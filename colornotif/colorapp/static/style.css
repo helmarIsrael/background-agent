@@ -1,0 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+
+}
+
+body{
+    font-family: "Montserrat", sans-serif;
+    background: rgb(12, 12, 12);
+    color: rgb(247, 247, 247);
+
+}
+
+.app{
+    height: 100vh;
+    align-items: center;
+}
+
+header h1{
+    margin: 50px 0 20px 0;
+    text-align: center;
+    font-size: 40px;
+}
+
+header p{
+    font-size: 20px;
+    text-align: center;
+}
+
+header h2{
+    text-align: center;
+}
+
+
+.circle {
+    position: absolute;
+    margin: auto;
+    bottom: 15%;
+    right: 37%;
+    height: 20em;
+    width: 20em;
+    border-radius: 50%;
+
+  }
+
+
+
+
+  

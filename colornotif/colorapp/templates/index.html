@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Color Change</title>
+</head>
+
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.27.2.min.js"></script>
+<body>
+    <div class="app">
+        <header>
+            <h1>Tap to Change Colors</h1>
+            <p>Notify when Color Change</p>
+            <h2 id="notif"></h2>
+        </header>
+    </div>
+
+    <div class="circle">
+    </div>
+    
+    <script>
+        let currentColor = 0
+        const colors = [
+            "red",
+            "#60d394",
+            "#d36060",
+            "#c060d3",
+            "#d3d160",
+            "#606bd3",
+            "#60c2d3"
+        ];
+        window.addEventListener("load", () => {
+        const circle = document.querySelector(".circle");
+       
+        circle.style.backgroundColor = colors[currentColor];
+        
+        circle.addEventListener("click", function() {
+            changeColor(colors[currentColor++]);
+            if (currentColor == colors.length){
+                currentColor = 0;
+            }
+        });
+});
+    </script>
+
+<script type="text/javascript"> 
+    const circle = document.querySelector(".circle");
+    var pubnub = new PubNub({
+            publishKey:"pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7",
+            subscribe_key : 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
+        });
+
+    function changeColor(color){
+        pubnub.publish({
+            channel:"color",
+            message:{
+                color: color
+            }
+        })
+    }
+
+    pubnub.addListener({
+        message: function(m){
+            console.log(m.message.color)
+            circle.style.backgroundColor = m.message.color;
+            document.getElementById("notif").innerHTML = "Color Changed to "+'<br>'+m.message.color;
+        }
+    })
+
+    pubnub.subscribe({
+        channels:["color"]
+
+    })
+
+</script>
+</body>
+</html>
