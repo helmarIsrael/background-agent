@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+	 <div class="container-fluid p-1">
+        <div class="container-fluid college-view-tools m-0 mt-4 p-4">                 
+          <div class="pr-4 pl-4 card-deck">
+            <a href="{{ url_for('department',college='COET') }}"class="COET card text-white bg-none mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">COET</h1>
+                <p class="card-text lead">College of Engineering & Technology</p>
+              </div>
+            </a>
+            <a href="{{ url_for('department',college='CSM') }}" class="card text-white bg-danger mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">CSM</h1>
+                <p class="card-text lead">College of Science and Mathematics</p>
+              </div>
+            </a>
+          </div>
+          <div class="pr-4 pl-4 card-deck">
+            <a href="{{ url_for('department', college='CCS') }}"class="card text-white bg-primary mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">CCS</h1>
+                <p class="card-text lead">College of Computer Studies</p>
+              </div>
+            </a>
+            <a href="{{ url_for('department', college='CED') }}"class="ced card text-white bg-none mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">CED</h1>
+                <p class="card-text lead">College of Education</p>
+              </div>
+            </a>
+          </div>
+          <div class="pr-4 pl-4 card-deck">
+            <a href="{{ url_for('department', college='CASS') }}"class="card text-white bg-success mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">CASS</h1>
+                <p class="card-text lead">College of Arts and Social Science</p>
+              </div>
+            </a>
+            <a href="{{ url_for('department', college='CBAA') }}"class="card text-white bg-warning mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">CBAA</h1>
+                <p class="card-text lead">College of Business Administration & Accountancy</p>
+              </div>
+            </a>
+          </div>
+          <div class="pr-4 pl-4 card-deck">
+            <a href="{{ url_for('department', college='CON') }}"class="card text-dark bg-light mb-3 d-inline-block border-secondary">
+              <div class="card-body">
+                <h1 class="card-title display-2">CON</h1>
+                <p class="card-text lead">College of Nursing</p>
+              </div>
+            </a>
+            <a href="{{ url_for('department', college='SGS') }}"class="card text-white bg-info mb-3 d-inline-block">
+              <div class="card-body">
+                <h1 class="card-title display-2">SGS</h1>
+                <p class="card-text lead">School of Graduate Studies</p>
+              </div>
+            </a>
+          </div> 
+        </div>
+      </div>
+{% endblock content %}

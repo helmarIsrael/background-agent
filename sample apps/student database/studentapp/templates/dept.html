@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="container-fluid course-view-tools mt-3 mb-3 p-2">
+		<div class="col-8">
+               <h1 class="display-2">Select Department</h1>
+            </div>
+            {% for dept in dept %}
+            <a href="{{ url_for('courses', dept=dept[0]) }}" class="d-inline-block lead pl-4 pr-4 pt-3 text-info">
+              <div>
+                <p class="">{{dept[0]}}</p>
+              </div>
+            </a>
+            {% endfor %}
+  </div>
+{% endblock content %}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      {% if title %}
+        <title>Student Database | {{ title }}</title>
+      {% else %}
+        <title>Student Database</title>
+      {% endif %}
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/style.css') }}">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+   <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <div class="container p-2">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navCollapse"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navCollapse">
+            <ul class="navbar-nav mr-auto">
+              {% if banner %}
+                <li class="navbar-item">
+                  <a href="{{ url_for('land') }}" class="nav-link"> View All Student </a>
+                </li>
+                <li class="navbar-item">
+                  <a href="{{ url_for('register') }}" class="nav-link pl-2"> Add New Student </a>
+                </li>
+                <li class="navbar-item">
+                  <a href="{{ url_for('colleges') }}" class="nav-link">Colleges </a>
+                </li>
+              {% else %}
+                <li class="navbar-item">
+                  <a href="{{ url_for('register') }}" class="nav-link"> Add New Student </a>
+                </li>
+                <li class="navbar-item">
+                  <a href="{{ url_for('colleges') }}" class="nav-link">Colleges </a>
+                </li>
+              {% endif %}
+            </ul>
+            <form method="POST" class="form-inline my-2 my-lg-0 ml-auto">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search I.D" aria-label="Search" name="search">
+              <input class="btn btn-outline-danger my-2 my-sm-0" value="Search" type="submit"/>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container-fluid hero p-0" id="top">
+      <div class="jumbotron jumbotron-fluid mt-3 ml-0 mr-0">
+        <div class="container-fluid pt-3 pl-4 m-0">
+          <div class="row">
+                {% if banner %}
+                  <div class="col">
+                    <h1 class="display-4 font-weight-light text-light">{{ banner }}</h1>
+                  </div>
+                {% else %}
+                  <div class="col">
+                     <h1 class="display-4 font-weight-light text-light">Student List</h1>
+                  </div>
+                {% endif %}
+          </div>
+
+        </div>
+      </div>
+        {% block content %}{% endblock content %}
+    </div>
+    <a href = "#top" class="scroll bg-warning rounded-circle">
+     <img src="https://img.icons8.com/fluent-systems-filled/96/000000/chevron-up--v2.png"/>
+    </a>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #333333;
+  scroll-behavior: smooth;
+}
+.navbar {
+  background-color: #a41d21;
+}
+
+.hero {
+  height: fit-content;
+  background-color: #333333;
+  font-family: "Montserrat", sans-serif;
+
+  display: grid;
+}
+.hero .jumbotron {
+  margin: 0;
+  background-color: #931d23;
+  display: grid;
+  align-content: center;
+}
+/* INDEX.HTML STYLES */
+.hero .home-view-tools {
+  border: 1px solid black;
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.hero .home-view-tools table tbody {
+  font-size: 0.91em;
+}
+
+/* REGISTER AND UPDATE STYLES */
+.hero .view-tools {
+  background-image: url(../images/bg.png);
+  background-size: cover;
+  height: 100%;
+  width: 60%;
+  border-radius: 10px;
+}
+
+.hero .view-tools .reg-form {
+  border-radius: 10px;
+  background-color: rgba(197, 197, 197, 0.342);
+}
+
+.hero .view-tools .reg-form legend {
+  color: #333333;
+}
+.hero .view-tools .reg-form .btn-danger:hover {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+.hero .view-tools .reg-form .btn-primary:hover {
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.hero .view-tools .reg-form select option {
+  font-size: 0.8em;
+}
+
+.hero .view-tools .reg-form select {
+  font-size: 1em;
+}
+
+
+
+/* COLLEGES AND COURSES STYLES */
+.hero .college-view-tools {
+  border: 1px solid black;
+  background-color: white;
+  height: 100%;
+  width:100%;
+  border-radius: 10px;
+}
+
+.hero .college-view-tools .COET {
+  background-color: #7b1113;
+}
+.hero .college-view-tools .COET:hover {
+  background-color: #660e10;
+}
+.hero .college-view-tools .ced {
+  background-color: #fb5581;
+}
+.hero .college-view-tools .ced:hover {
+  background-color: #d6456c;
+}
+.hero .college-view-tools a {
+  cursor: pointer;
+}
+
+.hero .college-view-tools a:hover {
+  text-decoration: none;
+  border: 1px rgb(255, 255, 255) solid;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 1em rgba(12, 12, 12, 0.6);
+}
+.hero .course-view-tools{
+  background-image: url(../images/bg.png);
+  background-size: cover;
+  height: 100%;
+  width: 80%;
+  border-radius: 10px;  
+}
+
+.hero .course-view-tools .course-div {
+  color: #3e3636;
+  border: rgba(197, 197, 197, 0.11) solid 1px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.281);
+}
+
+
+
+/* SCROLL UP BUTTON STYLES */
+
+.scroll {
+  background-color: #fcff37;
+  text-align: center;
+  height: 3.5em;
+  width: 3.5em;
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  z-index: 99;
+  cursor: pointer;
+  display: grid;
+}
+
+.scroll:hover {
+  background-color: #dadd2c;
+}
+
+.scroll img {
+  place-self: center;
+  height: 2.5em;
+  width: 2.5em;
+}

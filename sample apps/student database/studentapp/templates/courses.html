@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="container-fluid course-view-tools mt-3 mb-3 p-2">
+    {% if course %}
+            <div class="course-div container-fluid h-100 m-0 p-2">
+                <div class="row">
+                    <div class="col-8">
+                        <h1 class="display-6">{{ course[0][0] }} Department</h1>
+                    </div>
+                    <div class="col mt-4">
+                        <div class="row">
+                            <div class="col dropdown ">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-flip="false" data-toggle="dropdown" aria-expanded="false">
+                                  Department
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  {% for dept in depts %}
+                                  <a class="deptmnt dropdown-item" href="{{ url_for('courses', college=clg, dept=dept[1]) }}">{{ dept[1] }}</a>
+                                  {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col college dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-flip="false" data-toggle="dropdown" aria-expanded="false">
+                                  College
+                                </button>
+                                <ul class=" college dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  <li><a href="{{ url_for('department',college='COET') }}" class="dropdown-item">COET</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CSM') }}" class="dropdown-item" >CSM</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CCS') }}" class="dropdown-item" >CCS</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CED') }}" class="dropdown-item" >CED</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CASS') }}" class="dropdown-item" >CASS</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CBAA') }}" class="dropdown-item" >CBAA</a></li>
+
+                                  <li><a href="{{ url_for('department',college='CON') }}" class="dropdown-item">CON</a></li>
+
+                                  <li><a href="{{ url_for('department',college='SGS') }}" class="dropdown-item" >SGS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    {% for course in course %}
+                    <table class="table table-borderless lead">
+                        <tr>
+                            <td><p class="font-weight-bold d-inline-block p-0 m-0">{{ course[1] }}</p> &nbsp &nbsp{{ course[2] }}</td>
+                        </tr>
+                        
+                        
+                    </table>
+                    {% endfor %}
+                </div>
+            </div>
+    {% else %}
+            <div class="col-8">
+               <h1 class="display-2">Select Department</h1>
+            </div>
+            {% for dept in dept %}
+            <a href="" class="d-inline-block p-0 text-dark">
+              <div>
+                <p class="lead">{{dept[0]}}</p>
+              </div>
+            </a>
+            {% endfor %}
+            
+    {% endif %}
+  </div>
+{% endblock content %}

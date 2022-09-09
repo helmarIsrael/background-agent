@@ -1,0 +1,191 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container-fluid view-tools mt-3 mb-3 p-2">
+      <form method="POST" class="container-fluid reg-form h-100 m-0 p-4">
+          {{ form.csrf_token }}
+          {{ form.hidden_tag() }}
+        <legend class="lead display-4 mb-3">Update</legend>
+          <div class="container-fluid form-row">
+
+             <div class="form-group col-md-6 w-100">
+              {{ form.update_fname.label(class="font-weight-bold") }}
+              {% if form.update_fname.errors %}
+                {{ form.update_fname(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_fname.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_fname(class="form-control") }}
+              {% endif %}
+            </div>
+
+            <div class="form-group col-md-6 w-75">
+              {{ form.update_lname.label(class="font-weight-bold") }}
+              {% if form.update_lname.errors %}
+                {{ form.update_lname(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_lname.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_lname(class="form-control") }}
+              {% endif %}
+            </div> 
+          </div>
+
+          <div class="container-fluid form-row">
+            <div class="form-group w-25 col-md-2">
+             {{ form.update_gender.label(class="font-weight-bold") }}
+              {% if form.update_gender.errors %}
+                {{ form.update_gender(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_gender.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_gender(class="form-control form-control-md") }}
+              {% endif %}
+            </div>
+
+            <div class="form-group  col-md-3">
+              {{ form.update_id.label(class="font-weight-bold") }}
+              {% if form.update_id.errors %}
+                {{ form.update_id(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_id.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_id(class="form-control") }}
+              {% endif %}
+            </div>
+
+            <div class="form-group col">
+              {{ form.update_college.label(class="font-weight-bold") }}
+              {% if form.update_college.errors %}
+                {{ form.update_college(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_college.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_college(class="form-control form-control-md") }}
+              {% endif %}
+            </div>   
+          </div>
+
+          <div class="container-fluid form-row">
+            <div class="form-group col-3">
+              {{ form.update_yearLvl.label(class="font-weight-bold") }}
+              {% if form.update_yearLvl.errors %}
+                {{ form.update_yearLvl(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_yearLvl.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_yearLvl(class="form-control form-control-md") }}
+              {% endif %}
+            </div>
+            <div class="form-group col">
+              {{ form.update_department.label(class="font-weight-bold") }}
+              {% if form.update_department.errors %}
+                {{ form.update_department(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_department.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_department(class="form-control form-control-md") }}
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="container-fluid form-row">
+            <div class="form-group col">
+              {{ form.update_course.label(class="font-weight-bold") }}
+              {% if form.update_course.errors %}
+                {{ form.update_course(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.update_course.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.update_course(class="form-control form-control-md") }}
+              {% endif %}
+            </div>
+          </div>
+        <div class="container-fluid">
+          {{ form.update_submit(class="btn btn-primary btn-outline-light mr-auto") }}
+          <button type="button" class="btn btn-danger btn-outline-light" data-toggle="modal" data-target="#deleteModal">
+              Delete
+          </button>
+        </div>
+        
+      </form>
+      </div>
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Hello, {{ form.update_fname.data }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h1 class="lead">Do you really want to delete data?</h1>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <a href="{{ url_for('delete', id_number = form.update_id.data ) }}" class="btn btn-danger mr-2">Delete</a>
+              </div>
+            </div>
+          </div>
+      <script>
+        college_select = document.getElementById('update_college')
+        dept_select = document.getElementById('update_department');
+        course_select = document.getElementById('update_course');
+
+        college_select.onchange = function(){
+          college = college_select.value;
+          fetch('/dept/' + college).then(function(response){
+            response.json().then(function(data){
+              choice = '';
+              for (item of data.department){
+                choice += '<option value = "' + item.name_value + '">' + item.name + '</option>'
+              }
+              dept_select.innerHTML = choice
+              course_select.innerHTML = ''
+            });
+          }); 
+        };
+
+        dept_select.onchange = function(){
+          dept = dept_select.value;
+          college = college_select.value;
+          fetch('/course/'+college+'/'+dept).then(function(response){
+            response.json().then(function(data){
+              choice = '';
+              for (item of data.course){
+                  choice += '<option value = "'+ item.code + '">'+item.code+' '+item.name +'</option>'
+              }
+              course_select.innerHTML = choice
+            })
+          })
+        }
+    </script>
+      </div>
+    
+
+
+{% endblock content %}
