@@ -72,9 +72,17 @@
                   </div>
                 {% endif %}
           </div>
-
+          
         </div>
+        <div class="notif">
+          <div class="alert alert-success m-2 w-50 ml-4" role="alert">
+            <strong>Well done!</strong> You successfully read this
+            important alert message.
+          </div>
+        </div> 
       </div>
+      
+    
         {% block content %}{% endblock content %}
     </div>
     <a href = "#top" class="scroll bg-warning rounded-circle">
@@ -96,5 +104,28 @@
       integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
       crossorigin="anonymous"
     ></script>
+
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
+
+    <script type="text/javascript"> 
+      var pubnub = new PubNub({
+              subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
+              uuid: "myUUID",
+          });
+
+      pubnub.subscribe({
+          channels: ["my_channel"]
+      })
+
+      pubnub.addListener({
+          message: function(m){
+              const channelName = "my_channel"
+              console.log(m.message)
+          }
+      })
+
+      
+  
+  </script>
   </body>
 </html>
