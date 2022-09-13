@@ -105,7 +105,7 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
+    <!-- <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
 
     <script type="text/javascript"> 
       var pubnub = new PubNub({
@@ -119,13 +119,54 @@
 
       pubnub.addListener({
           message: function(m){
-              const channelName = "my_channel"
+              const channelName = "my_channel" //Specify ni dapat
               console.log(m.message)
           }
       })
 
       
   
-  </script>
-  </body>
+  </script> -->
+  <script>
+
+    async function getNotification(){
+      let response = await fetch('/notif');
+
+      console.log(response.stauts);
+      console.log(response.statusText);
+
+      if (response.status === 200){
+        let data = await  response.json().then(function(data){
+          console.log(data)
+        })
+      } else {
+        alert("HTTP-Error: " + response.statusText);
+      }
+    
+    }
+
+    getNotification()
+
+    // dept_select = document.getElementById('register_department');
+    // course_select = document.getElementById('register_course');
+
+    // college_select.onchange = function(){
+    //   console.log(college_select.value)
+    //   college = college_select.value;
+    //   fetch('dept/' + college).then(function(response){
+    //     response.json().then(function(data){
+    //       choice = '';
+    //       for (item of data.department){
+    //         choice += '<option value = "' + item.name_value + '">' + item.name + '</option>'
+    //       }
+    //       dept_select.innerHTML = choice
+    //       course_select.innerHTML = ''
+    //     });
+    //   }); 
+    // };
+
+    
+  </script>  
+
+</body>
 </html>

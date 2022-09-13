@@ -1,3 +1,4 @@
+from socket import MsgFlag
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
@@ -23,11 +24,28 @@ def my_publish_callback(envelope, status):
         print("Connection OK")
         pass
 
+def notif():
+    class MySubscribeCallback(SubscribeCallback):
+        def __init__(self, notif=None):
+            self.notif = notif
+
+        def message(self, pubnub, message):
+            self.notif = message.message
+        
+        def getMessage(self):
+            print('Get Msg')
+            return self.notif
+
+
+    pubnub.subscribe().channels('my_channel').execute()
+    pubnub.add_listener(MySubscribeCallback(None))
+    MySubscribeCallback.getMessage();
+
+
+
 class notifications(object):
     def __init__(self, id=None):
         self.id = id
-
-    
 
     def verify_id(self, id):
         student = models.students(id_number=id)

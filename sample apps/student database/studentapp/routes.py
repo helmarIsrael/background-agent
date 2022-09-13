@@ -64,6 +64,8 @@ def register():
     return render_template('register.html', banner='Add Student', title='Register', form=form)
 
 
+
+
 @app.route('/update/<string:id_number>', methods=['GET', 'POST'])
 def update(id_number):
     form = updateForm()
@@ -125,6 +127,16 @@ def update(id_number):
     title = banner_data[1] + " " + banner_data[2]
     current_id.clear()
     return render_template('update.html', banner=banner, title=title, form=form)
+
+
+@app.route('/notif')
+def notify():
+    print("notify called")
+    notification.notif()
+    
+    return jsonify({'notif_status': 'No Notif'})
+
+
 
 
 @app.route('/dept/<string:get_college>')
@@ -270,3 +282,5 @@ def courses(college, dept):
         depts = department.showSGSdept()
         banner = "("+college+")"+" "+courses[0][3]
         return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
+
+

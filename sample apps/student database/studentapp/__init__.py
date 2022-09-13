@@ -14,4 +14,5 @@ mysql = MySQL(app)
 
 
 
+
 from studentapp import routes
