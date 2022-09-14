@@ -4,7 +4,7 @@ from studentapp.for_valid import current_id
 from studentapp.forms import registerForm, updateForm, filterForm
 import studentapp.notification as notification
 import studentapp.models as models
-from pubnub.callbacks import SubscribeCallback
+from pubnub.pubnub import PubNub, SubscribeListener
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 
@@ -134,20 +134,22 @@ def update(id_number):
 
 @app.route('/notif')
 def notify():
-    print("notify called")
     pnconfig = PNConfiguration()
     pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
     pnconfig.uuid = "myUUID"
+    ch = 'my_channel'
 
     pubnub = PubNub(pnconfig)
 
-    class MySubscribeCallback(SubscribeCallback):
+    pubnub.subscribe().channels(ch).execute()
+    subscribe_listener = SubscribeListener()
+    pubnub.add_listener(subscribe_listener)
+    result = subscribe_listener.wait_for_message_on(ch)
+    print(result.message['text'])
 
-        def message(self, pubnub, message):
-            print(message.message)
-
-    pubnub.subscribe().channels('my_channel').execute()
-    pubnub.add_listener(MySubscribeCallback())
+    pubnub.unsubscribe().channels(ch).execute()
+    subscribe_listener.wait_for_disconnect()
+    
     return jsonify({'notif_status': 'No Notif'})
 
 
