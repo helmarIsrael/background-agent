@@ -134,7 +134,6 @@
         course_select = document.getElementById('register_course');
 
         college_select.onchange = function(){
-          console.log(college_select.value)
           college = college_select.value;
           fetch('dept/' + college).then(function(response){
             response.json().then(function(data){

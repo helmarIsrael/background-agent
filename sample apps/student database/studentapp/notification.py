@@ -24,15 +24,16 @@ def my_publish_callback(envelope, status):
 
 # def notif():
 #     class MySubscribeCallback(SubscribeCallback):
-#         def __init__(self, notif=None):
-#             self.notif = notif
 
 #         def message(self, pubnub, message):
-#             self.notif = message.message
-
+#             pass
 
 #     pubnub.subscribe().channels('my_channel').execute()
 #     pubnub.add_listener(MySubscribeCallback())
+
+   
+    
+    
 
 
 
@@ -50,5 +51,5 @@ class notifications(object):
         event = f'New Student Added - {id}'
         pubnub.publish().channel('my_channel').message({'text': event}).pn_async(my_publish_callback)
 
-        
+    
 

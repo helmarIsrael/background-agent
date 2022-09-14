@@ -129,20 +129,32 @@
   </script> -->
   <script>
 
-    async function getNotification(){
-      let response = await fetch('/notif');
+    // async function getNotification(){
+    //   let response = await fetch('/notif');
 
-      console.log(response.stauts);
-      console.log(response.statusText);
+    //   console.log('asd')
+
+    //   console.log(response.stauts);
+    //   console.log(response.statusText);
+
+    //   if (response.status === 200){
+    //     let data = await  response.json().then(function(data){
+    //       console.log(data)
+    //     })
+    //   } else {
+    //     alert("HTTP-Error: " + response.statusText);
+    //   }
+    
+    // }
+
+    function getNotification(){
+      let response = fetch('/notif');
 
       if (response.status === 200){
-        let data = await  response.json().then(function(data){
+        let data = response.json().then(function(data){
           console.log(data)
         })
-      } else {
-        alert("HTTP-Error: " + response.statusText);
       }
-    
     }
 
     getNotification()

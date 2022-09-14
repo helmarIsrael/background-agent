@@ -138,19 +138,24 @@ def notify():
     pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
     pnconfig.uuid = "myUUID"
     ch = 'my_channel'
-
     pubnub = PubNub(pnconfig)
+    result = "hey"
 
     pubnub.subscribe().channels(ch).execute()
     subscribe_listener = SubscribeListener()
     pubnub.add_listener(subscribe_listener)
-    result = subscribe_listener.wait_for_message_on(ch)
+    # result = subscribe_listener.wait_for_message_on(ch)
+    
+
+    # pubnub.unsubscribe().channels(ch).execute()
+    # subscribe_listener.wait_for_disconnect()~
+    # pubnub.remove_listener(subscribe_listener)
+    # pubnub.stop()
     print(result.message['text'])
 
-    pubnub.unsubscribe().channels(ch).execute()
-    subscribe_listener.wait_for_disconnect()
+    return jsonify({'notif': result})
     
-    return jsonify({'notif_status': 'No Notif'})
+    # return jsonify({'notif': 'No Notif'})
 
 
 
