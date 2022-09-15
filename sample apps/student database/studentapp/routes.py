@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request, url_for, flash, jsonify
 from studentapp import app
-from studentapp.for_valid import current_id
+from studentapp.for_valid import current_id, notifs
 from studentapp.forms import registerForm, updateForm, filterForm
 import studentapp.notification as notification
 import studentapp.models as models
@@ -134,28 +134,39 @@ def update(id_number):
 
 @app.route('/notif')
 def notify():
-    pnconfig = PNConfiguration()
-    pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
-    pnconfig.uuid = "myUUID"
-    ch = 'my_channel'
-    pubnub = PubNub(pnconfig)
-    result = "hey"
+    print('notify called')
+    # pnconfig = PNConfiguration()
+    # pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
+    # pnconfig.uuid = "myUUID"
+    # ch = 'my_channel'
+    # pubnub = PubNub(pnconfig)
 
-    pubnub.subscribe().channels(ch).execute()
-    subscribe_listener = SubscribeListener()
-    pubnub.add_listener(subscribe_listener)
+    # pubnub.subscribe().channels(ch).execute()
+    # subscribe_listener = SubscribeListener()
+    # pubnub.add_listener(subscribe_listener)
     # result = subscribe_listener.wait_for_message_on(ch)
     
 
     # pubnub.unsubscribe().channels(ch).execute()
-    # subscribe_listener.wait_for_disconnect()~
+    # subscribe_listener.wait_for_disconnect()
     # pubnub.remove_listener(subscribe_listener)
     # pubnub.stop()
-    print(result.message['text'])
 
-    return jsonify({'notif': result})
+    notif = "wala pay notif"
+
+    if notifs:
+        for item in notifs:
+            notif = item
     
-    # return jsonify({'notif': 'No Notif'})
+        print("routes: " + notif)
+
+    # result = notification.notifications.getMsg()
+    # print(result)
+
+
+    # return jsonify({'notif': result.message})
+    
+    return jsonify({'notif': 'No Notif'})
 
 
 

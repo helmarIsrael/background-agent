@@ -148,6 +148,7 @@
     // }
 
     function getNotification(){
+      console.log('test')
       let response = fetch('/notif');
 
       if (response.status === 200){
@@ -156,6 +157,14 @@
         })
       }
     }
+
+  //   function getNotification(){
+  //       fetch('/notif').then(function(response){
+  //       response.json().then(function(data){
+  //         console.log(data)
+  //       });
+  //     })
+  //  }
 
     getNotification()
 

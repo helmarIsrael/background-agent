@@ -1,8 +1,11 @@
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub, SubscribeListener
 from pubnub.pubnub import PubNub
+import os
 
+from .for_valid import notifs
 
 import studentapp.models as models
 
@@ -12,6 +15,7 @@ pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
 pnconfig.user_id = "my_user_id"
 pnconfig.uuid = "myUUID"
 pnconfig.ssl = True
+ch = 'my_channel'
 
 pubnub = PubNub(pnconfig)
 
@@ -22,14 +26,14 @@ def my_publish_callback(envelope, status):
         print("Connection OK")
         pass
 
-# def notif():
-#     class MySubscribeCallback(SubscribeCallback):
+class MySubscribeCallback(SubscribeCallback):
 
-#         def message(self, pubnub, message):
-#             pass
+    def message(self, pubnub, message):
+        notifs.append(message.message['text'])
 
-#     pubnub.subscribe().channels('my_channel').execute()
-#     pubnub.add_listener(MySubscribeCallback())
+
+pubnub.subscribe().channels('my_channel').execute()
+pubnub.add_listener(MySubscribeCallback())
 
    
     
@@ -49,7 +53,16 @@ class notifications(object):
     def sent_event(self):
         id = self.verify_id(self.id)
         event = f'New Student Added - {id}'
-        pubnub.publish().channel('my_channel').message({'text': event}).pn_async(my_publish_callback)
+        pubnub.publish().channel(ch).message({'text': event}).pn_async(my_publish_callback)
 
+    def getMsg(self):
+        result = None
+        subscribe_listener = SubscribeListener()
+        pubnub.add_listener(subscribe_listener) 
+        result = subscribe_listener.wait_for_message_on(ch)
+        
+        notifs.append(result.message['text'])
+
+        print(notifs)
     
 
