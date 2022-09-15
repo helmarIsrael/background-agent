@@ -1,10 +1,7 @@
 from pubnub.callbacks import SubscribeCallback
-from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub, SubscribeListener
 from pubnub.pubnub import PubNub
-import os
-
 from .for_valid import notifs
 
 import studentapp.models as models
@@ -29,6 +26,7 @@ def my_publish_callback(envelope, status):
 class MySubscribeCallback(SubscribeCallback):
 
     def message(self, pubnub, message):
+        print(message.message)
         notifs.append(message.message['text'])
 
 
@@ -50,7 +48,7 @@ class notifications(object):
         if student.validation():
             return id
 
-    def sent_event(self):
+    async def sent_event(self):
         id = self.verify_id(self.id)
         event = f'New Student Added - {id}'
         pubnub.publish().channel(ch).message({'text': event}).pn_async(my_publish_callback)

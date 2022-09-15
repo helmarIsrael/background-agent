@@ -7,7 +7,7 @@ import studentapp.models as models
 from pubnub.pubnub import PubNub, SubscribeListener
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-
+import asyncio
 
 @app.route('/')
 def land():
@@ -43,7 +43,7 @@ def home(clg, arnge):
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+async def register():
     db = models.students()
     college = db.showCollege()
     form = registerForm()
@@ -61,7 +61,7 @@ def register():
                              course=form.register_course.data)
         db.add()
         notify = notification.notifications(id=form.register_id.data)
-        notify.sent_event()
+        await notify.sent_event()
         flash('New Student Added', 'success')
         return redirect(url_for('searched', id_number=form.register_id.data))
     return render_template('register.html', banner='Add Student', title='Register', form=form)
