@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_mysql_connector import MySQL
 from config import DB_NAME, DB_HOST, DB_USERNAME, SECRET_KEY
 app = Flask(__name__)
@@ -10,9 +10,13 @@ app.config['MYSQL_DATABASE'] = DB_NAME
 app.config['MYSQL_HOST'] = DB_HOST
 app.config['SECRET_KEY'] = SECRET_KEY
 
+
 mysql = MySQL(app)
 
 
 
 
 from studentapp import routes
+
+
+

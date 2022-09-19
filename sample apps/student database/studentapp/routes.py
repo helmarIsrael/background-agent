@@ -316,3 +316,18 @@ def courses(college, dept):
         return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
 
 
+@app.after_request
+def add_cors(resp):
+    resp.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+    resp.headers['Access-Control-Allow-Credentials'] = True
+    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS, GET, PUT, DELETE'
+    resp.headers['Access-Control-Allow-Headers'] = request.headers.get('Access-Control-Request-Headers',
+                                                                             'Authorization')
+    resp.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    resp.headers['X-XSS-Protection'] = '1; mode=block'
+    resp.headers['X-Content-Type-Options'] = 'nosniff'
+    # set low for debugging
+
+    if app.debug:
+        resp.headers["Access-Control-Max-Age"] = '1'
+    return resp

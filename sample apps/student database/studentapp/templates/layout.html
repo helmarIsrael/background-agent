@@ -105,8 +105,9 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.min.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"
+    crossorigin="anonymous"></script>
+
 
     <script type="text/javascript"> 
       var pubnub = new PubNub({
@@ -121,15 +122,15 @@
 
       pubnub.addListener({
           message: function(m){
-              // const channelName = "my_channel" //Specify ni dapat
+              const channelName = "my_channel" //Specify ni dapat
               console.log(m.message)
           }
       })
 
       
   
-  </script> -->
-  <script>
+  </script>
+  <!-- <script>
 
     async function getNotification(){
       
@@ -171,7 +172,7 @@
 
 
     
-  </script>  
+  </script>   -->
 
 </body>
 </html>
