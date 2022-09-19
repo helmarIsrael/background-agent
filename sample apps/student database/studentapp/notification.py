@@ -48,19 +48,10 @@ class notifications(object):
         if student.validation():
             return id
 
-    async def sent_event(self):
+    def sent_event(self):
         id = self.verify_id(self.id)
         event = f'New Student Added - {id}'
         pubnub.publish().channel(ch).message({'text': event}).pn_async(my_publish_callback)
 
-    def getMsg(self):
-        result = None
-        subscribe_listener = SubscribeListener()
-        pubnub.add_listener(subscribe_listener) 
-        result = subscribe_listener.wait_for_message_on(ch)
-        
-        notifs.append(result.message['text'])
 
-        print(notifs)
-    
 

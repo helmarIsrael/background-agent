@@ -43,7 +43,7 @@ def home(clg, arnge):
 
 
 @app.route('/register', methods=['GET', 'POST'])
-async def register():
+def register():
     db = models.students()
     college = db.showCollege()
     form = registerForm()
@@ -61,7 +61,7 @@ async def register():
                              course=form.register_course.data)
         db.add()
         notify = notification.notifications(id=form.register_id.data)
-        await notify.sent_event()
+        notify.sent_event()
         flash('New Student Added', 'success')
         return redirect(url_for('searched', id_number=form.register_id.data))
     return render_template('register.html', banner='Add Student', title='Register', form=form)
@@ -130,44 +130,6 @@ def update(id_number):
     title = banner_data[1] + " " + banner_data[2]
     current_id.clear()
     return render_template('update.html', banner=banner, title=title, form=form)
-
-
-@app.route('/notif')
-def notify():
-    print('notify called')
-    # pnconfig = PNConfiguration()
-    # pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
-    # pnconfig.uuid = "myUUID"
-    # ch = 'my_channel'
-    # pubnub = PubNub(pnconfig)
-
-    # pubnub.subscribe().channels(ch).execute()
-    # subscribe_listener = SubscribeListener()
-    # pubnub.add_listener(subscribe_listener)
-    # result = subscribe_listener.wait_for_message_on(ch)
-    
-
-    # pubnub.unsubscribe().channels(ch).execute()
-    # subscribe_listener.wait_for_disconnect()
-    # pubnub.remove_listener(subscribe_listener)
-    # pubnub.stop()
-
-    notif = "wala pay notif"
-
-    if notifs:
-        for item in notifs:
-            notif = item
-    
-        print("routes: " + notif)
-
-    # result = notification.notifications.getMsg()
-    # print(result)
-
-
-    # return jsonify({'notif': result.message})
-    
-    return jsonify({'notif': 'No Notif'})
-
 
 
 

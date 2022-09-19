@@ -105,15 +105,15 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"
-    crossorigin="anonymous"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
 
 
     <script type="text/javascript"> 
       var pubnub = new PubNub({
               subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
               uuid: "myUUID",
-              keepAlive: false
+              keepAlive: false,
+              origin: 'pubsub.pubnub.com'
           });
 
       pubnub.subscribe({
