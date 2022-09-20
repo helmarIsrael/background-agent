@@ -74,10 +74,8 @@
           </div>
           
         </div>
-        <div class="notif">
-          <div class="alert alert-success m-2 w-50 ml-4" role="alert">
-            <strong>Well done!</strong> You successfully read this
-            important alert message.
+        <div>
+          <div id="notif" class="alert alert-success m-2 w-50 ml-4" role="alert" style="display:none">
           </div>
         </div> 
       </div>
@@ -109,126 +107,47 @@
 
 
     <script> 
-      // var pubnub = new PubNub({
-      //         subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
-      //         uuid: "myUUID",
-      //         keepAlive: false,
-      //         origin: 'pubsub.pubnub.com'
-      //     });
+      var pubnub = new PubNub({
+              subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
+              publish_key:"pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7",
+              uuid: "myUUID",
+              origin: 'pubsub.pubnub.com',
+              
+          });
 
-      // // paste below "add listener" comment
-      // const listener = {
-      //     status: (statusEvent) => {
-      //         if (statusEvent.category === "PNConnectedCategory") {
-      //             console.log("Connected");
-      //         }
-      //     },
-      //     message: (messageEvent) => {
-      //         showMessage(messageEvent.message.description);
-      //     },
-      //     presence: (presenceEvent) => {
-      //         // handle presence
-      //     }
-      // };
-      // pubnub.addListener(listener);
+      pubnub.addListener({
+          message: function(m){
+              const channelName = "my_channel" //Specify ni dapat
+              console.log(m.message.text)
+              bootstrap_alert('#notif', m.message.text, 5000)
+          },
+          status: function(s) {
+            var category = s.category; 
+            var operation = s.operation; 
+            var lastTimetoken = s.lastTimetoken;
+
+            console.log(category)
+      
+    }
+      })
 
 
-      // pubnub.subscribe({
-      //     channels: ["my_channel"],
-      // })
+      pubnub.subscribe({
+          channels: ["my_channel"],
+      });
 
-    let pubnub;
-
-    const setupPubNub = () => {
-        // Update this block with your publish/subscribe keys
-        pubnub = new PubNub({
-          subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
-          uuid: "myUUID",
-    
-        });
-
-        // add listener
-        const listener = {
-            status: (statusEvent) => {
-                if (statusEvent.category === "PNConnectedCategory") {
-                    console.log("Connected");
-                }
-            },
-            message: (messageEvent) => {
-                msg = showMessage(messageEvent.message.description);
-                console.log(msg)
-                //console.log(messageEvent.message.description)
-            },
-            presence: (presenceEvent) => {
-                // handle presence
-            }
-        };
-        pubnub.addListener(listener);
-
-        // subscribe to a channel
-        pubnub.subscribe({
-            channels: ["my_channel"]
-        });
+  
+      function bootstrap_alert(elem, message, timeout) {
+      $(elem).show().html('<div class="alert"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+message+'</strong></div>');
+      if (timeout || timeout === 0) {
+        setTimeout(function() { 
+          $(elem).alert('close');
+        }, timeout);    
+      }
     };
 
-    // run after page is loaded
-    window.onload = setupPubNub;
 
 
-
-      // pubnub.addListener({
-      //     message: function(m){
-      //         const channelName = "my_channel" //Specify ni dapat
-      //         console.log(m.message)
-      //     }
-      // })
-
-      
-  
   </script>
-  <!-- <script>
-
-    async function getNotification(){
-      
-      let response = await fetch('http://ps20.pndsn.com/v2/subscribe/sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279/my_channel/student_notif')
-
-      console.log(response.stauts);
-      console.log(response.statusText);
-
-      if (response.status === 200){
-        let data = await  response.json().then(function(data){
-          console.log(data)
-        })
-      } else {
-        alert("HTTP-Error: " + response.statusText);
-      }
-    
-    }
-
-    // function getNotification(){
-    //   console.log('test')
-    //   let response = fetch('/notif');
-
-    //   if (response.status === 200){
-    //     let data = response.json().then(function(data){
-    //       console.log(data)
-    //     })
-    //   }
-    // }
-
-  //   function getNotification(){
-  //       fetch('/notif').then(function(response){
-  //       response.json().then(function(data){
-  //         console.log(data)
-  //       });
-  //     })
-  //  }
-
-  getNotification()
-
-
-    
-  </script>   -->
-
 </body>
 </html>

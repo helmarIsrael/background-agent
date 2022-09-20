@@ -1,3 +1,4 @@
+from unicodedata import category
 from flask import render_template, redirect, request, url_for, flash, jsonify
 from studentapp import app
 from studentapp.for_valid import current_id, notifs
@@ -27,7 +28,7 @@ def home(clg, arnge):
             return redirect(url_for('home', clg=college_data, arnge=arrange_data))
         elif request.form["search"]:
             id = request.form["search"]
-            return redirect(url_for('searched', id_number=id))
+            return redirect(url_for('searched', id_number=id, category="search"))
         elif not request.form["search"]:
             flash('Please Enter an I.D Number', 'danger')
             return redirect(url_for('land'))
@@ -60,10 +61,8 @@ def register():
                              gender=form.register_gender.data,
                              course=form.register_course.data)
         db.add()
-        notify = notification.notifications(id=form.register_id.data)
-        notify.sent_event()
         flash('New Student Added', 'success')
-        return redirect(url_for('searched', id_number=form.register_id.data))
+        return redirect(url_for('searched', id_number=form.register_id.data, category='data_change'))
     return render_template('register.html', banner='Add Student', title='Register', form=form)
 
 
@@ -216,15 +215,20 @@ def courseByDept(get_college, get_dept):
         return jsonify({'course': courseArray})
 
 
-@app.route('/searched/<string:id_number>', methods=['GET', 'POST'])
-def searched(id_number):
-    if request.method == "POST":
-        if request.form["search"]:
-            id = request.form["search"]
-            return redirect(url_for('searched', id_number=id))
-        elif not request.form["search"]:
-            flash('Please Enter an I.D Number', 'danger')
-            return redirect(url_for('land'))
+@app.route('/searched/<string:id_number> <string:category>', methods=['GET', 'POST'])
+async def searched(id_number, category):
+    if category == 'search':
+        if request.method == "POST":
+            if request.form["search"]:
+                id = request.form["search"]
+                return redirect(url_for('searched', id_number=id, category='search'))
+            elif not request.form["search"]:
+                flash('Please Enter an I.D Number', 'danger')
+                return redirect(url_for('land'))
+    elif category == 'data_change':
+        print(category)
+        notify = notification.notifications(id=id_number)
+        await notify.sent_event()
     student = models.students(id_number=id_number)
     students = student.search()
     try:
@@ -232,6 +236,7 @@ def searched(id_number):
     except Exception:
         flash('Sorry student not found', 'danger')
         return redirect(url_for('home', fltr='id'))
+    
 
 
 @app.route('/delete/<string:id_number>', methods=['GET'])
