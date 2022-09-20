@@ -132,7 +132,6 @@ def update(id_number):
     return render_template('update.html', banner=banner, title=title, form=form)
 
 
-
 @app.route('/dept/<string:get_college>')
 def deptByCollege(get_college):
     form = registerForm()

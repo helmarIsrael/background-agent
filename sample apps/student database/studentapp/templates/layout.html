@@ -108,24 +108,80 @@
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
 
 
-    <script type="text/javascript"> 
-      var pubnub = new PubNub({
-              subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
-              uuid: "myUUID",
-              keepAlive: false,
-              origin: 'pubsub.pubnub.com'
-          });
+    <script> 
+      // var pubnub = new PubNub({
+      //         subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
+      //         uuid: "myUUID",
+      //         keepAlive: false,
+      //         origin: 'pubsub.pubnub.com'
+      //     });
 
-      pubnub.subscribe({
-          channels: ["my_channel"]
-      })
+      // // paste below "add listener" comment
+      // const listener = {
+      //     status: (statusEvent) => {
+      //         if (statusEvent.category === "PNConnectedCategory") {
+      //             console.log("Connected");
+      //         }
+      //     },
+      //     message: (messageEvent) => {
+      //         showMessage(messageEvent.message.description);
+      //     },
+      //     presence: (presenceEvent) => {
+      //         // handle presence
+      //     }
+      // };
+      // pubnub.addListener(listener);
 
-      pubnub.addListener({
-          message: function(m){
-              const channelName = "my_channel" //Specify ni dapat
-              console.log(m.message)
-          }
-      })
+
+      // pubnub.subscribe({
+      //     channels: ["my_channel"],
+      // })
+
+    let pubnub;
+
+    const setupPubNub = () => {
+        // Update this block with your publish/subscribe keys
+        pubnub = new PubNub({
+          subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
+          uuid: "myUUID",
+    
+        });
+
+        // add listener
+        const listener = {
+            status: (statusEvent) => {
+                if (statusEvent.category === "PNConnectedCategory") {
+                    console.log("Connected");
+                }
+            },
+            message: (messageEvent) => {
+                msg = showMessage(messageEvent.message.description);
+                console.log(msg)
+                //console.log(messageEvent.message.description)
+            },
+            presence: (presenceEvent) => {
+                // handle presence
+            }
+        };
+        pubnub.addListener(listener);
+
+        // subscribe to a channel
+        pubnub.subscribe({
+            channels: ["my_channel"]
+        });
+    };
+
+    // run after page is loaded
+    window.onload = setupPubNub;
+
+
+
+      // pubnub.addListener({
+      //     message: function(m){
+      //         const channelName = "my_channel" //Specify ni dapat
+      //         console.log(m.message)
+      //     }
+      // })
 
       
   

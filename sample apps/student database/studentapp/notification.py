@@ -23,15 +23,15 @@ def my_publish_callback(envelope, status):
         print("Connection OK")
         pass
 
-class MySubscribeCallback(SubscribeCallback):
+# class MySubscribeCallback(SubscribeCallback):
 
-    def message(self, pubnub, message):
-        print(message.message)
-        notifs.append(message.message['text'])
+#     def message(self, pubnub, message):
+#         print(message.message)
+#         notifs.append(message.message['text'])
 
 
-pubnub.subscribe().channels('my_channel').execute()
-pubnub.add_listener(MySubscribeCallback())
+# pubnub.subscribe().channels('my_channel').execute()
+# pubnub.add_listener(MySubscribeCallback())
 
    
     
