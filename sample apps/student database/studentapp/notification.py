@@ -1,6 +1,5 @@
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
-from pubnub.pubnub import PubNub, SubscribeListener
 from pubnub.pubnub import PubNub
 
 import studentapp.models as models
@@ -64,15 +63,15 @@ class notifications(object):
 
     async def update_event(self):
         id = self.verify_id(self.id, 'update')
-        # print(f'id: {id}')
-        # changed_items = len(self.updated_items)
-        # # print(len(self.updated_items))
-        # if changed_items > 2:
-        #     event = f'Student {id} infos updated! {changed_items} info changed'
-        # elif changed_items == 2:
-        #     event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
-        # else:
-        #     event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
+        print(f'id: {id}')
+        changed_items = len(self.updated_items)
+        # print(len(self.updated_items))
+        if changed_items > 2:
+            event = f'Student {id} infos updated! {changed_items} info changed'
+        elif changed_items == 2:
+            event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
+        else:
+            event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
         type = 'update'
         event = f'Student {id} infos updated!'
         self.pubnub.publish().channel(self.ch).message({'text': event}).pn_async(my_publish_callback)
