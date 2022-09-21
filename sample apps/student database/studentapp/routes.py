@@ -1,7 +1,7 @@
 from unicodedata import category
 from flask import render_template, redirect, request, url_for, flash, jsonify
 from studentapp import app
-from studentapp.for_valid import current_id, notifs
+from studentapp.for_valid import current_id
 from studentapp.forms import registerForm, updateForm, filterForm
 import studentapp.notification as notification
 import studentapp.models as models
@@ -28,7 +28,7 @@ def home(clg, arnge):
             return redirect(url_for('home', clg=college_data, arnge=arrange_data))
         elif request.form["search"]:
             id = request.form["search"]
-            return redirect(url_for('searched', id_number=id, category="search"))
+            return redirect(url_for('searched', id_number=id))
         elif not request.form["search"]:
             flash('Please Enter an I.D Number', 'danger')
             return redirect(url_for('land'))
@@ -44,7 +44,7 @@ def home(clg, arnge):
 
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+async def register():
     db = models.students()
     college = db.showCollege()
     form = registerForm()
@@ -61,15 +61,17 @@ def register():
                              gender=form.register_gender.data,
                              course=form.register_course.data)
         db.add()
+        notify = notification.notifications(id=form.register_id.data)
+        await notify.add_event()
         flash('New Student Added', 'success')
-        return redirect(url_for('searched', id_number=form.register_id.data, category='data_change'))
+        return redirect(url_for('searched', id_number=form.register_id.data))
     return render_template('register.html', banner='Add Student', title='Register', form=form)
 
 
 
 
 @app.route('/update/<string:id_number>', methods=['GET', 'POST'])
-def update(id_number):
+async def update(id_number):
     form = updateForm()
     courses = []
     db = models.students(id_number=id_number)
@@ -84,15 +86,43 @@ def update(id_number):
         banner_data = item
         current_id.append(item[0])
         if request.method == "POST" and form.validate_on_submit():
-            yearLvl = int(form.update_yearLvl.data)
-            db = models.students(id_number=form.update_id.data,
-                                 firstname=form.update_fname.data,
-                                 lastname=form.update_lname.data,
-                                 yearlvl=yearLvl,
-                                 gender=form.update_gender.data,
-                                 course=form.update_course.data,
-                                 id=id_number)
-            db.update()
+            if form.update_fname.data == item[1] and \
+            form.update_lname.data == item[2] and \
+            form.update_id.data == item[0] and \
+            form.update_gender.data == item[9] and \
+            form.update_college.data == item[6] and \
+            form.update_yearLvl.data == str(item[4]) and \
+            form.update_department.data == item[5] and form.update_course.data == item[3]: #walay change
+                pass
+            else:
+                updated = []
+                if form.update_fname.data != item[1]:
+                    updated.append('First Name')
+                if form.update_lname.data != item[2]:
+                    updated.append('Last Name')
+                if form.update_id.data != item[0]:
+                    updated.append('I.D Number')
+                if form.update_gender.data != item[9]:
+                    updated.append('Gender')
+                if  form.update_college.data != item[6]:
+                    updated.append('College')
+                if form.update_yearLvl.data != str(item[4]):
+                    updated.append('Year Level')
+                if form.update_department.data != item[5]:
+                    updated.append('Department')
+                
+                print(f'{form.update_id.data} CHANGED')
+                yearLvl = int(form.update_yearLvl.data)
+                db = models.students(id_number=form.update_id.data,
+                                    firstname=form.update_fname.data,
+                                    lastname=form.update_lname.data,
+                                    yearlvl=yearLvl,
+                                    gender=form.update_gender.data,
+                                    course=form.update_course.data,
+                                    id=id_number)
+                db.update()
+                # # notify = notification.notifications(id = form.update_id.data, updated_items=updated)
+                # await notify.update_event()
             return redirect(url_for('searched', id_number=form.update_id.data))
 
         elif request.method == "GET":
@@ -215,20 +245,15 @@ def courseByDept(get_college, get_dept):
         return jsonify({'course': courseArray})
 
 
-@app.route('/searched/<string:id_number> <string:category>', methods=['GET', 'POST'])
-async def searched(id_number, category):
-    if category == 'search':
-        if request.method == "POST":
-            if request.form["search"]:
-                id = request.form["search"]
-                return redirect(url_for('searched', id_number=id, category='search'))
-            elif not request.form["search"]:
-                flash('Please Enter an I.D Number', 'danger')
-                return redirect(url_for('land'))
-    elif category == 'data_change':
-        print(category)
-        notify = notification.notifications(id=id_number)
-        await notify.sent_event()
+@app.route('/searched/<string:id_number>', methods=['GET', 'POST'])
+async def searched(id_number):
+    if request.method == "POST":
+        if request.form["search"]:
+            id = request.form["search"]
+            return redirect(url_for('searched', id_number=id))
+        elif not request.form["search"]:
+            flash('Please Enter an I.D Number', 'danger')
+            return redirect(url_for('land'))
     student = models.students(id_number=id_number)
     students = student.search()
     try:
