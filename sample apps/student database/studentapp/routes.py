@@ -121,8 +121,8 @@ async def update(id_number):
                                     course=form.update_course.data,
                                     id=id_number)
                 db.update()
-                # # notify = notification.notifications(id = form.update_id.data, updated_items=updated)
-                # await notify.update_event()
+                notify = notification.notifications(id = form.update_id.data, updated_items=updated)
+                await notify.update_event()
             return redirect(url_for('searched', id_number=form.update_id.data))
 
         elif request.method == "GET":

@@ -28,9 +28,9 @@ class MySubscribeCallback(SubscribeCallback):
 
 
 class notifications(object):
-    def __init__(self, id=None):
+    def __init__(self, id=None, updated_items=None):
         self.id = id
-        # self.updated_items = updated_items
+        self.updated_items = updated_items
 
 
         pnconfig = PNConfiguration()
@@ -55,7 +55,7 @@ class notifications(object):
         id = self.verify_id(self.id, 'create')
         event = f'New Student Added - {id}'
         type = 'create'
-        self.pubnub.publish().channel(self.ch).message({'text': event}).pn_async(my_publish_callback)
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type}).pn_async(my_publish_callback)
         self.pubnub.subscribe().channels('my_channel').execute()
         self.pubnub.add_listener(MySubscribeCallback())
 
@@ -67,14 +67,14 @@ class notifications(object):
         changed_items = len(self.updated_items)
         # print(len(self.updated_items))
         if changed_items > 2:
-            event = f'Student {id} infos updated! {changed_items} info changed'
+            event = f'Student {id} infos updated! {changed_items} infos changed'
         elif changed_items == 2:
             event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
         else:
-            event = f'Student {id} updated its {self.updated_items[0]} and {self.updated_items[1]}'
+            event = f'Student {id} updated its {self.updated_items[0]}'
         type = 'update'
-        event = f'Student {id} infos updated!'
-        self.pubnub.publish().channel(self.ch).message({'text': event}).pn_async(my_publish_callback)
+        # event = f'Student {id} infos updated!'
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type}).pn_async(my_publish_callback)
         self.pubnub.subscribe().channels('my_channel').execute()
         self.pubnub.add_listener(MySubscribeCallback())
 
