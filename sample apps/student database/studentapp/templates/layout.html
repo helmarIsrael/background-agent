@@ -41,12 +41,18 @@
                 <li class="navbar-item">
                   <a href="{{ url_for('colleges') }}" class="nav-link">Colleges </a>
                 </li>
+                <li class="navbar-item">
+                  <a href="{{ url_for('notifs') }}" class="nav-link">Notifs <span><strong id="notif_count" style="display:none"></strong></span></a>
+                </li>
               {% else %}
                 <li class="navbar-item">
                   <a href="{{ url_for('register') }}" class="nav-link"> Add New Student </a>
                 </li>
                 <li class="navbar-item">
                   <a href="{{ url_for('colleges') }}" class="nav-link">Colleges </a>
+                </li>
+                <li class="navbar-item">
+                  <a href="{{ url_for('notifs') }}" class="nav-link">Notifs <span><strong id="notif_count" style="display:none"></strong></span></a>
                 </li>
               {% endif %}
             </ul>
@@ -106,24 +112,37 @@
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
 
 
-    <script> 
+    <script>
       var pubnub = new PubNub({
               subscribe_key : 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279',
               publish_key:'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7',
               uuid: "myUUID",
               origin: 'pubsub.pubnub.com'
-          });
+          }
+          );
 
-      pubnub.addListener({
+          
+          
+
+
+      pubnub.addListener(
+        {
           message: function(m){
               const channelName = "my_channel" //Specify ni dapat
-              console.log(m.message)
+              console.log(m.timetoken)
               if (m.message.type == 'create') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'success')
               } else if (m.message.type == 'update') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'primary')
+              } else if (m.message.type == 'remove') {
+                bootstrap_alert('#notif', m.message.text, 5000, 'info')
               }
-              
+              getmetaData()
+          },
+
+          objects: (objectEvent) => {
+              const data = objectEvent.data; // Data from the event that occurred
+              console.log(data)
           },
           status: function(s) {
             var category = s.category; 
@@ -140,8 +159,59 @@
           channels: ["my_channel"],
       });
 
-  
-      function bootstrap_alert(elem, message, timeout, type) {
+
+    //16638355983567627
+    // pubnub.objects.setChannelMetadata({
+    //     channel: "my_channel",
+    //         data: {
+    //         custom : {
+    //           lastTimetoken : 16638350122080070
+    //         }
+    //       }
+    //     });
+
+    function getmetaData() {
+      pubnub.objects.getChannelMetadata({
+          channel: "my_channel"
+      }).then(result => {
+          tt = result.data.custom.lastTimetoken
+          getNotifs(tt)
+      });
+    }
+
+    function getNotifs (tt) {
+      pubnub.objects.setMemberships({
+          channels: [{
+              id: "my_channel",
+              custom: {
+                lastReadTimetoken: tt
+              }}]        
+        });
+
+          pubnub.objects.getMemberships({
+          include: {
+            customFields: true
+          }
+        });
+
+        pubnub.messageCounts({
+          channels: ['my_channel'],
+          channelTimetokens: [String(tt)],
+        }, (status, results) => {
+          // handle status, response
+          // console.log(status);
+          // console.log(results)
+          count = results.channels.my_channel;
+          if (count > 0) {
+            notif_counter('#notif_count', count)
+          }
+          
+        });
+      
+  }
+  getmetaData()
+
+  function bootstrap_alert(elem, message, timeout, type) {
       $(elem).show().html('<div class="alert alert-'+type+' p-4 mb-0"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+message+'</strong></div>');
       if (timeout || timeout === 0) {
         setTimeout(function() { 
@@ -151,7 +221,14 @@
     };
 
 
+  function notif_counter (elem, count) {
+    // console.log(count)
+    $(elem).show().html(count)
+  }
 
+  
+   
+  
   </script>
 </body>
 </html>

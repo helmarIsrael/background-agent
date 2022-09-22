@@ -161,6 +161,84 @@ async def update(id_number):
     return render_template('update.html', banner=banner, title=title, form=form)
 
 
+@app.route('/delete/<string:id_number>', methods=['GET'])
+async def delete(id_number):
+    students = models.students(id_number=id_number)
+    students = students.delete()
+    notify = notification.notifications(id = id_number)
+    await notify.delete_event()
+    flash('Student data has been deleted', 'success')
+    return redirect(url_for('land'))
+
+
+
+@app.route('/searched/<string:id_number>', methods=['GET', 'POST'])
+async def searched(id_number):
+    if request.method == "POST":
+        if request.form["search"]:
+            id = request.form["search"]
+            return redirect(url_for('searched', id_number=id))
+        elif not request.form["search"]:
+            flash('Please Enter an I.D Number', 'danger')
+            return redirect(url_for('land'))
+    student = models.students(id_number=id_number)
+    students = student.search()
+    try:
+        return render_template('searched.html', banner="Searched Student", title='Search', students=students)
+    except Exception:
+        flash('Sorry student not found', 'danger')
+        return redirect(url_for('home', fltr='id'))
+    
+@app.route('/colleges')
+def colleges():
+    return render_template('colleges.html', banner='Colleges')
+
+@app.route('/courses/<string:college>/<string:dept>')
+def courses(college, dept):
+    if college != 'SGS':
+        course = models.students(dept=dept)
+        courses = course.showCourse()
+        department = models.students(college=college)
+        depts = department.showDept()
+        banner = "("+college+")"+" "+courses[0][3]
+        return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
+    else:
+        course = models.students(dept=dept)
+        courses = course.showSGScourse()
+        department = models.students(college=college)
+        depts = department.showSGSdept()
+        banner = "("+college+")"+" "+courses[0][3]
+        return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
+
+
+
+
+@app.route('/notifs')
+def notifs():
+    return render_template('notifs.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @app.route('/dept/<string:get_college>')
 def deptByCollege(get_college):
     form = registerForm()
@@ -244,39 +322,6 @@ def courseByDept(get_college, get_dept):
             courseArray.append(courseObj)
         return jsonify({'course': courseArray})
 
-
-@app.route('/searched/<string:id_number>', methods=['GET', 'POST'])
-async def searched(id_number):
-    if request.method == "POST":
-        if request.form["search"]:
-            id = request.form["search"]
-            return redirect(url_for('searched', id_number=id))
-        elif not request.form["search"]:
-            flash('Please Enter an I.D Number', 'danger')
-            return redirect(url_for('land'))
-    student = models.students(id_number=id_number)
-    students = student.search()
-    try:
-        return render_template('searched.html', banner="Searched Student", title='Search', students=students)
-    except Exception:
-        flash('Sorry student not found', 'danger')
-        return redirect(url_for('home', fltr='id'))
-    
-
-
-@app.route('/delete/<string:id_number>', methods=['GET'])
-def delete(id_number):
-    students = models.students(id_number=id_number)
-    students = students.delete()
-    flash('Student data has been deleted', 'success')
-    return redirect(url_for('land'))
-
-
-@app.route('/colleges')
-def colleges():
-    return render_template('colleges.html', banner='Colleges')
-
-
 @app.route('/<string:college>departments')
 def department(college):
     if college != 'SGS':
@@ -289,22 +334,7 @@ def department(college):
         return redirect(url_for('courses', college=college, dept=dept[0][1]))
 
 
-@app.route('/courses/<string:college>/<string:dept>')
-def courses(college, dept):
-    if college != 'SGS':
-        course = models.students(dept=dept)
-        courses = course.showCourse()
-        department = models.students(college=college)
-        depts = department.showDept()
-        banner = "("+college+")"+" "+courses[0][3]
-        return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
-    else:
-        course = models.students(dept=dept)
-        courses = course.showSGScourse()
-        department = models.students(college=college)
-        depts = department.showSGSdept()
-        banner = "("+college+")"+" "+courses[0][3]
-        return render_template('courses.html', course=courses, depts=depts, banner=banner, clg=college)
+
 
 
 @app.after_request

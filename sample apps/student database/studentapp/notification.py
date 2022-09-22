@@ -47,7 +47,7 @@ class notifications(object):
         if type == 'create':
             if student.validation(): #Existing ang id so mo error sya kung register
                 return id
-        elif type == 'update':
+        elif type == 'update' or 'delete':
             if not student.validation(): #Existing ang id pero since update man so okay ra na existing
                 return id
 
@@ -55,6 +55,15 @@ class notifications(object):
         id = self.verify_id(self.id, 'create')
         event = f'New Student Added - {id}'
         type = 'create'
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type}).pn_async(my_publish_callback)
+        self.pubnub.subscribe().channels('my_channel').execute()
+        self.pubnub.add_listener(MySubscribeCallback())
+
+
+    async def delete_event(self):
+        id = self.verify_id(self.id, 'delete')
+        event = f'Student {id} is Deleted'
+        type = 'remove'
         self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type}).pn_async(my_publish_callback)
         self.pubnub.subscribe().channels('my_channel').execute()
         self.pubnub.add_listener(MySubscribeCallback())
