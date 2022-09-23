@@ -215,7 +215,7 @@ def courses(college, dept):
 
 @app.route('/notifs')
 def notifs():
-    return render_template('notifs.html')
+    return render_template('notifs.html', title='Notifications')
 
 
 

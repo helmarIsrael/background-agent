@@ -140,10 +140,7 @@
               getmetaData()
           },
 
-          objects: (objectEvent) => {
-              const data = objectEvent.data; // Data from the event that occurred
-              console.log(data)
-          },
+          
           status: function(s) {
             var category = s.category; 
             var operation = s.operation; 
@@ -170,23 +167,29 @@
     //       }
     //     });
 
-    function getmetaData() {
-      pubnub.objects.getChannelMetadata({
-          channel: "my_channel"
-      }).then(result => {
-          tt = result.data.custom.lastTimetoken
-          getNotifs(tt)
-      });
-    }
+      function getmetaData(){
+        pubnub.objects.getChannelMetadata({
+            channel: "my_channel"
+        }).then(result => {
+          if (result.data.custom){
+            tt = result.data.custom.latestTimetoken
+            console.log("getMetaData: " + tt)
+            getNotifs(tt)
+          }
+        });
+      }
+
 
     function getNotifs (tt) {
       pubnub.objects.setMemberships({
-          channels: [{
-              id: "my_channel",
-              custom: {
-                lastReadTimetoken: tt
-              }}]        
-        });
+      channels: [{
+          id: "my_channel",
+          custom: {
+            lastReadTimetoken: tt
+          },
+        }]
+      });
+
 
           pubnub.objects.getMemberships({
           include: {
