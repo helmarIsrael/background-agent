@@ -49,29 +49,27 @@
           <div class="row">
                   <div class="col">
                      <h1 class="display-4 font-weight-light text-light">Notifications</h1>
+                     <button type="button" class="btn btn-light" onclick="setNewTT()">Read All</button>
                   </div>
           </div>
           
         </div> 
       </div>
       <div class="container-fluid mb-3 pl-3 pr-3">
-        <div class="container-fluid home-view-tools p-3 m-0 mt-2">
+        <div class="container-fluid home-view-tools p-3 m-0 mt-2" style="background-color: rgba(255, 255, 255, 0.938);"">
             <div class="new_notif p-3 mb-2" style="border-bottom: 0.2em solid gray; border-radius:10px; background-color: rgba(101, 200, 207, 0.582);">
                 <div class="d-flex justify-content-center" style="font-size: larger;">
-                     <Strong>New</Strong>
+                     <Strong>Latest</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
-                    <!-- <h1 class="display-4 font-weight-light">No Students to View</h1>
-                    <h1 class="display-4 font-weight-light">No Students to View</h1>     -->
                 </div>    
             </div>
             
-            <div class="old_notif bg-warning p-3 mb-2">
+            <div class="old_notif p-3 mb-2">
                 <div class="d-flex justify-content-center" style="font-size: larger;">
                     <Strong>Earlier</Strong>
                 </div>
-                <div class="old_notif_body">
-                    <h1 class="display-4 font-weight-light">No Students to View</h1>    
+                <div id="old_notif_body" class="mt-1">
                 </div>    
             </div>
 
@@ -94,6 +92,7 @@
 
     //  UPON CLOSING THE TAB
     function setNewTT(){
+        console.log('Set New TT')
         pubnub.fetchMessages({
         channels: ["my_channel"],
         // end : String(tt)
@@ -114,6 +113,12 @@
             }
           }
         });
+
+        pubnub.signal({
+            message: 'read_notif',
+            channel: 'my_channel'
+        })
+
     }
 
   
@@ -136,21 +141,25 @@
         }).then(result=> {
             if (result.channels.my_channel) {
                 // console.log(result.channels.my_channel)
-                notifs = result.channels.my_channel
+                notifs = result.channels.my_channel.reverse()
                 for (var item = 0; item < notifs.length; item++){
-                    ts = notifs[item].timetoken
-                    // console.log(ts.toLocaleString())
-                    console.log(new Date(ts/1e4));
-                    msg = notifs[item].message.text
-                    document.getElementById('new_notif_body').innerHTML+= `
-                    <div class="card mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">`
-                            +msg+ 
-                        `</h5>
-                        
-                        </div>
-                    </div>`
+                    if (notifs[item].message.type != 'read_notif') {
+                        ts = notifs[item].timetoken
+                        // console.log(ts.toLocaleString())
+                        datetime = new Date(ts/1e4);
+                        msg = notifs[item].message.text
+                        document.getElementById('new_notif_body').innerHTML+= `
+                        <div class="card mb-2">
+                        <div class="card-body">
+                            <h4 class="card-title">`
+                                +msg+ 
+                            `<h6 class="card-subtitle mb-2 text-muted">`+ new Date(ts/1e4) +`</h6>
+                            </h4>
+                            
+                            </div>
+                        </div>`
+                    }
+                    
                 }
             }
         })
@@ -160,11 +169,30 @@
         console.log(tt)
         pubnub.fetchMessages({
         channels: ["my_channel"],
-        start : String(tt)
+        start : String(tt),
         }).then(result=> {
-            // if (result.channels.my_channel) {
-            //     console.log(result.channels.my_channel)
-            // }
+            if (result.channels.my_channel) {
+                notifs = result.channels.my_channel.reverse()
+                for (var item = 0; item < notifs.length; item++){
+                    if (notifs[item].message.type != 'read_notif') {
+                        ts = notifs[item].timetoken
+                        // console.log(ts.toLocaleString())
+                        datetime = new Date(ts/1e4);
+                        msg = notifs[item].message.text
+                        document.getElementById('old_notif_body').innerHTML+= `
+                        <div class="card mb-2">
+                        <div class="card-body">
+                            <h4 class="card-title">`
+                                +msg+ 
+                            `<h6 class="card-subtitle mb-2 text-muted">`+ new Date(ts/1e4) +`</h6>
+                            </h4>
+                            
+                            </div>
+                        </div>`
+                    }
+                    
+                }
+            }
         })
     }
 

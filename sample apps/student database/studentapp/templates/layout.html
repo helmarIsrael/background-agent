@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body onload="getmetaData()">
    <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top">
         <div class="container p-2">
@@ -129,17 +129,21 @@
         {
           message: function(m){
               const channelName = "my_channel" //Specify ni dapat
-              console.log(m.timetoken)
               if (m.message.type == 'create') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'success')
               } else if (m.message.type == 'update') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'primary')
               } else if (m.message.type == 'remove') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'info')
-              }
+              } 
               getmetaData()
           },
-
+          
+          signal: function (s) {
+            const msg = s.message;
+            console.log(msg) // Payload
+            getmetaData()
+          },
           
           status: function(s) {
             var category = s.category; 
@@ -212,7 +216,6 @@
         });
       
   }
-  getmetaData()
 
   function bootstrap_alert(elem, message, timeout, type) {
       $(elem).show().html('<div class="alert alert-'+type+' p-4 mb-0"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><strong>'+message+'</strong></div>');
