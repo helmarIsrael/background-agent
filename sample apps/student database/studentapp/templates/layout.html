@@ -141,7 +141,7 @@
           
           signal: function (s) {
             const msg = s.message;
-            console.log(msg) // Payload
+            console.log('Signal: ' + msg) // Payload
             getmetaData()
           },
           
@@ -170,6 +170,14 @@
     //         }
     //       }
     //     });
+      
+    // pubnub.fetchMessages({
+    //     channels: ["my_channel"],
+    //     start : 16638355983567627,
+    //     }).then(result => {
+    //       console.log(result)
+    //     })
+
 
       function getmetaData(){
         pubnub.objects.getChannelMetadata({
@@ -209,7 +217,8 @@
           // console.log(status);
           // console.log(results)
           count = results.channels.my_channel;
-          if (count > 0) {
+          console.log("Count: " + count)
+          if (count >= 0) {
             notif_counter('#notif_count', count)
           }
           
@@ -228,8 +237,12 @@
 
 
   function notif_counter (elem, count) {
-    // console.log(count)
-    $(elem).show().html(count)
+    console.log("notif counter: " + count)
+    if (count > 0){
+      $(elem).show().html(count)
+    } else {
+      $(elem).hide().html(count)
+    }
   }
 
   

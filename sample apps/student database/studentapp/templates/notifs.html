@@ -58,15 +58,15 @@
       <div class="container-fluid mb-3 pl-3 pr-3">
         <div class="container-fluid home-view-tools p-3 m-0 mt-2" style="background-color: rgba(255, 255, 255, 0.938);"">
             <div class="new_notif p-3 mb-2" style="border-bottom: 0.2em solid gray; border-radius:10px; background-color: rgba(101, 200, 207, 0.582);">
-                <div class="d-flex justify-content-center" style="font-size: larger;">
+                <div class="d-flex justify-content-center" id = "labels" style="font-size: larger;">
                      <Strong>Latest</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
                 </div>    
             </div>
             
-            <div class="old_notif p-3 mb-2">
-                <div class="d-flex justify-content-center" style="font-size: larger;">
+            <div id="old_notif" class="p-3 mb-2">
+                <div class="d-flex justify-content-center" id="labels" style="font-size: larger;">
                     <Strong>Earlier</Strong>
                 </div>
                 <div id="old_notif_body" class="mt-1">
@@ -92,7 +92,6 @@
 
     //  UPON CLOSING THE TAB
     function setNewTT(){
-        console.log('Set New TT')
         pubnub.fetchMessages({
         channels: ["my_channel"],
         // end : String(tt)
@@ -104,7 +103,7 @@
 
     //16638979278064423
     function saveData(tt){
-        console.log(tt)
+      console.log('Set New TT:' + tt)
         pubnub.objects.setChannelMetadata({
             channel: "my_channel",
             data: {
@@ -192,6 +191,8 @@
                     }
                     
                 }
+            } else {
+              document.getElementById('old_notif').style.display = "none"
             }
         })
     }

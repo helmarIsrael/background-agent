@@ -110,6 +110,8 @@ async def update(id_number):
                     updated.append('Year Level')
                 if form.update_department.data != item[5]:
                     updated.append('Department')
+                if form.update_course.data != item[3]:
+                    updated.append('Course')
                 
                 print(f'{form.update_id.data} CHANGED')
                 yearLvl = int(form.update_yearLvl.data)
