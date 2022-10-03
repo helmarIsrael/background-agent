@@ -1,48 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8"/>
+    <title>Hello, PubNub</title>
+    <!-- Update this block with the URL to the content delivery network version of the SDK -->
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
 </head>
 <body>
-    
+    <script>
+    const buttonClick = () => {
+        var input = document.getElementById('message-body');
+        publishMessage(input.value);
+        input.value = '';
+    };
+
+    const showMessage = (msg) => {
+        var message = document.createElement('div');
+        message.innerText = msg;
+        document.getElementById('messages').appendChild(message);
+    };
+
+    let pubnub;
+
+    const setupPubNub = () => {
+        // Update this block with your publish/subscribe keys
+        pubnub = new PubNub({
+            publishKey : "myPublishKey",
+            subscribeKey : "mySubscribeKey",
+            userId: "myUniqueUserId",
+            uuid:"myUniqueUUID"
+        });
+
+        // add listener
+
+        // publish message
+
+        // subscribe to a channel
+    };
+
+    // run after page is loaded
+    window.onload = setupPubNub;
+    </script>
+
+    <div>
+        <input id="message-body" type="text">
+        <button onclick="buttonClick()">Send</button>
+        <div id="messages"></div>
+    </div>
 </body>
 </html>
-
-
-<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
-
-
-
-<script>
-    var pubnub = new PubNub({
-              subscribe_key : "sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279",
-              publish_key:"pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7",
-              uuid: "myUUID",
-              
-          });
-
-      pubnub.addListener({
-          message: function(m){
-              const channelName = "testChannel" //Specify ni dapat
-              console.log(m.message)
-          },
-          status: function(s) {
-            var category = s.category; 
-            var operation = s.operation; 
-            var lastTimetoken = s.lastTimetoken;
-
-            console.log(category)
-      
-    }
-      })
-
-
-      pubnub.subscribe({
-          channels: ["testChannel"],
-      });
-
-
-</script>
