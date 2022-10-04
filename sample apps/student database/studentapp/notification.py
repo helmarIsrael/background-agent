@@ -1,8 +1,8 @@
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-
 import studentapp.models as models
+from studentapp import app
 
 
 
@@ -16,7 +16,20 @@ def my_publish_callback(envelope, status):
 class MySubscribeCallback(SubscribeCallback):
 
     def message(self, pubnub, message):
-        print(message.message)
+        msg = message.message['text']
+        msg_type = message.message['type']
+        msg_channel = message.channel
+        msg_timestamp = message.timetoken
+        print(f'Message payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}')
+        db = models.students(
+            message_payload=msg,
+            timestamp=msg_timestamp,
+            msg_type = msg_type,
+            channel = msg_channel
+        )
+
+        with app.app_context():
+            db.store_notif()
 
 
 
@@ -72,7 +85,7 @@ class notifications(object):
 
     async def update_event(self):
         id = self.verify_id(self.id, 'update')
-        print(f'id: {id}')
+        # print(f'id: {id}')
         changed_items = len(self.updated_items)
         # print(len(self.updated_items))
         if changed_items > 2:

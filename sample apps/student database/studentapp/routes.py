@@ -5,10 +5,6 @@ from studentapp.for_valid import current_id
 from studentapp.forms import registerForm, updateForm, filterForm
 import studentapp.notification as notification
 import studentapp.models as models
-from pubnub.pubnub import PubNub, SubscribeListener
-from pubnub.pnconfiguration import PNConfiguration
-from pubnub.pubnub import PubNub
-import asyncio
 
 @app.route('/')
 def land():
@@ -113,7 +109,7 @@ async def update(id_number):
                 if form.update_course.data != item[3]:
                     updated.append('Course')
                 
-                print(f'{form.update_id.data} CHANGED')
+                # print(f'{form.update_id.data} CHANGED')
                 yearLvl = int(form.update_yearLvl.data)
                 db = models.students(id_number=form.update_id.data,
                                     firstname=form.update_fname.data,
@@ -217,7 +213,11 @@ def courses(college, dept):
 
 @app.route('/notifs')
 def notifs():
-    return render_template('notifs.html', title='Notifications')
+    db = models.students()
+    notifs = db.show_notif()
+    for notif in notifs:
+        print(notif)
+    return render_template('notifs.html', title='Notifications', notifs = notifs)
 
 
 

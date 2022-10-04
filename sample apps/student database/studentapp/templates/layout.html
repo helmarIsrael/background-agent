@@ -128,7 +128,8 @@
       pubnub.addListener(
         {
           message: function(m){
-              const channelName = "my_channel" //Specify ni dapat
+              // const channelName = "my_channel" //Specify ni dapat
+              console.log(m.timetoken)
               if (m.message.type == 'create') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'success')
               } else if (m.message.type == 'update') {
@@ -184,24 +185,6 @@
       });
 
 
-    //16638355983567627
-    // pubnub.objects.setChannelMetadata({
-    //     channel: "my_channel",
-    //         data: {
-    //         custom : {
-    //           lastTimetoken : 16638350122080070
-    //         }
-    //       }
-    //     });
-      
-    // pubnub.fetchMessages({
-    //     channels: ["my_channel"],
-    //     start : 16641618210123199,
-    //     }).then(result => {
-    //       console.log(result)
-    //     })
-
-
       function getmetaData(){
         pubnub.objects.getChannelMetadata({
             channel: "my_channel"
@@ -236,9 +219,6 @@
           channels: ['my_channel'],
           channelTimetokens: [String(tt)],
         }, (status, results) => {
-          // handle status, response
-          // console.log(status);
-          // console.log(results)
           count = results.channels.my_channel;
           console.log("Count: " + count)
           if (count >= 0) {
@@ -251,32 +231,6 @@
 
 
   
-  // console.log(status)
-  
-  // const connectionCheck = (fn, handler) => e => {
-  //   fn(handler(e));
-  // };
-
-  // var recevier = function recevier(x){
-  //   return x;
-  // };
-
-  // const sendStatus = e => {
-  //   return 1;
-  // };
-  
-  
-  // console.log(document.addEventListener('reconnect', connectionCheck(recevier, sendStatus)))
-  // var event = new CustomEvent("reconnect", {
-  //   detail : {
-  //      status :'disconnected'
-  //     }
-  //   }
-  // );
-  // document.addEventListener('reconnect', (e) => {
-  //   console.log(e.detail.status)
-  // })// IF kani iya ma listen meaning walay internet
-  
 
   function reconnect(){
     bootstrap_alert('#notif', 'Attempting to Reconnect', 0, 'info')
@@ -284,26 +238,19 @@
   }
 
   function connectionCheck () {
-    // await document.dispatchEvent(event);
     var evtFired = false;
     setTimeout(function() {
         if (!evtFired) {
           bootstrap_alert('#notif', 'NO INTERNET', 0, 'danger')
         }
-    }, 5000);
+    }, 8000);
 
-    function fooFn(e) {
+    function connectionListener(e) {
         evtFired = true;
         console.log('connection check: '+ e.detail.status)
-        // setTimeout(function(){
-        //   if (e.detail.status == 'disconnected'){
-        //   console.log('true disconnected')
-        //     bootstrap_alert('#notif', 'NO INTERNET', 0, 'danger')
-        // }
-        // }, 5000)
     }
 
-    document.addEventListener('reconnect', fooFn)
+    document.addEventListener('reconnect', connectionListener)
 
   }
 

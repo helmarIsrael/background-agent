@@ -6,6 +6,8 @@ class students(object):
                         yearlvl=None, gender=None, 
                         course=None, filter=None, 
                         college=None, dept=None,
+                        message_payload=None, timestamp=None,
+                        msg_type=None, channel=None
                                               ):
 
         self.id = id
@@ -21,6 +23,10 @@ class students(object):
         self.college = college
         self.dept = dept
 
+        self.message_payload = message_payload
+        self.timestamp = timestamp
+        self.msg_type = msg_type
+        self.channel = channel
 
 
 
@@ -167,3 +173,23 @@ class students(object):
         return display
 
 
+    #### NOTIFICATION ##########
+    def store_notif(self):
+        cursor = mysql.connection.cursor()
+        # print(self.message_payload, self.timestamp, self.msg_type, self.channel)
+        sql = """INSERT INTO notifications(message_payload, timestamp, type, channel) 
+            VALUES ('%s','%s','%s','%s')""" % (self.message_payload, self.timestamp,
+                                                self.msg_type, self.channel)
+        
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+    # show_notif INITIALLY, BUT WILL ADD OTHER FUNCTION THAT CAN SEGREGATE NEW AND OLD 
+    # BASED ON THE MACHINE/LOCAL TIME '+' OR '-' THE NOTIFICATION TIMESTAMP   
+    def show_notif(self): 
+        cursor = mysql.connection.cursor()
+        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp, '%h:%i %p, %D %M %Y') AS UNIX FROM notifications"""
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        return display

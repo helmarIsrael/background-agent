@@ -62,6 +62,16 @@
                      <Strong>Latest</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
+                    {% for notif in notifs %}
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                {{ notif[0] }}
+                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                            </h4>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>    
             </div>
             
@@ -70,6 +80,15 @@
                     <Strong>Earlier</Strong>
                 </div>
                 <div id="old_notif_body" class="mt-1">
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                +msg+ 
+                            <h6 class="card-subtitle mb-2 text-muted">+ new Date(ts/1e4) +</h6>
+                            </h4>
+                            
+                            </div>
+                        </div>
                 </div>    
             </div>
 
@@ -79,127 +98,3 @@
     </div>
 </body>
 </html>
-
-<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
-
-<script>
-    var pubnub = new PubNub({
-              subscribe_key : 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279',
-              publish_key:'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7',
-              uuid: "myUUID",
-              origin: 'pubsub.pubnub.com'
-          });
-
-    //  UPON CLOSING THE TAB
-    function setNewTT(){
-        pubnub.fetchMessages({
-        channels: ["my_channel"],
-        // end : String(tt)
-        }).then(result=> {
-            tt = result.channels.my_channel.at(-1)['timetoken']
-            saveData(tt)
-        })
-    }
-
-    //16638979278064423
-    function saveData(tt){
-      console.log('Set New TT:' + tt)
-        pubnub.objects.setChannelMetadata({
-            channel: "my_channel",
-            data: {
-            custom : {
-              latestTimetoken : tt
-            }
-          }
-        });
-
-        pubnub.signal({
-            message: 'read_notif',
-            channel: 'my_channel'
-        })
-
-    }
-
-  
-
-    // UPON OPENNING THE TAB
-    pubnub.objects.getChannelMetadata({
-        channel: "my_channel"
-    }).then(result => {
-        tt = result.data.custom.latestTimetoken
-        getNewNotif(tt)
-        getOldNotif(tt)
-    });
-
-
-    function getNewNotif (tt) {
-        console.log(tt)
-        pubnub.fetchMessages({
-        channels: ["my_channel"],
-        end : String(tt)
-        }).then(result=> {
-            if (result.channels.my_channel) {
-                // console.log(result.channels.my_channel)
-                notifs = result.channels.my_channel.reverse()
-                for (var item = 0; item < notifs.length; item++){
-                    if (notifs[item].message.type != 'read_notif') {
-                        ts = notifs[item].timetoken
-                        // console.log(ts.toLocaleString())
-                        datetime = new Date(ts/1e4);
-                        msg = notifs[item].message.text
-                        document.getElementById('new_notif_body').innerHTML+= `
-                        <div class="card mb-2">
-                        <div class="card-body">
-                            <h4 class="card-title">`
-                                +msg+ 
-                            `<h6 class="card-subtitle mb-2 text-muted">`+ new Date(ts/1e4) +`</h6>
-                            </h4>
-                            
-                            </div>
-                        </div>`
-                    }
-                    
-                }
-            }
-        })
-    }
-
-    function getOldNotif (tt) {
-        console.log(tt)
-        pubnub.fetchMessages({
-        channels: ["my_channel"],
-        start : String(tt),
-        }).then(result=> {
-            if (result.channels.my_channel) {
-                notifs = result.channels.my_channel.reverse()
-                for (var item = 0; item < notifs.length; item++){
-                    if (notifs[item].message.type != 'read_notif') {
-                        ts = notifs[item].timetoken
-                        // console.log(ts.toLocaleString())
-                        datetime = new Date(ts/1e4);
-                        msg = notifs[item].message.text
-                        document.getElementById('old_notif_body').innerHTML+= `
-                        <div class="card mb-2">
-                        <div class="card-body">
-                            <h4 class="card-title">`
-                                +msg+ 
-                            `<h6 class="card-subtitle mb-2 text-muted">`+ new Date(ts/1e4) +`</h6>
-                            </h4>
-                            
-                            </div>
-                        </div>`
-                    }
-                    
-                }
-            } else {
-              document.getElementById('old_notif').style.display = "none"
-            }
-        })
-    }
-
-    
-
-
-
-
-</script>
