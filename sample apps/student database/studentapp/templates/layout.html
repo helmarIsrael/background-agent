@@ -122,13 +122,8 @@
           }
           );
 
-      const event = new CustomEvent("reconnect",{
-        detail:{
-          status:'recon'
-        }
-      });
-          
-
+      
+    
 
       pubnub.addListener(
         {
@@ -151,12 +146,15 @@
           },
           
           status: function(s) {
+            // document.dispatchEvent(event)
             var category = s.category; 
             // var operation = s.operation; 
             // var lastTimetoken = s.lastTimetoken;
             if (category == 'PNConnectedCategory'){ //Connected
               console.log("Status: " + category)
+              const event = new CustomEvent("reconnect", {detail:{status:'connected'}});
               document.dispatchEvent(event);
+              // connectionCheck()
             } 
             else if(category == 'PNNetworkDownCategory'){ // SDK Detected Network Down or No internet
               console.log("Status: " + category)
@@ -165,7 +163,9 @@
             else if(category == 'PNNetworkUpCategory'){ // SDK Detected Network Up or reconnected internet
               console.log("Status: " + category)
               bootstrap_alert('#notif', 'CONNECTED', 10000, 'success')
+              const event = new CustomEvent("reconnect", {detail:{status:'connected'}});
               document.dispatchEvent(event);
+              // connectionCheck()
             }
             else if (category == 'PNReconnectedCategory'){ // SDK reconnected to Pubnub
               console.log("Status: " + category)
@@ -258,7 +258,7 @@
   // };
 
   // var recevier = function recevier(x){
-  //   return x*1;
+  //   return x;
   // };
 
   // const sendStatus = e => {
@@ -267,21 +267,44 @@
   
   
   // console.log(document.addEventListener('reconnect', connectionCheck(recevier, sendStatus)))
+  // var event = new CustomEvent("reconnect", {
+  //   detail : {
+  //      status :'disconnected'
+  //     }
+  //   }
+  // );
+  // document.addEventListener('reconnect', (e) => {
+  //   console.log(e.detail.status)
+  // })// IF kani iya ma listen meaning walay internet
   
 
   function reconnect(){
-    var status;
     bootstrap_alert('#notif', 'Attempting to Reconnect', 0, 'info')
-    // document.addEventListener('reconnect', (e) => {
-    //   status =  e.detail.status
-    // })
-  
-    // console.log('status sa recon ' + status)
-  
-    
-    setTimeout(function(){
-      bootstrap_alert('#notif', 'NO INTERNET', 0, 'danger')
-    }, 5000)
+    connectionCheck()
+  }
+
+  function connectionCheck () {
+    // await document.dispatchEvent(event);
+    var evtFired = false;
+    setTimeout(function() {
+        if (!evtFired) {
+          bootstrap_alert('#notif', 'NO INTERNET', 0, 'danger')
+        }
+    }, 5000);
+
+    function fooFn(e) {
+        evtFired = true;
+        console.log('connection check: '+ e.detail.status)
+        // setTimeout(function(){
+        //   if (e.detail.status == 'disconnected'){
+        //   console.log('true disconnected')
+        //     bootstrap_alert('#notif', 'NO INTERNET', 0, 'danger')
+        // }
+        // }, 5000)
+    }
+
+    document.addEventListener('reconnect', fooFn)
+
   }
 
   function bootstrap_alert(elem, message, timeout, type) {
