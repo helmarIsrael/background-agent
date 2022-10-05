@@ -62,7 +62,7 @@
                      <Strong>Latest</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
-                    {% for notif in notifs %}
+                    {% for notif in new_notifs %}
                     <div class="card mb-2">
                         <div class="card-body">
                             <h4 class="card-title">
@@ -80,15 +80,16 @@
                     <Strong>Earlier</Strong>
                 </div>
                 <div id="old_notif_body" class="mt-1">
+                  {% for notif in old_notifs %}
                     <div class="card mb-2">
                         <div class="card-body">
                             <h4 class="card-title">
-                                +msg+ 
-                            <h6 class="card-subtitle mb-2 text-muted">+ new Date(ts/1e4) +</h6>
+                                {{ notif[0] }}
+                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
                             </h4>
-                            
-                            </div>
                         </div>
+                    </div>
+                  {% endfor %}
                 </div>    
             </div>
 

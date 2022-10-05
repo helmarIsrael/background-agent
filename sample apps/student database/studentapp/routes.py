@@ -5,6 +5,8 @@ from studentapp.for_valid import current_id
 from studentapp.forms import registerForm, updateForm, filterForm
 import studentapp.notification as notification
 import studentapp.models as models
+import timeago, datetime
+from datetime import datetime as dtime, timedelta
 
 @app.route('/')
 def land():
@@ -213,12 +215,27 @@ def courses(college, dept):
 
 @app.route('/notifs')
 def notifs():
-    # db = models.students()
-    # notifs = db.show_notif()
-    # for notif in notifs:
-    #     print(notif)
-    # return render_template('notifs.html', title='Notifications', notifs = notifs)
-    return render_template('notifs_pubnub.html', title='Notifications')
+    db = models.students()
+    notifs = db.show_notif()
+    #yesterday = datetime.datetimetoday() - timedelta(days=1)
+    now = datetime.datetime.now()
+    new_notif = []
+    old_notif = []
+    print("2 days ago: " + str(dtime.today().date() - timedelta(days=2)))
+    for notif in notifs:
+        if notif[1].date() < dtime.today().date():  #  if notif[1] kay gahapon kay iappend sya sa old_notif
+            if notif[1].date() < (dtime.today().date() - timedelta(days=2)):
+                notif[1] = f'{notif[1].date().strftime("%a, %d %b, %Y")} at {notif[1].time().strftime("%I:%M %p")}'
+            else:
+                notif[1] = f'{timeago.format(notif[1], now)} at {notif[1].time().strftime("%I:%M %p")}'
+            old_notif.append(notif)
+        else:  # if notif[1] kay karon, iappend sya sa new_notif[]
+            notif[1] = timeago.format(notif[1], now)
+            new_notif.append(notif)
+       
+    
+    return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
+    # return render_template('notifs_pubnub.html', title='Notifications')
 
 
 

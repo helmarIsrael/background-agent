@@ -1,6 +1,5 @@
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
-from pubnub.enums import PNOperationType, PNStatusCategory
 from pubnub.pubnub import PubNub
 import studentapp.models as models
 from studentapp import app
@@ -34,17 +33,7 @@ class MySubscribeCallback(SubscribeCallback):
 
         with app.app_context():
             db.store_notif()
-
-    def status(self, pubnub, status):
-         if status.operation == PNOperationType.PNSubscribeOperation \
-                or status.operation == PNOperationType.PNUnsubscribeOperation:
-            if status.category == PNStatusCategory.PNConnectedCategory:
-                # print(pubnub.time().sync())
-                pass
-
-   
-    
-    
+        
 
 
 

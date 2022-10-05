@@ -189,7 +189,9 @@ class students(object):
     # BASED ON THE MACHINE/LOCAL TIME '+' OR '-' THE NOTIFICATION TIMESTAMP   
     def show_notif(self): 
         cursor = mysql.connection.cursor()
-        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp, '%h:%i %p, %D %M %Y') AS UNIX FROM notifications"""
+        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX FROM notifications
+                ORDER BY timestamp DESC"""
         cursor.execute(sql)
         display = cursor.fetchall()
-        return display
+        result = [list(i) for i in display]
+        return result
