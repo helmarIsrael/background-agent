@@ -213,12 +213,12 @@ def courses(college, dept):
 
 @app.route('/notifs')
 def notifs():
-    db = models.students()
-    notifs = db.show_notif()
-    for notif in notifs:
-        print(notif)
-    return render_template('notifs.html', title='Notifications', notifs = notifs)
-
+    # db = models.students()
+    # notifs = db.show_notif()
+    # for notif in notifs:
+    #     print(notif)
+    # return render_template('notifs.html', title='Notifications', notifs = notifs)
+    return render_template('notifs_pubnub.html', title='Notifications')
 
 
 

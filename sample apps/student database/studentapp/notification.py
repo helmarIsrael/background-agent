@@ -1,9 +1,10 @@
 from pubnub.callbacks import SubscribeCallback
 from pubnub.pnconfiguration import PNConfiguration
+from pubnub.enums import PNOperationType, PNStatusCategory
 from pubnub.pubnub import PubNub
 import studentapp.models as models
 from studentapp import app
-
+from datetime import datetime
 
 
 
@@ -19,7 +20,10 @@ class MySubscribeCallback(SubscribeCallback):
         msg = message.message['text']
         msg_type = message.message['type']
         msg_channel = message.channel
-        msg_timestamp = message.timetoken
+        curr_dt = datetime.now()
+        # print("Current datetime: ", curr_dt)
+        msg_timestamp = int(round(curr_dt.timestamp()))
+        # print("Integer timestamp of current datetime: ", msg_timestamp)
         print(f'Message payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}')
         db = models.students(
             message_payload=msg,
@@ -31,8 +35,12 @@ class MySubscribeCallback(SubscribeCallback):
         with app.app_context():
             db.store_notif()
 
-
-
+    def status(self, pubnub, status):
+         if status.operation == PNOperationType.PNSubscribeOperation \
+                or status.operation == PNOperationType.PNUnsubscribeOperation:
+            if status.category == PNStatusCategory.PNConnectedCategory:
+                # print(pubnub.time().sync())
+                pass
 
    
     

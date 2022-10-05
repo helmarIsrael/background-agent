@@ -192,6 +192,8 @@
           if (result.data.custom){
             tt = result.data.custom.latestTimetoken
             console.log("getMetaData: " + tt)
+            datetime = new Date(tt/1e4);
+            console.log(datetime)
             getNotifs(tt)
           }
         });
