@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+  <body onload="getUnread()">
    <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top">
         <div class="container p-2">
@@ -49,28 +49,39 @@
           <div class="row">
                   <div class="col">
                      <h1 class="display-4 font-weight-light text-light">Notifications</h1>
-                     <button type="button" class="btn btn-light" onclick="setNewTT()">Read All</button>
+                     <span><strong id="notif_count" style="font-size:1.5em; color: white; display: none;"></strong></span>
                   </div>
           </div>
           
         </div> 
       </div>
       <div class="container-fluid mb-3 pl-3 pr-3">
-        <div class="container-fluid home-view-tools p-3 m-0 mt-2" style="background-color: rgba(255, 255, 255, 0.938);"">
-            <div class="new_notif p-3 mb-2" style="border-bottom: 0.2em solid gray; border-radius:10px; background-color: rgba(101, 200, 207, 0.582);">
+        <div class="container-fluid home-view-tools p-3 m-0 mt-2" style="background-color: rgba(255, 255, 255, 0.938);">
+            <div class="new_notif p-3 mb-2" style="border-bottom: 0.2em solid gray; border-radius:10px; background-color: rgba(255, 255, 255, 0.959);">
                 <div class="d-flex justify-content-center" id = "labels" style="font-size: larger;">
-                     <Strong>Latest</Strong>
+                     <Strong>Today</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
                     {% for notif in new_notifs %}
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                {{ notif[0] }}
-                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                            </h4>
+                      {% if notif[2] == 0 %}
+                        <div class="card mb-2">
+                          <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                              <h4 class="card-title">
+                                  {{ notif[0] }}
+                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                              </h4>
+                          </div>
                         </div>
-                    </div>
+                      {%else%}
+                        <div class="card mb-2">
+                          <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161);">
+                              <h4 class="card-title">
+                                  {{ notif[0] }}
+                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                              </h4>
+                          </div>
+                        </div>
+                      {% endif %}
                     {% endfor %}
                 </div>    
             </div>
@@ -81,6 +92,16 @@
                 </div>
                 <div id="old_notif_body" class="mt-1">
                   {% for notif in old_notifs %}
+                  {% if notif[2] == 0 %}
+                    <div class="card mb-2">
+                      <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                          <h4 class="card-title">
+                              {{ notif[0] }}
+                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                          </h4>
+                      </div>
+                    </div>
+                  {% else %}
                     <div class="card mb-2">
                         <div class="card-body">
                             <h4 class="card-title">
@@ -89,6 +110,7 @@
                             </h4>
                         </div>
                     </div>
+                  {% endif %}
                   {% endfor %}
                 </div>    
             </div>
@@ -98,4 +120,31 @@
 
     </div>
 </body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+<script>
+  function getUnread(){
+        fetch('/countNotifs').then(function(response){
+            response.json().then(function(data){
+              count = data.unread
+              if (count >= 0) {
+                notif_counter('#notif_count', count)
+              }
+            });
+          });
+      }
+    
+  function notif_counter (elem, count) {
+    console.log("notif counter: " + count)
+    if (count > 0){
+      $(elem).show().html(`${count} New!`)
+    } else {
+      $(elem).hide().html(`${count} New!`)
+    }
+  }
+
+</script>
 </html>

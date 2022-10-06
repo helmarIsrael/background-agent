@@ -221,7 +221,7 @@ def notifs():
     now = datetime.datetime.now()
     new_notif = []
     old_notif = []
-    print("2 days ago: " + str(dtime.today().date() - timedelta(days=2)))
+    # print("2 days ago: " + str(dtime.today().date() - timedelta(days=2)))
     for notif in notifs:
         if notif[1].date() < dtime.today().date():  #  if notif[1] kay gahapon kay iappend sya sa old_notif
             if notif[1].date() < (dtime.today().date() - timedelta(days=2)):
@@ -238,8 +238,12 @@ def notifs():
     # return render_template('notifs_pubnub.html', title='Notifications')
 
 
-
-
+@app.route('/countNotifs')
+def countNotifs():
+    db = models.students()
+    notifCount = db.count_unread()
+    count = notifCount[0][0]
+    return jsonify({'unread': count})
 
 
 

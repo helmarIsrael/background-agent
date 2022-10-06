@@ -189,9 +189,17 @@ class students(object):
     # BASED ON THE MACHINE/LOCAL TIME '+' OR '-' THE NOTIFICATION TIMESTAMP   
     def show_notif(self): 
         cursor = mysql.connection.cursor()
-        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX FROM notifications
+        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX, status FROM notifications
                 ORDER BY timestamp DESC"""
         cursor.execute(sql)
         display = cursor.fetchall()
         result = [list(i) for i in display]
         return result
+
+
+    def count_unread(self):
+        cursor = mysql.connection.cursor()
+        sql = """SELECT COUNT(*) FROM notifications WHERE status = 0"""
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        return display

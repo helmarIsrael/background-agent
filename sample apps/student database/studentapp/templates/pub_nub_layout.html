@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     />
   </head>
-  <body onload="getUnread()">
+  <body onload="getmetaData()">
    <header>
       <nav class="navbar navbar-expand-md navbar-dark fixed-top">
         <div class="container p-2">
@@ -137,8 +137,14 @@
               } else if (m.message.type == 'remove') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'info')
               } 
+              getmetaData()
           },
           
+          signal: function (s) {
+            const msg = s.message;
+            console.log('Signal: ' + msg) // Payload
+            getmetaData()
+          },
           
           status: function(s) {
             // document.dispatchEvent(event)
@@ -178,17 +184,52 @@
           channels: ["my_channel"],
       });
 
-      function getUnread(){
-        fetch('/countNotifs').then(function(response){
-            response.json().then(function(data){
-              count = data.unread
-              if (count >= 0) {
-                notif_counter('#notif_count', count)
-              }
-            });
-          });
+
+      function getmetaData(){
+        pubnub.objects.getChannelMetadata({
+            channel: "my_channel"
+        }).then(result => {
+          if (result.data.custom){
+            tt = result.data.custom.latestTimetoken
+            console.log("getMetaData: " + tt)
+            datetime = new Date(tt/1e4);
+            console.log(datetime)
+            getNotifs(tt)
+          }
+        });
       }
 
+
+    function getNotifs (tt) {
+      pubnub.objects.setMemberships({
+      channels: [{
+          id: "my_channel",
+          custom: {
+            lastReadTimetoken: tt
+          },
+        }]
+      });
+
+
+          pubnub.objects.getMemberships({
+          include: {
+            customFields: true
+          }
+        });
+
+        pubnub.messageCounts({
+          channels: ['my_channel'],
+          channelTimetokens: [String(tt)],
+        }, (status, results) => {
+          count = results.channels.my_channel;
+          console.log("Count: " + count)
+          if (count >= 0) {
+            notif_counter('#notif_count', count)
+          }
+          
+        });
+      
+  }
 
 
   
