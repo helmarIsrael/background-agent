@@ -64,14 +64,26 @@
                 <div id="new_notif_body" class="mt-1">
                     {% for notif in new_notifs %}
                       {% if notif[2] == 0 %}
-                        <div class="card mb-2">
-                          <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                      <div class="card mb-2">
+                        <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                            <h4 class="card-title">
+                                {{ notif[0] }}
+                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                            </h4>
+                        </div>
+                      </div>
+                        <!-- {% if notif[5] == 'remove' %} -->
+                          
+                        <!-- {% else %}
+                        <a href="{{ url_for('searched', id_number = notif[4])}}" class="card mb-2">
+                          <div class="card-body bg-warning" style="border: 0.1px solid rgb(161, 161, 161)">
                               <h4 class="card-title">
                                   {{ notif[0] }}
                                   <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
                               </h4>
                           </div>
-                        </div>
+                        </a>
+                        {% endif %} -->
                       {%else%}
                         <div class="card mb-2">
                           <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161);">
@@ -126,25 +138,25 @@
       crossorigin="anonymous"
     ></script>
 <script>
-  function getUnread(){
-        fetch('/countNotifs').then(function(response){
-            response.json().then(function(data){
-              count = data.unread
-              if (count >= 0) {
-                notif_counter('#notif_count', count)
-              }
-            });
-          });
-      }
+  // function getUnread(){
+  //       fetch('/countNotifs').then(function(response){
+  //           response.json().then(function(data){
+  //             count = data.unread
+  //             if (count >= 0) {
+  //               notif_counter('#notif_count', count)
+  //             }
+  //           });
+  //         });
+  //     }
     
-  function notif_counter (elem, count) {
-    console.log("notif counter: " + count)
-    if (count > 0){
-      $(elem).show().html(`${count} New!`)
-    } else {
-      $(elem).hide().html(`${count} New!`)
-    }
-  }
+  // function notif_counter (elem, count) {
+  //   console.log("notif counter: " + count)
+  //   if (count > 0){
+  //     $(elem).show().html(`${count} New!`)
+  //   } else {
+  //     $(elem).hide().html(`${count} New!`)
+  //   }
+  // }
 
 </script>
 </html>

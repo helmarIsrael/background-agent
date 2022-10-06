@@ -136,7 +136,8 @@
                 bootstrap_alert('#notif', m.message.text, 5000, 'primary')
               } else if (m.message.type == 'remove') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'info')
-              } 
+              }
+              // getUnread()
           },
           
           
@@ -178,16 +179,16 @@
           channels: ["my_channel"],
       });
 
-      function getUnread(){
-        fetch('/countNotifs').then(function(response){
-            response.json().then(function(data){
-              count = data.unread
-              if (count >= 0) {
-                notif_counter('#notif_count', count)
-              }
-            });
-          });
-      }
+      // function getUnread(){
+      //   fetch('/countNotifs').then(function(response){
+      //       response.json().then(function(data){
+      //         count = data.unread
+      //         if (count >= 0) {
+      //           notif_counter('#notif_count', count)
+      //         }
+      //       });
+      //     });
+      // }
 
 
 

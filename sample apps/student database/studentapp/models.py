@@ -177,8 +177,8 @@ class students(object):
     def store_notif(self):
         cursor = mysql.connection.cursor()
         # print(self.message_payload, self.timestamp, self.msg_type, self.channel)
-        sql = """INSERT INTO notifications(message_payload, timestamp, type, channel) 
-            VALUES ('%s','%s','%s','%s')""" % (self.message_payload, self.timestamp,
+        sql = """INSERT INTO notifications(student_id, message_payload, timestamp, type, channel) 
+            VALUES ('%s', '%s','%s','%s','%s')""" % (self.id, self.message_payload, self.timestamp,
                                                 self.msg_type, self.channel)
         
 
@@ -189,7 +189,7 @@ class students(object):
     # BASED ON THE MACHINE/LOCAL TIME '+' OR '-' THE NOTIFICATION TIMESTAMP   
     def show_notif(self): 
         cursor = mysql.connection.cursor()
-        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX, status FROM notifications
+        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX, status, notif_id, student_id, type FROM notifications
                 ORDER BY timestamp DESC"""
         cursor.execute(sql)
         display = cursor.fetchall()
@@ -203,3 +203,11 @@ class students(object):
         cursor.execute(sql)
         display = cursor.fetchall()
         return display
+
+    # def delete_notif(self):
+    #     cursor = mysql.connection.cursor()
+    #     sql = """DELETE FROM notifications 
+    #             WHERE student_id = '{}' AND type != 'remove'""".format(self.id_number)
+
+    #     cursor.execute(sql)
+    #     mysql.connection.commit()

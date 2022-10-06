@@ -5,7 +5,12 @@ import studentapp.models as models
 from studentapp import app
 from datetime import datetime
 
-
+pnconfig = PNConfiguration()
+pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
+pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
+pnconfig.user_id = "my_user_id"
+pnconfig.uuid = "myUUID"
+pnconfig.ssl = True
 
 def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
@@ -18,21 +23,25 @@ class MySubscribeCallback(SubscribeCallback):
     def message(self, pubnub, message):
         msg = message.message['text']
         msg_type = message.message['type']
+        msg_id = message.message['id']
         msg_channel = message.channel
         curr_dt = datetime.now()
         # print("Current datetime: ", curr_dt)
+        if message.message:
+            print('asdasd')
         msg_timestamp = int(round(curr_dt.timestamp()))
         # print("Integer timestamp of current datetime: ", msg_timestamp)
-        print(f'Message payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}')
-        db = models.students(
-            message_payload=msg,
-            timestamp=msg_timestamp,
-            msg_type = msg_type,
-            channel = msg_channel
-        )
+        # print(f'Student I.D: {msg_id}\nMessage payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}\n\n')
+        # db = models.students(
+        #     id=msg_id,
+        #     message_payload=msg,
+        #     timestamp=msg_timestamp,
+        #     msg_type = msg_type,
+        #     channel = msg_channel
+        # )
 
-        with app.app_context():
-            db.store_notif()
+        # with app.app_context():
+        #     db.store_notif()
         
 
 
@@ -43,14 +52,11 @@ class notifications(object):
         self.updated_items = updated_items
 
 
-        pnconfig = PNConfiguration()
-        pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
-        pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
-        pnconfig.user_id = "my_user_id"
-        pnconfig.uuid = "myUUID"
-        pnconfig.ssl = True
+        
         self.ch = 'my_channel'
         self.pubnub = PubNub(pnconfig)
+        # self.pubnub.subscribe().channels('my_channel').execute()
+        # self.pubnub.add_listener(MySubscribeCallback())
 
     def verify_id(self, id, type):
         student = models.students(id_number=id)
@@ -65,18 +71,16 @@ class notifications(object):
         id = self.verify_id(self.id, 'create')
         event = f'New Student Added - {id}'
         type = 'create'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type}).pn_async(my_publish_callback)
-        self.pubnub.subscribe().channels('my_channel').execute()
-        self.pubnub.add_listener(MySubscribeCallback())
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id}).pn_async(my_publish_callback)
+        
 
 
     async def delete_event(self):
         id = self.verify_id(self.id, 'delete')
         event = f'Student {id} is Deleted'
         type = 'remove'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type}).pn_async(my_publish_callback)
-        self.pubnub.subscribe().channels('my_channel').execute()
-        self.pubnub.add_listener(MySubscribeCallback())
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id}).pn_async(my_publish_callback)
+
 
     
 
@@ -93,9 +97,7 @@ class notifications(object):
             event = f'Student {id} updated its {self.updated_items[0]}'
         type = 'update'
         # event = f'Student {id} infos updated!'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type}).pn_async(my_publish_callback)
-        self.pubnub.subscribe().channels('my_channel').execute()
-        self.pubnub.add_listener(MySubscribeCallback())
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type, 'id': id}).pn_async(my_publish_callback)
 
 
 
