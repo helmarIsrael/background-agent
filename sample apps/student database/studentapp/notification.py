@@ -1,62 +1,49 @@
 from pubnub.callbacks import SubscribeCallback
+from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 import studentapp.models as models
-from studentapp import app
-from datetime import datetime
+import studentapp.deviceOne
+import time
+import os
 
-pnconfig = PNConfiguration()
-pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
-pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
-pnconfig.user_id = "my_user_id"
-pnconfig.uuid = "myUUID"
-pnconfig.ssl = True
+# pubnub = PubNub(pnconfig)
 
+# pubnub = PubNub(pnconfig)
 def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
     if not status.is_error():
-        print("Connection OK")
         pass
-
 class MySubscribeCallback(SubscribeCallback):
-
+    def presence(self, pubnub, presence):
+        pass
+    def status(self, pubnub, status):
+        pass
     def message(self, pubnub, message):
-        msg = message.message['text']
-        msg_type = message.message['type']
-        msg_id = message.message['id']
-        msg_channel = message.channel
-        curr_dt = datetime.now()
-        # print("Current datetime: ", curr_dt)
-        if message.message:
-            print('asdasd')
-        msg_timestamp = int(round(curr_dt.timestamp()))
-        # print("Integer timestamp of current datetime: ", msg_timestamp)
-        # print(f'Student I.D: {msg_id}\nMessage payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}\n\n')
-        # db = models.students(
-        #     id=msg_id,
-        #     message_payload=msg,
-        #     timestamp=msg_timestamp,
-        #     msg_type = msg_type,
-        #     channel = msg_channel
-        # )
+        print ("\nmessage: " + message.message['text']+"\n")
 
-        # with app.app_context():
-        #     db.store_notif()
-        
 
+# pubnub.add_listener(MySubscribeCallback())
+# pubnub.subscribe().channels("my_channel").execute()
 
 
 class notifications(object):
     def __init__(self, id=None, updated_items=None):
         self.id = id
         self.updated_items = updated_items
-
+        pnconfig = PNConfiguration()
+        pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
+        pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
+        pnconfig.ssl = True
+        pnconfig.uuid = "myUUID"
 
         
-        self.ch = 'my_channel'
-        self.pubnub = PubNub(pnconfig)
-        # self.pubnub.subscribe().channels('my_channel').execute()
+        self.ch = 'my_channel'#######################
+                              ############## KANING DUHA NEEDED DRI PARA MAGBALIK2 UG GAWAS ANG FLASH SA FRONTEND
+        self.pubnub = PubNub(pnconfig)##############
+        
         # self.pubnub.add_listener(MySubscribeCallback())
+        # self.pubnub.subscribe().channels('my_channel').execute()
 
     def verify_id(self, id, type):
         student = models.students(id_number=id)
@@ -97,7 +84,7 @@ class notifications(object):
             event = f'Student {id} updated its {self.updated_items[0]}'
         type = 'update'
         # event = f'Student {id} infos updated!'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type, 'id': id}).pn_async(my_publish_callback)
+        self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id}).pn_async(my_publish_callback)
 
 
 
