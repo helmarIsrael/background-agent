@@ -2,8 +2,9 @@ from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-import time
-import os
+from studentapp.messages import *
+import json
+
 pnconfig = PNConfiguration()
 pnconfig.subscribe_key = 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279'
 pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
@@ -16,9 +17,18 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
-        print (message.message['text'])
+        f = open('msg.txt', "r+")
+        f.read()
+        f.seek(0)
+        f.truncate()
+        with open('msg.txt', 'w') as convert_file:
+            convert_file.write(json.dumps(message.message))
+    
 pubnub.add_listener(MySubscribeCallback())
 pubnub.subscribe().channels("my_channel").execute()
+
+
+
 
 # publish a message
 # while True:

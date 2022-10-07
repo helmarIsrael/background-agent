@@ -22,7 +22,7 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
-        print ("\nmessage: " + message.message+"\n")
+        print ("\nmessage: " + message.message['text']+"\n")
 
 
 pubnub.add_listener(MySubscribeCallback())
@@ -33,7 +33,7 @@ class notif(object):
     def __init__(self, msg=None):
         self.msg = msg
         # self.ch = 'my_channel'
-        # self.pubnub = PubNub(pnconfig)
+        self.pubnub = PubNub(pnconfig)
         # self.pubnub.add_listener(MySubscribeCallback())
         # self.pubnub.subscribe().channels("chan-1").execute()
 

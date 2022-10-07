@@ -3,29 +3,26 @@ from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 import studentapp.models as models
-import studentapp.deviceOne
-import time
-import os
+import studentapp.message_receiver
+from .messages import received_messages
+import datetime
 
-# pubnub = PubNub(pnconfig)
 
-# pubnub = PubNub(pnconfig)
+def show():
+    arr = []
+    f = open("msg.txt", "r")
+    contents = f.read()
+    arr.append(contents)
+    print(arr)
+    arr.clear()
+        
+
 def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
     if not status.is_error():
+        print("Connection Good!")
+        show()
         pass
-class MySubscribeCallback(SubscribeCallback):
-    def presence(self, pubnub, presence):
-        pass
-    def status(self, pubnub, status):
-        pass
-    def message(self, pubnub, message):
-        print ("\nmessage: " + message.message['text']+"\n")
-
-
-# pubnub.add_listener(MySubscribeCallback())
-# pubnub.subscribe().channels("my_channel").execute()
-
 
 class notifications(object):
     def __init__(self, id=None, updated_items=None):
@@ -38,12 +35,27 @@ class notifications(object):
         pnconfig.uuid = "myUUID"
 
         
-        self.ch = 'my_channel'#######################
+        self.ch = 'chan-1'#######################
                               ############## KANING DUHA NEEDED DRI PARA MAGBALIK2 UG GAWAS ANG FLASH SA FRONTEND
         self.pubnub = PubNub(pnconfig)##############
         
         # self.pubnub.add_listener(MySubscribeCallback())
         # self.pubnub.subscribe().channels('my_channel').execute()
+
+    def show(self):
+        arr = []
+        f = open("msg.txt", "r")
+        contents = f.read()
+        arr.append(contents)
+        print(arr)
+        arr.clear()
+        
+
+    def get_timestamp(self):
+        curr_dt = datetime.datetime.now()
+        msg_timestamp = int(round(curr_dt.timestamp()))
+        return msg_timestamp
+
 
     def verify_id(self, id, type):
         student = models.students(id_number=id)
@@ -58,16 +70,16 @@ class notifications(object):
         id = self.verify_id(self.id, 'create')
         event = f'New Student Added - {id}'
         type = 'create'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id}).pn_async(my_publish_callback)
-        
+        time = self.get_timestamp()
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id, 'timestamp': time}).pn_async(my_publish_callback)
 
 
     async def delete_event(self):
         id = self.verify_id(self.id, 'delete')
         event = f'Student {id} is Deleted'
         type = 'remove'
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id}).pn_async(my_publish_callback)
-
+        time = self.get_timestamp()
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id,'timestamp': time}).pn_async(my_publish_callback)
 
     
 
@@ -83,8 +95,6 @@ class notifications(object):
         else:
             event = f'Student {id} updated its {self.updated_items[0]}'
         type = 'update'
+        time = self.get_timestamp()
         # event = f'Student {id} infos updated!'
-        self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id}).pn_async(my_publish_callback)
-
-
-
+        self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': time}).pn_async(my_publish_callback)
