@@ -3,18 +3,11 @@ from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 import studentapp.models as models
-import studentapp.message_receiver as msg_recv
-from .messages import received_messages
+import studentapp.message_receiver 
 import datetime
+import time
 
 
-def show():
-    arr = []
-    f = open("msg.txt", "r")
-    contents = f.read()
-    arr.append(contents)
-    print(arr)
-    arr.clear()
         
 
 def my_publish_callback(envelope, status):
@@ -71,17 +64,16 @@ class notifications(object):
         id = self.verify_id(self.id, 'create')
         event = f'New Student Added - {id}'
         type = 'create'
-        time = self.get_timestamp()
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id, 'timestamp': time}).pn_async(my_publish_callback)
+        timestamp = self.get_timestamp()
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id, 'timestamp': timestamp}).pn_async(my_publish_callback)
 
 
     async def delete_event(self):
         id = self.verify_id(self.id, 'delete')
         event = f'Student {id} is Deleted'
         type = 'remove'
-        time = self.get_timestamp()
-        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id,'timestamp': time}).pn_async(my_publish_callback)
-
+        timestamp = self.get_timestamp()
+        self.pubnub.publish().channel(self.ch).message({'text': event, 'type' : type, 'id': id,'timestamp': timestamp}).pn_async(my_publish_callback)
     
 
     async def update_event(self):
@@ -96,7 +88,6 @@ class notifications(object):
         else:
             event = f'Student {id} updated its {self.updated_items[0]}'
         type = 'update'
-        time = self.get_timestamp()
+        timestamp = self.get_timestamp()
         # event = f'Student {id} infos updated!'
-        self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': time}).pn_async(my_publish_callback)
-        msg_recv.sub()
+        self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': timestamp}).pn_async(my_publish_callback)
