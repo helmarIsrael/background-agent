@@ -3,7 +3,7 @@ from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 import studentapp.models as models
-import studentapp.message_receiver
+import studentapp.message_receiver as msg_recv
 from .messages import received_messages
 import datetime
 
@@ -21,7 +21,7 @@ def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
     if not status.is_error():
         print("Connection Good!")
-        show()
+        # show()
         pass
 
 class notifications(object):
@@ -38,6 +38,7 @@ class notifications(object):
         self.ch = 'chan-1'#######################
                               ############## KANING DUHA NEEDED DRI PARA MAGBALIK2 UG GAWAS ANG FLASH SA FRONTEND
         self.pubnub = PubNub(pnconfig)##############
+        
         
         # self.pubnub.add_listener(MySubscribeCallback())
         # self.pubnub.subscribe().channels('my_channel').execute()
@@ -98,3 +99,4 @@ class notifications(object):
         time = self.get_timestamp()
         # event = f'Student {id} infos updated!'
         self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': time}).pn_async(my_publish_callback)
+        msg_recv.sub()

@@ -11,23 +11,66 @@ pnconfig.publish_key = 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7'
 pnconfig.ssl = True
 pnconfig.uuid = "myUUID"
 pubnub = PubNub(pnconfig)
+pubnub.unsubscribe().channels("my_channel").execute()
+
 class MySubscribeCallback(SubscribeCallback):
     def presence(self, pubnub, presence):
         pass
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
-        f = open('msg.txt', "r+")
-        f.read()
-        f.seek(0)
-        f.truncate()
-        with open('msg.txt', 'w') as convert_file:
-            convert_file.write(json.dumps(message.message))
+        # f = open('msg.txt', "r+")
+        # f.read()
+        # f.seek(0)
+        # f.truncate()
+        # with open('msg.txt', 'w') as convert_file:
+        #     convert_file.write(json.dumps(message.message))
+        print(message.message['text'])
+        # unsub()
+
+# The Python SDK doesn't currently support *Server Objects*,
+# so it doesn't have any handlers for them.
+
+class SubscribeHandler(SubscribeCallback):
+  def message(self, pubnub, message):
+      print("Message payload: %s" % message.message)
+      print("Message publisher: %s" % message.publisher)
+      unsub()
+
+
+
+async def sub():
+    await pubnub.add_listener(MySubscribeCallback())
+    await pubnub.subscribe().channels("my_channel").execute()
+    unsub()
+
+def unsub():   
+    pubnub.unsubscribe().channels("my_channel").execute()         
     
-pubnub.add_listener(MySubscribeCallback())
-pubnub.subscribe().channels("my_channel").execute()
+    pubnub.here_now()\
+    .channels("my_channel")\
+    .include_state(True)\
+    .pn_async(here_now_callback)
 
 
+
+
+def here_now_callback(result, status):
+  if status.is_error():
+    print("here_now error: %s" % status)
+    return
+
+  for channel_data in result.channels:
+    print("channel: %s" % (channel_data.channel_name))
+    print("occupancy: %s" % channel_data.occupancy)
+    # if channel_data.occupancy != 0:
+    #     print("unsubing")
+# sub()        
+# pubnub.unsubscribe().channels("my_channel").execute()     
+# pubnub.here_now()\
+#     .channels("my_channel")\
+#     .include_state(True)\
+#     .pn_async(here_now_callback)
 
 
 # publish a message
