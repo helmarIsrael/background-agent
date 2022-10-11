@@ -37,12 +37,15 @@ class notifications(object):
         # self.pubnub.subscribe().channels('my_channel').execute()
 
     def show(self):
-        arr = []
         f = open("msg.txt", "r")
         contents = f.read()
-        arr.append(contents)
-        print(arr)
-        arr.clear()
+        if contents:
+            print(contents)
+        else:
+            print("alawss")
+        with open("msg.txt",'w') as file:
+            pass
+
         
 
     def get_timestamp(self):
@@ -91,3 +94,5 @@ class notifications(object):
         timestamp = self.get_timestamp()
         # event = f'Student {id} infos updated!'
         self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': timestamp}).pn_async(my_publish_callback)
+        # time.sleep(1)
+        self.show()

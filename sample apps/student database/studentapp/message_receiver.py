@@ -18,14 +18,9 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
-        f = open('msg.txt', "r+")
-        f.read()
-        f.seek(0)
-        f.truncate()
         with open('msg.txt', 'w') as convert_file:
             convert_file.write(json.dumps(message.message))
         show()
-
 
  
 # pubnub.unsubscribe().channels("my_channel").execute()
