@@ -4,11 +4,43 @@ from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 import studentapp.models as models
 import studentapp.message_receiver 
-import datetime
+from datetime import datetime, timedelta
 import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
+observer = Observer()
 
-        
+def show():
+    # observer.stop()
+    f = open("studentapp\message_handler\msg.txt", "r")
+    contents = f.read()
+    if contents:
+        print(contents)
+
+class MyHandler(FileSystemEventHandler):
+    def __init__(self):
+        self.last_modified = datetime.now()
+        self.src_path = ''
+        self.observer = observer
+
+    def on_modified(self, event):
+        if self.src_path == event.src_path:
+            return
+        else:
+            self.src_path = event.src_path
+        self.observer.stop()
+        show()
+
+event_handler = MyHandler()
+observer.schedule(event_handler, path='studentapp\message_handler', recursive=False)
+
+def starter():
+    print("starting...")
+    observer.start()
+    # observer.join()
+
+   
 
 def my_publish_callback(envelope, status):
     # Check whether request successfully completed or not
@@ -36,20 +68,13 @@ class notifications(object):
         # self.pubnub.add_listener(MySubscribeCallback())
         # self.pubnub.subscribe().channels('my_channel').execute()
 
-    def show(self):
-        f = open("msg.txt", "r")
-        contents = f.read()
-        if contents:
-            print(contents)
-        else:
-            print("alawss")
-        with open("msg.txt",'w') as file:
-            pass
+    
+
 
         
 
     def get_timestamp(self):
-        curr_dt = datetime.datetime.now()
+        curr_dt = datetime.now()
         msg_timestamp = int(round(curr_dt.timestamp()))
         return msg_timestamp
 
@@ -93,6 +118,6 @@ class notifications(object):
         type = 'update'
         timestamp = self.get_timestamp()
         # event = f'Student {id} infos updated!'
+        starter()
         self.pubnub.publish().channel('my_channel').message({'text': event, 'type': type, 'id': id, 'timestamp': timestamp}).pn_async(my_publish_callback)
-        # time.sleep(1)
-        self.show()
+        

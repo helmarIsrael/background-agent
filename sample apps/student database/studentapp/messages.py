@@ -2,13 +2,10 @@ received_messages = []
 status = 0
 show_has_run = False
 
-def show(show_has_run):
-    if show_has_run:
-        print("ran")
-
-    show_has_run = True
-
-    print("Not Ran")
+def show():
+    f = open('studentapp\message_handler\msg.txt', 'r')
+    contents = f.read()
+    print(contents)
 
 # class receiveMSG():
 #     def __init__(self, status = None):

@@ -18,9 +18,8 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
-        with open('msg.txt', 'w') as convert_file:
+        with open('studentapp\message_handler\msg.txt', 'w') as convert_file:
             convert_file.write(json.dumps(message.message))
-        show()
 
  
 # pubnub.unsubscribe().channels("my_channel").execute()
