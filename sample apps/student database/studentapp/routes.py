@@ -225,7 +225,7 @@ def notifs():
     # print("2 days ago: " + str(dtime.today().date() - timedelta(days=2)))
     for notif in notifs:
         if notif[1].date() < dtime.today().date():  #  if notif[1] kay gahapon kay iappend sya sa old_notif
-            if notif[1].date() < (dtime.today().date() - timedelta(days=2)):
+            if notif[1].date() < (dtime.today().date() - timedelta(days=1)):
                 notif[1] = f'{notif[1].date().strftime("%a, %d %b, %Y")} at {notif[1].time().strftime("%I:%M %p")}'
             else:
                 notif[1] = f'{timeago.format(notif[1], now)} at {notif[1].time().strftime("%I:%M %p")}'

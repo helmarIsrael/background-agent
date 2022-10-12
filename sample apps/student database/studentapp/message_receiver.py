@@ -2,7 +2,6 @@ from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
-from studentapp.messages import *
 import json
 
 pnconfig = PNConfiguration()
@@ -22,7 +21,6 @@ class MySubscribeCallback(SubscribeCallback):
             convert_file.write(json.dumps(message.message))
 
  
-# pubnub.unsubscribe().channels("my_channel").execute()
 pubnub.add_listener(MySubscribeCallback())
 pubnub.subscribe().channels("my_channel").execute()
 
@@ -30,41 +28,3 @@ pubnub.subscribe().channels("my_channel").execute()
 
 
 
-# publish a message
-# while True:
-#     msg = input('Listening...')
-#     if msg == 'exit': os._exit(1)
-#     # pubnub.publish().channel("my_channel").message(str(msg)).pn_async(my_publish_callback)
-
-
-
-
-
-
-
-
-
-
-
-   # msg = message.message['text']
-        # msg_type = message.message['type']
-        # msg_id = message.message['id']
-        # msg_channel = message.channel
-        # curr_dt = datetime.now()
-        # # print("Current datetime: ", curr_dt)
-        # if message.message:
-        #     print('asdasd')
-        # msg_timestamp = int(round(curr_dt.timestamp()))
-        # print("Integer timestamp of current datetime: ", msg_timestamp)
-        # print(f'Student I.D: {msg_id}\nMessage payload: {msg}\nType: {msg_type}\nChannel: {msg_channel}\nTimestamp: {msg_timestamp}\n\n')
-        # db = models.students(
-        #     id=msg_id,
-        #     message_payload=msg,
-        #     timestamp=msg_timestamp,
-        #     msg_type = msg_type,
-        #     channel = msg_channel
-        # )
-
-        # with app.app_context():
-        #     db.store_notif()
-        

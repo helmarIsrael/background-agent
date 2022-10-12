@@ -179,16 +179,16 @@
           channels: ["my_channel"],
       });
 
-      // function getUnread(){
-      //   fetch('/countNotifs').then(function(response){
-      //       response.json().then(function(data){
-      //         count = data.unread
-      //         if (count >= 0) {
-      //           notif_counter('#notif_count', count)
-      //         }
-      //       });
-      //     });
-      // }
+      function getUnread(){
+        fetch('/countNotifs').then(function(response){
+            response.json().then(function(data){
+              count = data.unread
+              if (count >= 0) {
+                notif_counter('#notif_count', count)
+              }
+            });
+          });
+      }
 
 
 

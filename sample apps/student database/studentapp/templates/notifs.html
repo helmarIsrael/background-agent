@@ -97,7 +97,7 @@
                     {% endfor %}
                 </div>    
             </div>
-            
+            {% if old_notifs %}
             <div id="old_notif" class="p-3 mb-2">
                 <div class="d-flex justify-content-center" id="labels" style="font-size: larger;">
                     <Strong>Earlier</Strong>
@@ -126,6 +126,7 @@
                   {% endfor %}
                 </div>    
             </div>
+            {% endif %}
 
         </div>
     </div>
@@ -138,25 +139,25 @@
       crossorigin="anonymous"
     ></script>
 <script>
-  // function getUnread(){
-  //       fetch('/countNotifs').then(function(response){
-  //           response.json().then(function(data){
-  //             count = data.unread
-  //             if (count >= 0) {
-  //               notif_counter('#notif_count', count)
-  //             }
-  //           });
-  //         });
-  //     }
-    
-  // function notif_counter (elem, count) {
-  //   console.log("notif counter: " + count)
-  //   if (count > 0){
-  //     $(elem).show().html(`${count} New!`)
-  //   } else {
-  //     $(elem).hide().html(`${count} New!`)
-  //   }
-  // }
+    function getUnread(){
+          fetch('/countNotifs').then(function(response){
+              response.json().then(function(data){
+                count = data.unread
+                if (count >= 0) {
+                  notif_counter('#notif_count', count)
+                }
+              });
+            });
+        }
+      
+    function notif_counter (elem, count) {
+      console.log("notif counter: " + count)
+      if (count > 0){
+        $(elem).show().html(`${count} New!`)
+      } else {
+        $(elem).hide().html(`${count} New!`)
+      }
+    }
 
 </script>
 </html>
