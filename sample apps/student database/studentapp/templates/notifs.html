@@ -63,37 +63,51 @@
                 </div>
                 <div id="new_notif_body" class="mt-1">
                     {% for notif in new_notifs %}
-                      {% if notif[2] == 0 %}
-                      <div class="card mb-2">
-                        <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                            <h4 class="card-title">
-                                {{ notif[0] }}
-                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                            </h4>
-                        </div>
-                      </div>
-                        <!-- {% if notif[5] == 'remove' %} -->
-                          
-                        <!-- {% else %}
-                        <a href="{{ url_for('searched', id_number = notif[4])}}" class="card mb-2">
-                          <div class="card-body bg-warning" style="border: 0.1px solid rgb(161, 161, 161)">
-                              <h4 class="card-title">
-                                  {{ notif[0] }}
-                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                              </h4>
-                          </div>
-                        </a>
-                        {% endif %} -->
-                      {%else%}
-                        <div class="card mb-2">
-                          <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161);">
-                              <h4 class="card-title">
-                                  {{ notif[0] }}
-                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                              </h4>
-                          </div>
-                        </div>
-                      {% endif %}
+                        {% if notif[5] == 'remove' %}
+                                  {% if notif[2] == 0 %}
+                                  <div class="card mb-2">
+                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                        <h4 class="card-title">
+                                            {{ notif[0] }}
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                        </h4>
+                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                          Mark as Read                     
+                                        </button>
+                                    </div>
+                                  </div>
+                                  {% else %}
+                                  <div class="card mb-2">
+                                      <div class="card-body">
+                                          <h4 class="card-title">
+                                              {{ notif[0] }}
+                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                          </h4>
+                                      </div>
+                                  </div>
+                                {% endif %}
+                        {% else %}
+                                      {% if notif[2] == 0 %}
+                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                              <h4 class="card-title">
+                                                  {{ notif[0] }}
+                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                              </h4>
+                                          </div>
+                                        </a>
+                                      {% else %}
+                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
+                                            <h4 class="card-title">
+                                                {{ notif[0] }}
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                            </h4>
+                                        </div>
+                                      </a>
+                                      {% endif %}
+                        {% endif %}
+                        
                     {% endfor %}
                 </div>    
             </div>
@@ -104,26 +118,52 @@
                 </div>
                 <div id="old_notif_body" class="mt-1">
                   {% for notif in old_notifs %}
-                  {% if notif[2] == 0 %}
-                    <div class="card mb-2">
-                      <div class="card-body" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                          <h4 class="card-title">
-                              {{ notif[0] }}
-                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                          </h4>
-                      </div>
-                    </div>
-                  {% else %}
-                    <div class="card mb-2">
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                {{ notif[0] }}
-                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                            </h4>
-                        </div>
-                    </div>
-                  {% endif %}
-                  {% endfor %}
+                        {% if notif[5] == 'remove' %}
+                                  {% if notif[2] == 0 %}
+                                  <div class="card mb-2">
+                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                        <h4 class="card-title">
+                                            {{ notif[0] }}
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                        </h4>
+                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                          Mark as Read                     
+                                        </button>
+                                    </div>
+                                  </div>
+                                  {% else %}
+                                  <div class="card mb-2">
+                                      <div class="card-body">
+                                          <h4 class="card-title">
+                                              {{ notif[0] }}
+                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                          </h4>
+                                      </div>
+                                  </div>
+                                {% endif %}
+                        {% else %}
+                                      {% if notif[2] == 0 %}
+                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                              <h4 class="card-title">
+                                                  {{ notif[0] }}
+                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                              </h4>
+                                          </div>
+                                        </a>
+                                      {% else %}
+                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
+                                            <h4 class="card-title">
+                                                {{ notif[0] }}
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                            </h4>
+                                        </div>
+                                      </a>
+                                      {% endif %}
+                        {% endif %}
+                        
+                    {% endfor %}
                 </div>    
             </div>
             {% endif %}
@@ -149,6 +189,14 @@
               });
             });
         }
+    function read_remove(id){
+      var request = new XMLHttpRequest()
+      request.open("GET", '/readNotif/'+id, true )
+      request.send()
+      console.log(id)
+      document.getElementById("del_card").style.backgroundColor = "white";
+      document.getElementById("read_btn").style.display = 'none';
+    }
       
     function notif_counter (elem, count) {
       console.log("notif counter: " + count)

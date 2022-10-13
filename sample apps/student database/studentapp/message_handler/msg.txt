@@ -1,1 +1,1 @@
-{"text": "Student 2018-1637 is Deleted", "type": "remove", "id": "2018-1637", "channel": "my_channel", "timestamp": 1665628861}
+{"text": "Student 2018-1609 updated its Year Level", "type": "update", "id": "2018-1609", "channel": "my_channel", "timestamp": 1665647363}

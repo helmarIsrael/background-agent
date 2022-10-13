@@ -148,3 +148,7 @@ body {
   height: 2.5em;
   width: 2.5em;
 }
+
+.notif_card:hover {
+  background-color:#c9c9c979 !important;
+}

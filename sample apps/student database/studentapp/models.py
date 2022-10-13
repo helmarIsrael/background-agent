@@ -218,3 +218,10 @@ class students(object):
 
         cursor.execute(sql)
         mysql.connection.commit()
+
+    def read_notif(self):
+        cursor = mysql.connection.cursor()
+        sql = """UPDATE notifications SET is_read = 1 WHERE notif_id = {}""".format(self.id)
+       
+        cursor.execute(sql)
+        mysql.connection.commit()

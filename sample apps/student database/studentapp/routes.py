@@ -27,7 +27,7 @@ def home(clg, arnge):
             return redirect(url_for('home', clg=college_data, arnge=arrange_data))
         elif request.form["search"]:
             id = request.form["search"]
-            return redirect(url_for('searched', id_number=id))
+            return redirect(url_for('searched', id_number=id, from_where='home'))
         elif not request.form["search"]:
             flash('Please Enter an I.D Number', 'danger')
             return redirect(url_for('land'))
@@ -63,7 +63,7 @@ async def register():
         notify = notification.notifications(id=form.register_id.data)
         await notify.add_event()
         flash('New Student Added', 'success')
-        return redirect(url_for('searched', id_number=form.register_id.data))
+        return redirect(url_for('searched', id_number=form.register_id.data, from_where = 'register'))
     return render_template('register.html', banner='Add Student', title='Register', form=form)
 
 
@@ -124,7 +124,7 @@ async def update(id_number):
                 db.update()
                 notify = notification.notifications(id = form.update_id.data, updated_items=updated)
                 await notify.update_event()
-            return redirect(url_for('searched', id_number=form.update_id.data))
+            return redirect(url_for('searched', id_number=form.update_id.data, from_where = 'update'))
 
         elif request.method == "GET":
             curr_course = item[3]
@@ -175,15 +175,18 @@ async def delete(id_number):
 
 
 
-@app.route('/searched/<string:id_number>', methods=['GET', 'POST'])
-async def searched(id_number):
+@app.route('/searched/<string:id_number>/<string:from_where>', methods=['GET', 'POST'])
+async def searched(id_number, from_where):
     if request.method == "POST":
         if request.form["search"]:
             id = request.form["search"]
-            return redirect(url_for('searched', id_number=id))
+            return redirect(url_for('searched', id_number=id, from_where='search'))
         elif not request.form["search"]:
             flash('Please Enter an I.D Number', 'danger')
             return redirect(url_for('land'))
+    if type(eval(from_where)) == int:
+        db = models.students(id = eval(from_where))
+        db.read_notif()
     student = models.students(id_number=id_number)
     students = student.search()
     try:
@@ -235,7 +238,6 @@ def notifs():
         else:  # if notif[1] kay karon, iappend sya sa new_notif[]
             notif[1] = timeago.format(notif[1], now)
             new_notif.append(notif)
-    
     db.new_viewed()   
     return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
     # return render_template('notifs_pubnub.html', title='Notifications')
@@ -248,6 +250,13 @@ def countNotifs():
     count = notifCount[0][0]
     return jsonify({'unread': count})
 
+
+@app.route('/readNotif/<string:id>',  methods=['GET'])
+def readNotif(id):
+    db = models.students(id=id)
+    db.read_notif()
+
+    return '', 204
 
 
 
