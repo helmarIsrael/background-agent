@@ -189,7 +189,7 @@ class students(object):
     # BASED ON THE MACHINE/LOCAL TIME '+' OR '-' THE NOTIFICATION TIMESTAMP   
     def show_notif(self): 
         cursor = mysql.connection.cursor()
-        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX, status, notif_id, student_id, notif_type FROM notifications
+        sql = """SELECT message_payload, FROM_UNIXTIME(timestamp) AS UNIX, is_read, notif_id, student_id, notif_type FROM notifications
                 ORDER BY timestamp DESC"""
         cursor.execute(sql)
         display = cursor.fetchall()
@@ -199,15 +199,22 @@ class students(object):
 
     def count_unread(self):
         cursor = mysql.connection.cursor()
-        sql = """SELECT COUNT(*) FROM notifications WHERE status = 0"""
+        sql = """SELECT COUNT(*) FROM notifications WHERE is_new = 1"""
         cursor.execute(sql)
         display = cursor.fetchall()
         return display
 
+    def new_viewed(self):
+        cursor = mysql.connection.cursor()
+        sql = """UPDATE notifications SET is_new = 0"""
+
+        cursor.execute(sql)
+        mysql.connection.commit()   
+
     def delete_notif(self):
         cursor = mysql.connection.cursor()
         sql = """DELETE FROM notifications 
-                WHERE student_id = '{}' AND type != 'remove'""".format(self.id_number)
+                WHERE student_id = '{}' AND notif_type != 'remove'""".format(self.id_number)
 
         cursor.execute(sql)
         mysql.connection.commit()

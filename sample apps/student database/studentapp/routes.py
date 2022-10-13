@@ -168,6 +168,8 @@ async def delete(id_number):
     students = students.delete()
     notify = notification.notifications(id = id_number)
     await notify.delete_event()
+    db = models.students(id_number=id_number)
+    db.delete_notif()
     flash('Student data has been deleted', 'success')
     return redirect(url_for('land'))
 
@@ -233,8 +235,8 @@ def notifs():
         else:  # if notif[1] kay karon, iappend sya sa new_notif[]
             notif[1] = timeago.format(notif[1], now)
             new_notif.append(notif)
-       
     
+    db.new_viewed()   
     return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
     # return render_template('notifs_pubnub.html', title='Notifications')
 

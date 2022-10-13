@@ -17,6 +17,7 @@ class MySubscribeCallback(SubscribeCallback):
     def status(self, pubnub, status):
         pass
     def message(self, pubnub, message):
+        print("message received")
         with open('studentapp\message_handler\msg.txt', 'w') as convert_file:
             convert_file.write(json.dumps(message.message))
 

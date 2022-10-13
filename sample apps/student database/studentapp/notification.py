@@ -31,11 +31,7 @@ def show():
 
         with app.app_context():
             db.store_notif()
-            # if msg_type == 'remove':
-            #     db = models.students(
-            #         id=msg_id,
-            #     )
-            #     db.delete_notif()
+
 
 
 
