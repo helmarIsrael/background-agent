@@ -92,7 +92,11 @@
     <a href = "#top" class="scroll bg-warning rounded-circle">
      <img src="https://img.icons8.com/fluent-systems-filled/96/000000/chevron-up--v2.png"/>
     </a>
+    <link href="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.css" rel="stylesheet">
 
+    <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.0/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
+    
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -129,7 +133,7 @@
         {
           message: function(m){
               // const channelName = "my_channel" //Specify ni dapat
-              console.log(m.timetoken)
+              // console.log(m.timetoken)
               if (m.message.type == 'create') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'success')
               } else if (m.message.type == 'update') {
@@ -142,6 +146,7 @@
                 getUnread()
               }
               getUnread()
+              RefreshTable()
           },
           
           
@@ -188,7 +193,6 @@
           fetch('/countNotifs').then(function(response){
             response.json().then(function(data){
               count = data.unread
-              console.log(count)
               if (count >= 0) {
                 notif_counter('#notif_count', count)
               }
@@ -251,6 +255,8 @@
       $(elem).hide().html(count)
     }
   }
+
+ 
 
   
    

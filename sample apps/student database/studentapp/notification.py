@@ -104,7 +104,7 @@ class notifications(object):
         self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type, 'id': id, 'channel':self.ch, 'timestamp': timestamp}).pn_async(my_publish_callback)
 
     async def readAll_event(self):
-        self.pubnub.publish().channel(self.ch).message({'text': 'readAll'}).pn_async(my_publish_callback)
+        self.pubnub.publish().channel(self.ch).message({'text': 'read'}).pn_async(my_publish_callback)
     
 
     async def delete_event(self):

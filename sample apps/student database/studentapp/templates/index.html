@@ -52,7 +52,7 @@
               </div>
           </form>
           {% if students %} 
-            <table class="table table-bordered m-0 text-center p-4">
+            <!-- <table class="table table-bordered m-0 text-center p-4" data-auto-refresh="true" id="student_table">
               <tr class=" header bg-danger text-light">
                 <th scope="col">ID Number</th>
                 <th scope="col">Name</th>
@@ -77,8 +77,26 @@
                   </td>
                 </tr>
               {% endfor %}
+            </table> -->
+            
+            
+            <button type="button" class="btn btn-primary" onclick="RefreshTable()">Primary</button>
+            <table
+            class="table table-bordered m-0 text-center p-4"
+              id="table"
+              data-show-refresh="true"
+              data-auto-refresh="true"
+              data-pagination="true"
+              data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
+              data-side-pagination="server">
+              <thead>
+                <tr>
+                  <th data-field="id" data-sortable="true">ID</th>
+                  <th data-field="name" data-sortable="true">Item Name</th>
+                  <th data-field="price" data-sortable="true">Item Price</th>
+                </tr>
+              </thead>
             </table>
-
           {%else%}
             <div class="row">
                 <div class="col">
@@ -94,8 +112,12 @@
             
       </div>
 
-
+     
      <script>
+        function RefreshTable() {
+          console.log('refreshing..')
+          document.getElementById('table').bootstrapTable();
+      }
         college_select = document.getElementById('filter_college')
         dept_select = document.getElementById('filter_department');
         course_select = document.getElementById('filter_course');
