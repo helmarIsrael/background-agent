@@ -103,6 +103,9 @@ class notifications(object):
         fileListener()
         self.pubnub.publish().channel(self.ch).message({'text': event, 'type': type, 'id': id, 'channel':self.ch, 'timestamp': timestamp}).pn_async(my_publish_callback)
 
+    async def readAll_event(self):
+        self.pubnub.publish().channel(self.ch).message({'text': 'readAll'}).pn_async(my_publish_callback)
+    
 
     async def delete_event(self):
         id = self.verify_id(self.id, 'delete')

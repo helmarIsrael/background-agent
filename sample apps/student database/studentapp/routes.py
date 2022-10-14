@@ -220,7 +220,7 @@ def courses(college, dept):
 
 
 @app.route('/notifs')
-def notifs():
+async def notifs():
     db = models.students()
     notifs = db.show_notif()
     #yesterday = datetime.datetimetoday() - timedelta(days=1)
@@ -238,7 +238,9 @@ def notifs():
         else:  # if notif[1] kay karon, iappend sya sa new_notif[]
             notif[1] = timeago.format(notif[1], now)
             new_notif.append(notif)
-    db.new_viewed()   
+    db.new_viewed()
+    notify = notification.notifications()
+    await notify.readAll_event()
     return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
     # return render_template('notifs_pubnub.html', title='Notifications')
 

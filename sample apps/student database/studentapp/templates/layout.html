@@ -137,7 +137,11 @@
               } else if (m.message.type == 'remove') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'info')
               }
-              // getUnread()
+
+              if(m.message.text == 'readAll'){
+                getUnread()
+              }
+              getUnread()
           },
           
           
@@ -180,14 +184,17 @@
       });
 
       function getUnread(){
-        fetch('/countNotifs').then(function(response){
+        setTimeout(()=>{
+          fetch('/countNotifs').then(function(response){
             response.json().then(function(data){
               count = data.unread
+              console.log(count)
               if (count >= 0) {
                 notif_counter('#notif_count', count)
               }
             });
           });
+        }, 1000)     
       }
 
 

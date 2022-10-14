@@ -18,8 +18,11 @@ class MySubscribeCallback(SubscribeCallback):
         pass
     def message(self, pubnub, message):
         print("message received")
-        with open('studentapp\message_handler\msg.txt', 'w') as convert_file:
-            convert_file.write(json.dumps(message.message))
+        if message.message['text'] != 'readAll':
+            with open('studentapp\message_handler\msg.txt', 'w') as convert_file:
+                convert_file.write(json.dumps(message.message))
+        else:
+            print(message.message['text'])
 
  
 pubnub.add_listener(MySubscribeCallback())
