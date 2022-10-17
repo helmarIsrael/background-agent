@@ -272,7 +272,25 @@ def readNotif(id):
 
 
 
+@app.route('/students')
+def showStudents():
+    db = models.students(college='None',
+                         filter='None')
+    students = db.showAll()
+    print(students)
+    student_array = []
 
+    for item in students:
+        studentDict = {}
+        studentDict['id'] = item[0]
+        studentDict['name'] = f'{item[1]} {item[2]}'
+        studentDict['course'] = item[3]
+        studentDict['year'] = item[4]
+        studentDict['dept'] = f'Department of {item[5]}'
+        studentDict['college'] = item[7]
+        student_array.append(studentDict)
+    
+    return jsonify({'students': student_array})
 
 
 

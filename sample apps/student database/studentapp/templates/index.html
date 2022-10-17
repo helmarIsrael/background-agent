@@ -52,6 +52,25 @@
               </div>
           </form>
           {% if students %} 
+            
+          <table class="table table-bordered m-0 text-center p-4">
+            <tr class=" header bg-danger text-light">
+              <th scope="col">ID Number</th>
+              <th scope="col">Name</th>
+              <th scope="col">Course</th>
+              <th scope="col">Year</th>
+              <th scope="col">Department</th>
+              <th scope="col">College</th>
+              <th scope="col">Actions</th>
+            </tr>
+
+            <tbody id="student_table">
+
+            </tbody>
+          </table>
+          
+          
+            
             <!-- <table class="table table-bordered m-0 text-center p-4" data-auto-refresh="true" id="student_table">
               <tr class=" header bg-danger text-light">
                 <th scope="col">ID Number</th>
@@ -81,22 +100,6 @@
             
             
             <button type="button" class="btn btn-primary" onclick="RefreshTable()">Primary</button>
-            <table
-            class="table table-bordered m-0 text-center p-4"
-              id="table"
-              data-show-refresh="true"
-              data-auto-refresh="true"
-              data-pagination="true"
-              data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
-              data-side-pagination="server">
-              <thead>
-                <tr>
-                  <th data-field="id" data-sortable="true">ID</th>
-                  <th data-field="name" data-sortable="true">Item Name</th>
-                  <th data-field="price" data-sortable="true">Item Price</th>
-                </tr>
-              </thead>
-            </table>
           {%else%}
             <div class="row">
                 <div class="col">
@@ -111,14 +114,42 @@
     </div>
             
       </div>
-
-     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
      <script>
-        function RefreshTable() {
-          console.log('refreshing..')
-          document.getElementById('table').bootstrapTable();
+
+      $.ajax({
+        method:'GET',
+        url:'/students',
+        success:function(response){
+            console.log(response.students)
+            buildTable(response.students)
+        }
+      })
+
+      function buildTable(data){
+        var table = document.getElementById('student_table')
+    
+        for (var i = 0; i < data.length; i++){
+          var row = `<tr>
+                  <td>${data[i].id}</td>
+                  <td>${data[i].name}</td>
+                  <td>${data[i].course}</td>
+                  <td>${data[i].year}</td>
+                  <td>${data[i].dept}</td>
+                  <td>${data[i].college}</td>
+                  <td><a  href="/update/${data[i].id}" type="button" class="btn btn-info">
+                    More...
+                  </a></td>
+                </tr>`
+          table.innerHTML += row
+    
+    
+        }
       }
-        college_select = document.getElementById('filter_college')
+
+
+
+      college_select = document.getElementById('filter_college')
         dept_select = document.getElementById('filter_department');
         course_select = document.getElementById('filter_course');
 
@@ -149,5 +180,5 @@
             })
           })
         }
-    </script>
+     </script>
 {% endblock content %}
