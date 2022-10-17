@@ -272,10 +272,10 @@ def readNotif(id):
 
 
 
-@app.route('/students')
-def showStudents():
-    db = models.students(college='None',
-                         filter='None')
+@app.route('/students/<string:clg>/<string:fltr>')
+def showStudents(clg, fltr):
+    db = models.students(college=clg,
+                         filter=fltr)
     students = db.showAll()
     print(students)
     student_array = []

@@ -146,7 +146,6 @@
                 getUnread()
               }
               getUnread()
-              // RefreshTable()
           },
           
           
@@ -189,6 +188,7 @@
       });
 
       function getUnread(){
+        load('None', 'None')
         setTimeout(()=>{
           fetch('/countNotifs').then(function(response){
             response.json().then(function(data){

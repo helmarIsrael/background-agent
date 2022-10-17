@@ -53,17 +53,19 @@
           </form>
           {% if students %} 
             
-          <table class="table table-bordered m-0 text-center p-4">
-            <tr class=" header bg-danger text-light">
-              <th scope="col">ID Number</th>
-              <th scope="col">Name</th>
-              <th scope="col">Course</th>
-              <th scope="col">Year</th>
-              <th scope="col">Department</th>
-              <th scope="col">College</th>
-              <th scope="col">Actions</th>
-            </tr>
-
+          <table class="table table-bordered m-0 text-center p-4" id="table">
+            <thead>
+              <tr class=" header bg-danger text-light">
+                <th scope="col">ID Number</th>
+                <th scope="col">Name</th>
+                <th scope="col">Course</th>
+                <th scope="col">Year</th>
+                <th scope="col">Department</th>
+                <th scope="col">College</th>
+                <th scope="col">Actions</th>
+              </tr>
+  
+            </thead>
             <tbody id="student_table">
 
             </tbody>
@@ -99,7 +101,7 @@
             </table> -->
             
             
-            <button type="button" class="btn btn-primary" onclick="RefreshTable()">Primary</button>
+      
           {%else%}
             <div class="row">
                 <div class="col">
@@ -116,15 +118,23 @@
       </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
      <script>
-
-      $.ajax({
-        method:'GET',
-        url:'/students',
-        success:function(response){
-            console.log(response.students)
-            buildTable(response.students)
+      var jx = $.ajax
+      function load(clg, fltr){
+        var node = document.getElementById("student_table");
+        while (node.hasChildNodes()) {
+          node.removeChild(node.lastChild);
         }
-      })
+        jx({
+          method:'GET',
+          url:`/students/${clg}/${fltr}`,
+          success:function(response){
+              console.log(response.students)
+              buildTable(response.students)
+          }
+        })
+      }
+
+      
 
       function buildTable(data){
         var table = document.getElementById('student_table')
@@ -147,11 +157,7 @@
         }
       }
 
-
-
-      college_select = document.getElementById('filter_college')
-        dept_select = document.getElementById('filter_department');
-        course_select = document.getElementById('filter_course');
+      college_select = document.getElementById('filter_college');
 
         college_select.onchange = function(){
           college = college_select.value;
@@ -161,24 +167,9 @@
               for (item of data.department){
                 choice += '<option value = "' + item.name_value + '">' + item.name + '</option>'
               }
-              dept_select.innerHTML = choice
-              course_select.innerHTML = '<option> Select Course</option>'
             });
           }); 
         };
 
-        dept_select.onchange = function(){
-          dept = dept_select.value;
-          college = college_select.value;
-          fetch('/course/'+college+'/'+dept).then(function(response){
-            response.json().then(function(data){
-              choice = '';
-              for (item of data.course){
-                  choice += '<option value = "'+ item.code + '">'+item.code+' '+item.name +'</option>'
-              }
-              course_select.innerHTML = choice
-            })
-          })
-        }
      </script>
 {% endblock content %}
