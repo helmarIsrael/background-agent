@@ -62,53 +62,6 @@
                      <Strong>Today</Strong>
                 </div>
                 <div id="new_notif_body" class="mt-1">
-                    {% for notif in new_notifs %}
-                        {% if notif[5] == 'remove' %}
-                                  {% if notif[2] == 0 %}
-                                  <div class="card mb-2">
-                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                                        <h4 class="card-title">
-                                            {{ notif[0] }}
-                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                        </h4>
-                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
-                                          Mark as Read                     
-                                        </button>
-                                    </div>
-                                  </div>
-                                  {% else %}
-                                  <div class="card mb-2">
-                                      <div class="card-body">
-                                          <h4 class="card-title">
-                                              {{ notif[0] }}
-                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                          </h4>
-                                      </div>
-                                  </div>
-                                {% endif %}
-                        {% else %}
-                                      {% if notif[2] == 0 %}
-                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
-                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                                              <h4 class="card-title">
-                                                  {{ notif[0] }}
-                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                              </h4>
-                                          </div>
-                                        </a>
-                                      {% else %}
-                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
-                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
-                                            <h4 class="card-title">
-                                                {{ notif[0] }}
-                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                            </h4>
-                                        </div>
-                                      </a>
-                                      {% endif %}
-                        {% endif %}
-                        
-                    {% endfor %}
                 </div>    
             </div>
             {% if old_notifs %}
@@ -117,53 +70,6 @@
                     <Strong>Earlier</Strong>
                 </div>
                 <div id="old_notif_body" class="mt-1">
-                  {% for notif in old_notifs %}
-                        {% if notif[5] == 'remove' %}
-                                  {% if notif[2] == 0 %}
-                                  <div class="card mb-2">
-                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                                        <h4 class="card-title">
-                                            {{ notif[0] }}
-                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                        </h4>
-                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
-                                          Mark as Read                     
-                                        </button>
-                                    </div>
-                                  </div>
-                                  {% else %}
-                                  <div class="card mb-2">
-                                      <div class="card-body">
-                                          <h4 class="card-title">
-                                              {{ notif[0] }}
-                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                          </h4>
-                                      </div>
-                                  </div>
-                                {% endif %}
-                        {% else %}
-                                      {% if notif[2] == 0 %}
-                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
-                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
-                                              <h4 class="card-title">
-                                                  {{ notif[0] }}
-                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                              </h4>
-                                          </div>
-                                        </a>
-                                      {% else %}
-                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
-                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
-                                            <h4 class="card-title">
-                                                {{ notif[0] }}
-                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
-                                            </h4>
-                                        </div>
-                                      </a>
-                                      {% endif %}
-                        {% endif %}
-                        
-                    {% endfor %}
                 </div>    
             </div>
             {% endif %}
@@ -178,9 +84,8 @@
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
       crossorigin="anonymous"
     ></script>
-
-<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
-
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.7.1.2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
 <script>
   var pubnub = new PubNub({
               subscribe_key : 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279',
@@ -194,19 +99,89 @@
         {
           message: function(m){
               // const channelName = "my_channel" //Specify ni dapat
-              
+
               if (m.message.text != 'read') {
-                console.log(m.message)
-                $("#notif_holder").load(window.location.href + " #notif_holder" );
+                loadNotif()
               }
           },
         }
       )
-  
+
   pubnub.subscribe({
           channels: ["my_channel"],
       });
+  var jx = $.ajax
+  function loadNotif(){
+    var new_node = document.getElementById("new_notif_body");
+    var old_node = document.getElementById("old_notif_body");
+    while (new_node.hasChildNodes()) {
+      new_node.removeChild(new_node.lastChild);
+    }
+    jx({
+      method:'GET',
+      url:`/showNotifs`,
+      success:function(response){
+          showNotif(response.new_notif, response.old_notif)
+      }
+    })
+  }
 
+  function showNotif(new_data, old_data){
+    var new_body = document.getElementById('new_notif_body')
+    var old_body = document.getElementById('old_notif_body')
+    
+        for (var i = 0; i < new_data.length; i++){
+          if(new_data[i].is_read == 0){
+            var row = `<a href="/searched/${new_data[i].student_id}/${new_data[i].notif_id}" class="card mb-2">
+                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                            <h4 class="card-title">
+                              ${new_data[i].msg}
+                                <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
+                            </h4>
+                        </div>
+                      </a>`
+          } else {
+            var row = `<div class="card mb-2">
+                          <div class="card-body">
+                              <h4 class="card-title">
+                                  ${new_data[i].msg}
+                                  <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
+                              </h4>
+                          </div>
+                      </div>`
+          }
+          
+          new_body.innerHTML += row
+        }
+
+
+
+
+        for (var i = 0; i < old_data.length; i++){
+          if(old_data[i].is_read == 0){
+            var row = `<a href="/searched/${old_data[i].student_id}/${old_data[i].notif_id}" class="card mb-2">
+                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                            <h4 class="card-title">
+                              ${old_data[i].msg}
+                                <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                            </h4>
+                        </div>
+                      </a>`
+          } else {
+            var row = `<div class="card mb-2">
+                          <div class="card-body">
+                              <h4 class="card-title">
+                                  ${old_data[i].msg}
+                                  <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                              </h4>
+                          </div>
+                      </div>`
+          }
+          
+          old_body.innerHTML += row
+        }
+  }
+  loadNotif()
     function getUnread(){
           fetch('/countNotifs').then(function(response){
               response.json().then(function(data){
@@ -217,6 +192,8 @@
               });
             });
         }
+
+
     function read_remove(id){
       var request = new XMLHttpRequest()
       request.open("GET", '/readNotif/'+id, true )

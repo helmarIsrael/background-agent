@@ -239,6 +239,7 @@ async def notifs():
     db.new_viewed()
     notify = notification.notifications()
     await notify.readAll_event()
+    
     return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
 
 
@@ -265,8 +266,39 @@ def readNotif(id):
 
 
 
-
-
+@app.route('/showNotifs')
+async def showNotif():
+    db = models.students()
+    notifs = db.show_notif()
+    now = datetime.datetime.now()
+    new_notif = []
+    old_notif = []
+    for notif in notifs:
+        new_dict = {}
+        old_dict = {}
+        if notif[1].date() < dtime.today().date():  #  if notif[1] kay gahapon kay iappend sya sa old_notif
+            if notif[1].date() < (dtime.today().date() - timedelta(days=1)):
+                notif[1] = f'{notif[1].date().strftime("%a, %d %b, %Y")} at {notif[1].time().strftime("%I:%M %p")}'
+            else:
+                notif[1] = f'{timeago.format(notif[1], now)} at {notif[1].time().strftime("%I:%M %p")}'
+            old_dict['msg'] = notif [0]
+            old_dict['timestamp'] = notif[1]
+            old_dict['is_read'] = notif[2]
+            old_dict['notif_id'] = notif[3]
+            old_dict['student_id'] = notif[4]
+            old_dict['type'] = notif[5]
+            old_notif.append(old_dict)
+        else:  # if notif[1] kay karon, iappend sya sa new_notif[]
+            notif[1] = timeago.format(notif[1], now)
+            new_dict['msg'] = notif [0]
+            new_dict['timestamp'] = notif[1]
+            new_dict['is_read'] = notif[2]
+            new_dict['notif_id'] = notif[3]
+            new_dict['student_id'] = notif[4]
+            new_dict['type'] = notif[5]
+            new_notif.append(new_dict)
+    return jsonify({'new_notif': new_notif, 'old_notif': old_notif})
+    
 
 
 @app.route('/students/<string:clg>/<string:fltr>')

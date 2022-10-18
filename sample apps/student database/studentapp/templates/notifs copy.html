@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      {% if title %}
+        <title>Student Database | {{ title }}</title>
+      {% else %}
+        <title>Student Database</title>
+      {% endif %}
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheet/style.css') }}">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body onload="getUnread()">
+   <header>
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <div class="container p-2">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navCollapse"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-item">
+                  <a href="{{ url_for('land') }}" class="nav-link"> View All Student </a>
+                </li>
+            </ul>
+            <form method="POST" class="form-inline my-2 my-lg-0 ml-auto">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search I.D" aria-label="Search" name="search">
+              <input class="btn btn-outline-danger my-2 my-sm-0" value="Search" type="submit"/>
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container-fluid hero p-0" id="top">
+      <div class="jumbotron jumbotron-fluid mt-3 ml-0 mr-0">
+        <div class="container-fluid pt-3 pl-4 m-0">
+          <div class="row">
+                  <div class="col">
+                     <h1 class="display-4 font-weight-light text-light">Notifications</h1>
+                     <span><strong id="notif_count" style="font-size:1.5em; color: white; display: none;"></strong></span>
+                  </div>
+          </div>
+          
+        </div> 
+      </div>
+      <div class="container-fluid mb-3 pl-3 pr-3" id="notif_holder">
+        <div class="container-fluid home-view-tools p-3 m-0 mt-2" style="background-color: rgba(255, 255, 255, 0.938);">
+            <div class="new_notif p-3 mb-2" style="border-bottom: 0.2em solid gray; border-radius:10px; background-color: rgba(255, 255, 255, 0.959);">
+                <div class="d-flex justify-content-center" id = "labels" style="font-size: larger;">
+                     <Strong>Today</Strong>
+                </div>
+                <div id="new_notif_body" class="mt-1">
+                    {% for notif in new_notifs %}
+                        {% if notif[5] == 'remove' %}
+                                  {% if notif[2] == 0 %}
+                                  <div class="card mb-2">
+                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                        <h4 class="card-title">
+                                            {{ notif[0] }}
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                        </h4>
+                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                          Mark as Read                     
+                                        </button>
+                                    </div>
+                                  </div>
+                                  {% else %}
+                                  <div class="card mb-2">
+                                      <div class="card-body">
+                                          <h4 class="card-title">
+                                              {{ notif[0] }}
+                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                          </h4>
+                                      </div>
+                                  </div>
+                                {% endif %}
+                        {% else %}
+                                      {% if notif[2] == 0 %}
+                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                              <h4 class="card-title">
+                                                  {{ notif[0] }}
+                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                              </h4>
+                                          </div>
+                                        </a>
+                                      {% else %}
+                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
+                                            <h4 class="card-title">
+                                                {{ notif[0] }}
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                            </h4>
+                                        </div>
+                                      </a>
+                                      {% endif %}
+                        {% endif %}
+                        
+                    {% endfor %}
+                </div>    
+            </div>
+            {% if old_notifs %}
+            <div id="old_notif" class="p-3 mb-2">
+                <div class="d-flex justify-content-center" id="labels" style="font-size: larger;">
+                    <Strong>Earlier</Strong>
+                </div>
+                <div id="old_notif_body" class="mt-1">
+                  {% for notif in old_notifs %}
+                        {% if notif[5] == 'remove' %}
+                                  {% if notif[2] == 0 %}
+                                  <div class="card mb-2">
+                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                        <h4 class="card-title">
+                                            {{ notif[0] }}
+                                            <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                        </h4>
+                                        <button onClick="read_remove(`{{notif[3]}}`)"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                          Mark as Read                     
+                                        </button>
+                                    </div>
+                                  </div>
+                                  {% else %}
+                                  <div class="card mb-2">
+                                      <div class="card-body">
+                                          <h4 class="card-title">
+                                              {{ notif[0] }}
+                                              <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                          </h4>
+                                      </div>
+                                  </div>
+                                {% endif %}
+                        {% else %}
+                                      {% if notif[2] == 0 %}
+                                        <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                          <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                              <h4 class="card-title">
+                                                  {{ notif[0] }}
+                                                  <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                              </h4>
+                                          </div>
+                                        </a>
+                                      {% else %}
+                                      <a href="{{ url_for('searched', id_number = notif[4], from_where = notif[3]|string)}}" class="card mb-2">
+                                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
+                                            <h4 class="card-title">
+                                                {{ notif[0] }}
+                                                <h6 class="card-subtitle mb-2 text-muted">{{ notif[1] }}</h6>
+                                            </h4>
+                                        </div>
+                                      </a>
+                                      {% endif %}
+                        {% endif %}
+                        
+                    {% endfor %}
+                </div>    
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    </div>
+</body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+<script>
+  var jx = $.ajax
+      function loadNotif(){
+        // var node = document.getElementById("student_table");
+        // while (node.hasChildNodes()) {
+        //   node.removeChild(node.lastChild);
+        // }
+        jx({
+          method:'GET',
+          url:`/showNotifs`,
+          success:function(response){
+              console.log(response)
+          }
+        })
+  }
+
+  loadNotif()
+    function getUnread(){
+          fetch('/countNotifs').then(function(response){
+              response.json().then(function(data){
+                count = data.unread
+                if (count >= 0) {
+                  notif_counter('#notif_count', count)
+                }
+              });
+            });
+        }
+    function read_remove(id){
+      var request = new XMLHttpRequest()
+      request.open("GET", '/readNotif/'+id, true )
+      request.send()
+      console.log(id)
+      document.getElementById("del_card").style.backgroundColor = "white";
+      document.getElementById("read_btn").style.display = 'none';
+    }
+      
+    function notif_counter (elem, count) {
+      console.log("notif counter: " + count)
+      if (count > 0){
+        $(elem).show().html(`${count} New!`)
+      } else {
+        $(elem).hide().html(`${count} New!`)
+      }
+    }
+
+</script>
+</html>
