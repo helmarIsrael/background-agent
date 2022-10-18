@@ -136,15 +136,20 @@
               // console.log(m.timetoken)
               if (m.message.type == 'create') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'success')
+                load('None', 'None')
               } else if (m.message.type == 'update') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'primary')
+                load('None', 'None')
               } else if (m.message.type == 'remove') {
                 bootstrap_alert('#notif', m.message.text, 5000, 'info')
+                load('None', 'None')
               }
 
-              if(m.message.text == 'readAll'){
+              if(m.message.text == 'read'){
                 getUnread()
               }
+
+
               getUnread()
           },
           
@@ -182,13 +187,13 @@
     }
       })
 
+      load('None', 'None')
 
       pubnub.subscribe({
           channels: ["my_channel"],
       });
 
       function getUnread(){
-        load('None', 'None')
         setTimeout(()=>{
           fetch('/countNotifs').then(function(response){
             response.json().then(function(data){

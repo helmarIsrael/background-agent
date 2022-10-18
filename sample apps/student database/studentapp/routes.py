@@ -223,11 +223,9 @@ def courses(college, dept):
 async def notifs():
     db = models.students()
     notifs = db.show_notif()
-    #yesterday = datetime.datetimetoday() - timedelta(days=1)
     now = datetime.datetime.now()
     new_notif = []
     old_notif = []
-    # print("2 days ago: " + str(dtime.today().date() - timedelta(days=2)))
     for notif in notifs:
         if notif[1].date() < dtime.today().date():  #  if notif[1] kay gahapon kay iappend sya sa old_notif
             if notif[1].date() < (dtime.today().date() - timedelta(days=1)):
@@ -242,7 +240,6 @@ async def notifs():
     notify = notification.notifications()
     await notify.readAll_event()
     return render_template('notifs.html', title='Notifications', new_notifs = new_notif, old_notifs = old_notif)
-    # return render_template('notifs_pubnub.html', title='Notifications')
 
 
 @app.route('/countNotifs')
@@ -277,7 +274,6 @@ def showStudents(clg, fltr):
     db = models.students(college=clg,
                          filter=fltr)
     students = db.showAll()
-    print(students)
     student_array = []
 
     for item in students:

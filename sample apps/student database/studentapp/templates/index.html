@@ -128,7 +128,6 @@
           method:'GET',
           url:`/students/${clg}/${fltr}`,
           success:function(response){
-              console.log(response.students)
               buildTable(response.students)
           }
         })
