@@ -221,6 +221,7 @@ class students(object):
 
     def read_notif(self):
         cursor = mysql.connection.cursor()
+        print(self.id)
         sql = """UPDATE notifications SET is_read = 1 WHERE notif_id = {}""".format(self.id)
        
         cursor.execute(sql)

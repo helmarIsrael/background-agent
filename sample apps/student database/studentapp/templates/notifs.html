@@ -101,7 +101,7 @@
               // const channelName = "my_channel" //Specify ni dapat
 
               if (m.message.text != 'read') {
-                loadNotif()
+                // loadNotif()
               }
           },
         }
@@ -129,9 +129,35 @@
   function showNotif(new_data, old_data){
     var new_body = document.getElementById('new_notif_body')
     var old_body = document.getElementById('old_notif_body')
-    
+        // NEW NOTIFS
         for (var i = 0; i < new_data.length; i++){
-          if(new_data[i].is_read == 0){
+          if (new_data[i].type == 'remove') {
+              if(new_data[i].is_read == 0){
+                  var row = `<div class="card mb-2">
+                                <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                    <h4 class="card-title">
+                                        ${new_data[i].msg}
+                                        <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
+                                    </h4>
+                                    <button onClick="read_remove(${new_data[i].id})"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                      Mark as Read                     
+                                    </button>
+                                </div>
+                              </div>`
+            } else {
+                  var row = `<div class="card mb-2">
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        ${new_data[i].msg}
+                                        <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
+                                    </h4>
+                                </div>
+                            </div>`
+            }
+          
+          new_body.innerHTML += row
+        } else {
+            if(new_data[i].is_read == 0){
             var row = `<a href="/searched/${new_data[i].student_id}/${new_data[i].notif_id}" class="card mb-2">
                         <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
                             <h4 class="card-title">
@@ -141,45 +167,72 @@
                         </div>
                       </a>`
           } else {
-            var row = `<div class="card mb-2">
-                          <div class="card-body">
-                              <h4 class="card-title">
-                                  ${new_data[i].msg}
-                                  <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
-                              </h4>
-                          </div>
-                      </div>`
-          }
-          
-          new_body.innerHTML += row
-        }
-
-
-
-
-        for (var i = 0; i < old_data.length; i++){
-          if(old_data[i].is_read == 0){
-            var row = `<a href="/searched/${old_data[i].student_id}/${old_data[i].notif_id}" class="card mb-2">
-                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+            var row = `<a href="/searched/${new_data[i].student_id}/${new_data[i].notif_id}" class="card mb-2">
+                        <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
                             <h4 class="card-title">
-                              ${old_data[i].msg}
-                                <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                              ${new_data[i].msg}
+                                <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
                             </h4>
                         </div>
                       </a>`
+          }    
+          new_body.innerHTML += row
+        }
+          }
+          
+
+        // OLD NOTIFS
+        for (var i = 0; i < old_data.length; i++){
+          if(old_data[i].type == 'remove'){
+            if(old_data[i].is_read == 0){
+                  console.log(old_data[i])
+                  var row = `<div class="card mb-2">
+                                    <div class="card-body" id="del_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                        <h4 class="card-title">
+                                            ${old_data[i].msg}
+                                            <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                                        </h4>
+                                        <button onClick="read_remove('${old_data[i].notif_id}')"  id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                          Mark as Read                     
+                                        </button>
+                                    </div>
+                                  </div>`
+            } else {
+                  var row = `<div class="card mb-2">
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        ${old_data[i].msg}
+                                        <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                                    </h4>
+                                </div>
+                            </div>`
+            }
+            old_body.innerHTML += row
           } else {
-            var row = `<div class="card mb-2">
-                          <div class="card-body">
-                              <h4 class="card-title">
+            if(old_data[i].is_read == 0){
+                var row = `<a href="/searched/${old_data[i].student_id}/${old_data[i].notif_id}" class="card mb-2">
+                            <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161); background-color:#e7f3ff;">
+                                <h4 class="card-title">
                                   ${old_data[i].msg}
-                                  <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
-                              </h4>
-                          </div>
-                      </div>`
+                                    <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                                </h4>
+                            </div>
+                          </a>`
+          } else {
+                var row = `<a href="/searched/${old_data[i].student_id}/${old_data[i].notif_id}" class="card mb-2">
+                            <div class="card-body notif_card" style="border: 0.1px solid rgb(161, 161, 161);">
+                                <h4 class="card-title">
+                                  ${old_data[i].msg}
+                                    <h6 class="card-subtitle mb-2 text-muted">${old_data[i].timestamp}</h6>
+                                </h4>
+                            </div>
+                          </a>`
           }
           
           old_body.innerHTML += row
         }
+          }
+          
   }
   loadNotif()
     function getUnread(){
@@ -194,11 +247,11 @@
         }
 
 
-    function read_remove(id){
+    function read_remove(student_id){
+      console.log(student_id)
       var request = new XMLHttpRequest()
-      request.open("GET", '/readNotif/'+id, true )
+      request.open("GET", '/readNotif/'+student_id, true )
       request.send()
-      console.log(id)
       document.getElementById("del_card").style.backgroundColor = "white";
       document.getElementById("read_btn").style.display = 'none';
     }
