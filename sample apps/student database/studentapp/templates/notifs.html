@@ -51,8 +51,11 @@
                      <h1 class="display-4 font-weight-light text-light">Notifications</h1>
                      <span><strong id="notif_count" style="font-size:1.5em; color: white; display: none;"></strong></span>
                   </div>
+                  
           </div>
-          
+          <!-- <button onClick="loadNotif()" id="read_btn" class="btn btn-xs btn-info mr-2">
+           Reload div                     
+          </button> -->
         </div> 
       </div>
       <div class="container-fluid mb-3 pl-3 pr-3" id="notif_holder">
@@ -101,7 +104,9 @@
               // const channelName = "my_channel" //Specify ni dapat
 
               if (m.message.text != 'read') {
-                // loadNotif()
+                setTimeout(function() { 
+                  loadNotif()
+                }, 1000);
               }
           },
         }
@@ -112,8 +117,8 @@
       });
   var jx = $.ajax
   function loadNotif(){
+    console.log("loadNotif")
     var new_node = document.getElementById("new_notif_body");
-    var old_node = document.getElementById("old_notif_body");
     while (new_node.hasChildNodes()) {
       new_node.removeChild(new_node.lastChild);
     }
@@ -139,7 +144,7 @@
                                         ${new_data[i].msg}
                                         <h6 class="card-subtitle mb-2 text-muted">${new_data[i].timestamp}</h6>
                                     </h4>
-                                    <button onClick="read_remove(${new_data[i].id})"" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
+                                    <button onClick="read_remove('${new_data[i].notif_id}')" id="read_btn" class="btn btn-xs btn-info float-right mr-2">
                                       Mark as Read                     
                                     </button>
                                 </div>
@@ -234,36 +239,38 @@
           }
           
   }
+  
+  
   loadNotif()
-    function getUnread(){
-          fetch('/countNotifs').then(function(response){
-              response.json().then(function(data){
-                count = data.unread
-                if (count >= 0) {
-                  notif_counter('#notif_count', count)
-                }
-              });
+  function getUnread(){
+        fetch('/countNotifs').then(function(response){
+            response.json().then(function(data){
+              count = data.unread
+              if (count >= 0) {
+                notif_counter('#notif_count', count)
+              }
             });
-        }
-
-
-    function read_remove(student_id){
-      console.log(student_id)
-      var request = new XMLHttpRequest()
-      request.open("GET", '/readNotif/'+student_id, true )
-      request.send()
-      document.getElementById("del_card").style.backgroundColor = "white";
-      document.getElementById("read_btn").style.display = 'none';
-    }
-      
-    function notif_counter (elem, count) {
-      console.log("notif counter: " + count)
-      if (count > 0){
-        $(elem).show().html(`${count} New!`)
-      } else {
-        $(elem).hide().html(`${count} New!`)
+          });
       }
+
+
+  function read_remove(student_id){
+    console.log(student_id)
+    var request = new XMLHttpRequest()
+    request.open("GET", '/readNotif/'+student_id, true )
+    request.send()
+    document.getElementById("del_card").style.backgroundColor = "white";
+    document.getElementById("read_btn").style.display = 'none';
+  }
+    
+  function notif_counter (elem, count) {
+    console.log("notif counter: " + count)
+    if (count > 0){
+      $(elem).show().html(`${count} New!`)
+    } else {
+      $(elem).hide().html(`${count} New!`)
     }
+  }
 
 </script>
 </html>
