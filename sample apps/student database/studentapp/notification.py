@@ -73,12 +73,6 @@ class notifications(object):
                               ############## KANING DUHA NEEDED DRI PARA MAGBALIK2 UG GAWAS ANG FLASH SA FRONTEND
         self.pubnub = PubNub(pnconfig)##############
         
-        
-
-    
-
-
-        
 
     def get_timestamp(self):
         curr_dt = datetime.now()
