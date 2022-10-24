@@ -1,4 +1,6 @@
+from turtle import title
 from flask import render_template, redirect, request, url_for, flash, session
+from numpy import tile
 from mckeskwela_app.forms import SignUpForm, LoginForm
 from mckeskwela_app import app
 import mckeskwela_app.models as models
@@ -60,6 +62,6 @@ def home():
         user_request = False
         user = session['user']
         print(user)
-        return render_template('home.html', user=user[0])
+        return render_template('home.html', user=user[0], title='Home')
     else:
         return redirect(url_for('login'))
