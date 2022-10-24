@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock.Eskwela</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/login.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="container-fluid w-100 h-100">
+    <div class="row bg-dark  align-items-center h-100">
+      <div class="container">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+          <form method="POST">
+              {{ form.csrf_token }}
+              {{ form.hidden_tag() }}
+            <div class="row d-flex justify-content-between">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Register Teacher</h3>
+              <div>
+                <div class="row">
+                  <p class="mb-4 pb-2 pb-md-0 mb-md-5 p-1">Choose Teacher Type</p>
+                  {% if form.teach_type.errors %}
+                    {{ form.teach_type(class = "form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for errors in form.teach_type.errors %}
+                            <span>{{ errors }}</span>
+                        {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form.teach_type(class="select form-control-sm") }}
+                  {% endif %}
+                </div>
+            </div>
+            </div>
+            
+              <div class="row" id="signUp"> 
+                <div class="basic_cred col container-fluid m-0">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-group">
+                        {{ form.firstname.label(class="font-weight-bold") }}
+                        {% if form.firstname.errors %}
+                          {{ form.firstname(class = "form-control is-invalid") }}
+                          <div class="invalid-feedback">
+                              {% for errors in form.first.errors %}
+                                  <span>{{ errors }}</span>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          {{ form.firstname(class="form-control") }}
+                        {% endif %}
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-group">
+                        {{ form.lastname.label(class="font-weight-bold") }}
+                        {% if form.lastname.errors %}
+                          {{ form.lastname(class = "form-control is-invalid") }}
+                          <div class="invalid-feedback">
+                              {% for errors in form.lastname.errors %}
+                                  <span>{{ errors }}</span>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          {{ form.lastname(class="form-control") }}
+                        {% endif %}
+                      </div>
+    
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="row">
+                        <p class="mb-4 pb-2 pb-md-0 mb-md-5 p-1">Gender</p>
+                        {% if form.gender.errors %}
+                          {{ form.gender(class = "form-control is-invalid") }}
+                          <div class="invalid-feedback">
+                              {% for errors in form.gender.errors %}
+                                  <span>{{ errors }}</span>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          {{ form.gender(class="select form-control-sm") }}
+                        {% endif %}
+                      </div>
+                      <form>
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      
+    
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4 pb-2">
+    
+                      <div class="form-outline">
+                        {{ form.username.label(class="font-weight-bold") }}
+                        {% if form.username.errors %}
+                          {{ form.username(class = "form-control is-invalid") }}
+                          <div class="invalid-feedback">
+                              {% for errors in form.username.errors %}
+                                  <span>{{ errors }}</span>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          {{ form.username(class="form-control") }}
+                        {% endif %}
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4 pb-2">
+    
+                      <div class="form-outline">
+                        {{ form.password.label(class="font-weight-bold") }}
+                        {% if form.password.errors %}
+                          {{ form.password(class = "form-control is-invalid") }}
+                          <div class="invalid-feedback">
+                              {% for errors in form.password.errors %}
+                                  <span>{{ errors }}</span>
+                              {% endfor %}
+                          </div>
+                        {% else %}
+                          {{ form.password(class="form-control") }}
+                        {% endif %}
+                      </div>
+    
+                    </div>
+                  </div>
+    
+                </div>
+                <div class="col" id="notBasic_cred">
+                  <div class="container-fluid" id="district" style="display: none;">
+                    <div class="row">
+                      <div class="col">
+                        <h3>
+                          <label class="form-label select-label">Choose Division</label>
+                        </h3>
+                        {% if form.division.errors %}
+                        {{ form.division(class = "form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for errors in form.division.errors %}
+                                <span>{{ errors }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                          {{ form.division(class="select form-control-sm") }}
+                        {% endif %}
+                        
+      
+                      </div>
+                      <div class="container-fluid m-2"></div>
+                      <div class="col">
+                        <h3>
+                          <label class="form-label select-label">Choose District</label>
+                        </h3>
+                        {% if form.district.errors %}
+                        {{ form.district(class = "form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for errors in form.district.errors %}
+                                <span>{{ errors }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                          {{ form.district(class="select form-control-sm") }}
+                        {% endif %}
+                        
+      
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="container-fluid" id="school" style="display: none;">
+                    <div class="row">
+                      <div class="col">
+                        <h3>
+                          <label class="form-label select-label">Choose Division</label>
+                        </h3>
+                        {% if form.division.errors %}
+                        {{ form.division(class = "form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for errors in form.division.errors %}
+                                <span>{{ errors }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                          {{ form.division(class="select form-control-sm") }}
+                        {% endif %}
+                        
+      
+                      </div>
+                      <div class="container-fluid m-2"></div>
+                      <div class="col">
+                        <h3>
+                          <label class="form-label select-label">Choose District</label>
+                        </h3>
+                        {% if form.district.errors %}
+                        {{ form.district(class = "form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for errors in form.district.errors %}
+                                <span>{{ errors }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                          {{ form.district(class="select form-control-sm") }}
+                        {% endif %}
+                        
+      
+                      </div>
+                      <div class="container-fluid m-2"></div>
+                      <div class="col">
+                        <div class="form-outline">
+                          {{ form.school.label(class="font-weight-bold") }}
+                          {% if form.school.errors %}
+                            {{ form.school(class = "form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for errors in form.school.errors %}
+                                    <span>{{ errors }}</span>
+                                {% endfor %}
+                            </div>
+                          {% else %}
+                            {{ form.school(class="form-control") }}
+                          {% endif %}
+                        </div>
+  
+                      </div>
+  
+  
+                    </div>
+                  </div>
+
+                  <div class="container-fluid" id="please_choose">
+                    <h1 class="display-4">Please Choose Teacher Type</h1>
+                  </div>
+                </div>
+               
+                
+              </div>
+
+              <div class="mt-4 pt-2">
+                {{ form.submit(class="btn btn-primary btn-lg") }}
+                <p class="text d-flex flex-wrap justify-content-center">
+                  Have an account? |<a class="ml-2" href="{{url_for('toLogin', user='teacher')}}"
+                  >Login</a>
+              </p>
+              </div>
+
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+       
+</body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+<script>
+  teacher_select = document.getElementById('teach_type')
+
+  teacher_select.onchange = function () {
+      close_fields('#please_choose')  
+      close_fields('#division')  
+      close_fields('#school')
+      close_fields('#district')
+      teach_types = teacher_select.value
+      console.log(teach_types)
+      if (teach_types == 'Superintendent' || teach_types == 'Division Supervisor') {
+          document.getElementById('notBasic_cred').innerHTML = `<div class="container-fluid col" id="division" style="display: none;">
+                  <div class="row">
+                    <div class="col-12">
+                      <h3>
+                        <label class="form-label select-label">Choose Division</label>
+                      </h3>
+                      {% if form.division.errors %}
+                      {{ form.division(class = "form-control is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for errors in form.division.errors %}
+                              <span>{{ errors }}</span>
+                          {% endfor %}
+                      </div>
+                      {% else %}
+                        {{ form.division(class="select form-control-sm") }}
+                      {% endif %}
+                      
+    
+                    </div>
+                  </div>
+                </div>`
+      } else if (teach_types == 'District Supervisor') {
+        show_fields('#district')
+      } else if (teach_types == 'School Head' || teach_types == 'Public Teacher') {
+        show_fields('#school')
+      } else{
+        show_fields('#please_choose')
+      }
+  }
+
+  function show_fields (elem){
+    $(elem).show()
+  }
+  function close_fields (elem){
+    //$(elem).css('display', 'none')
+    $(elem).remove()
+  }
+</script>
+</html>

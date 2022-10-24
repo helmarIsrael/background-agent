@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock.Eskwela</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/login.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="d-flex flex-wrap justify-content-center align-items-center h-50">
+        <h1 class="display-4 text-light">mock.eskwela</h1>
+    </div>
+    <div class="login">
+        <h3 class="m-2 mt-5">Login</h3>
+            <form method="post">
+            <input class="m-2" type="text" name="u" placeholder="Username" required="required" />
+                <input class="m-2" type="password" name="p" placeholder="Password" required="required" />
+                <button type="submit" class="btn btn-primary btn-block m-2">Log in.</button>
+            </form>
+            <div class="d-flex flex-wrap justify-content-center">
+            <p class="text-light">
+                Dont have an account yet? |<a class="ml-2" href="{{url_for('signup', user='teacher')}}"
+                >Sign Up</a
+                >
+            </p>
+        </div>
+    </div>
+        
+       
+</body>
+</html>

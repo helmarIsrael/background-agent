@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock.Eskwela</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/login.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="container-fluid w-100 h-100">
+    <div class="row bg-dark  align-items-center h-100">
+      <div class="container">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            
+            <div class="row d-flex justify-content-between">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Register Student</h3>
+              <div>
+            </div>
+            </div>
+            <form>
+
+              <div class="row"> 
+                <div class="basic_cred col container-fluid m-0">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-outline">
+                        <input type="text" id="firstName" class="form-control form-control-sm" />
+                        <label class="form-label" for="firstName">First Name</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="form-outline">
+                        <input type="text" id="lastName" class="form-control form-control-sm" />
+                        <label class="form-label" for="lastName">Last Name</label>
+                      </div>
+    
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div class="row">
+                        <p class="mb-4 pb-2 pb-md-0 mb-md-5 p-1">Gender</p>
+                        <select class="select form-control-sm">
+                        <option value="1" disabled>Choose option</option>
+                        <option value="2">Choose...</option>
+                        <option value="2">Male</option>
+                        <option value="3">Female</option>
+                      </select></div>
+                      <form>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4 pb-2">
+    
+                      <div class="form-outline">
+                        <input type="email" id="emailAddress" class="form-control form-control-sm" />
+                        <label class="form-label" for="emailAddress">Username</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4 pb-2">
+    
+                      <div class="form-outline">
+                        <input type="tel" id="phoneNumber" class="form-control form-control-sm" />
+                        <label class="form-password" for="phoneNumber">Password</label>
+                      </div>
+    
+                    </div>
+                  </div>
+    
+                </div>
+            
+
+                <div class="container-fluid col" id="school">
+                  <div class="row">
+                    <div class="col">
+                      <h3>
+                        <label class="form-label select-label">Choose Division</label>
+                      </h3>
+                      <select class="select form-control-sm">
+                        <option value="1" disabled>Choose Division</option>
+                        <option value="2">Division 1</option>
+                        <option value="3">Division 2</option>
+                        <option value="4">Division 3</option>
+                      </select>
+                      
+    
+                    </div>
+                    <div class="container-fluid m-2"></div>
+                    <div class="col">
+                      <h3>
+                        <label class="form-label select-label">Choose District</label>
+                      </h3>
+                      <select class="select form-control-sm">
+                        <option value="1" disabled>Choose Division</option>
+                        <option value="2">District 1</option>
+                        <option value="3">District 2</option>
+                      </select>
+                      
+    
+                    </div>
+                    <div class="container-fluid m-2"></div>
+                    <div class="col">
+                      <div class="form-outline">
+                        <input type="text" id="lastName" class="form-control form-control-sm" />
+                        <label class="form-label" for="lastName">School</label>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2">
+                <input class="btn btn-primary btn-lg" type="submit" value="Submit" />
+                <p class="text d-flex flex-wrap justify-content-center">
+                  Have an account? |<a class="ml-2" href="{{url_for('toLogin', user='teacher')}}"
+                  >Login</a
+                  >
+              </p>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+       
+</body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+<script>
+  teacher_select = document.getElementById('select_teach')
+
+  teacher_select.onchange = function () {
+      close_fields('#division')  
+      close_fields('#school')
+      close_fields('#district')
+      teach_type = teacher_select.value
+      if (teach_type == 'super' || teach_type == 'div') {
+          show_fields('#division')
+      } else if (teach_type == 'dis') {
+        show_fields('#district')
+      } else if (teach_type == 'head' || teach_type == 'teach') {
+        show_fields('#school')
+      }
+  }
+
+  function show_fields (elem){
+    $(elem).show()
+  }
+  function close_fields (elem){
+    $(elem).css('display', 'none')
+  }
+</script>
+</html>
