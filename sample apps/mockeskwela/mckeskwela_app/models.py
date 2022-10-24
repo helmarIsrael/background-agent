@@ -25,3 +25,31 @@ class mckeskwla(object):
 
         cursor.execute(sql)
         mysql.connection.commit()
+
+    
+
+    def validateLogin(self):
+        cursor = mysql.connection.cursor()
+        sql = "SELECT * FROM teachers WHERE username = '{}'".format(self.username)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        if display:
+            for item in display:
+                if item[6] != self.password:
+                    return 2
+                else:
+                    return 0
+        elif not display:
+            return 1
+        else:
+            return 0
+
+    def login(self):
+        cursor = mysql.connection.cursor()
+
+        sql = "SELECT * FROM teachers WHERE username = '{}' and password = '{}'".format(self.username, self.password)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        return display

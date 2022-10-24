@@ -19,10 +19,40 @@
     </div>
     <div class="login">
         <h3 class="m-2 mt-5">Login</h3>
-            <form method="post">
-            <input class="m-2" type="text" name="u" placeholder="Username" required="required" />
-                <input class="m-2" type="password" name="p" placeholder="Password" required="required" />
-                <button type="submit" class="btn btn-primary btn-block m-2">Log in.</button>
+            <form method="POST">
+                {{ form.csrf_token }}
+                {{ form.hidden_tag() }}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class = "m-2 alert alert-{{ category }} w-100">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                {% if form.username.errors %}
+                {{ form.username(class = "form-control is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for errors in form.username.errors %}
+                        <span>{{ errors }}</span>
+                    {% endfor %}
+                </div>
+              {% else %}
+                {{ form.username(class="m-2", placeholder="Username") }}
+              {% endif %}
+              {% if form.password.errors %}
+              {{ form.password(class = "form-control is-invalid") }}
+              <div class="invalid-feedback">
+                  {% for errors in form.password.errors %}
+                      <span>{{ errors }}</span>
+                  {% endfor %}
+              </div>
+            {% else %}
+              {{ form.password(class="m-2", placeholder="Password") }}
+            {% endif %}
+                {{ form.submit(class="btn btn-primary btn-block m-2") }}
             </form>
             <div class="d-flex flex-wrap justify-content-center">
             <p class="text-light">

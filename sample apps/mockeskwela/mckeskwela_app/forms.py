@@ -5,6 +5,11 @@ import mckeskwela_app.models as models
 import re
 
 
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
+    submit = SubmitField('Log in')
+
 class myCustomSelectField(SelectField):
     def pre_validate(self, form):
         pass
@@ -22,10 +27,10 @@ class SignUpForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[
         DataRequired(), Length(min=5, max=20)])
-    division =  myCustomSelectField('Division', choices=[('','Choose...'),('Division 1','Division 1'),('Division 2','Division 2'), ('Division 3','Division 3')], validators=[DataRequired()])
-    district = myCustomSelectField('District', choices=[('','Choose...'),('District 1','District 1'),('District 2','District 2')], validators=[DataRequired()])
+    division =  myCustomSelectField('Division', choices=[('','Choose...'),('Division 1','Division 1'),('Division 2','Division 2'), ('Division 3','Division 3')])
+    district = myCustomSelectField('District', choices=[('','Choose...'),('District 1','District 1'),('District 2','District 2')])
 
-    school = StringField('School', validators=[DataRequired()])
+    school = StringField('School')
 
     submit = SubmitField('Submit')
     
