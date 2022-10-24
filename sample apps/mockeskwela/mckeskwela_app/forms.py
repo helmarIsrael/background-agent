@@ -1,3 +1,4 @@
+from enum import unique
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, PasswordField
 from wtforms.validators import InputRequired, Length, ValidationError, DataRequired, Email
@@ -33,8 +34,22 @@ class SignUpForm(FlaskForm):
     school = StringField('School')
 
     submit = SubmitField('Submit')
-    
 
-    
 
-    submit = SubmitField('Sign Up')
+
+
+class CreateStudentForm(FlaskForm):
+    firstname = StringField('Firstname', validators=[DataRequired()])
+    lastname = StringField('Lastname', validators=[DataRequired()])
+    gender = myCustomSelectField('Gender', choices=[('','Choose...'),('Male','Male'),('Female','Female')], validators=[DataRequired()])
+    unique_id = StringField('Unique I.D', validators=[DataRequired()])
+    school = StringField('School')
+
+    father_firstname = StringField('Father Firstname', validators=[DataRequired()])
+    father_lastname = StringField('Father Lastname', validators=[DataRequired()])
+
+    mother_firstname = StringField('Mother Firstname', validators=[DataRequired()])
+    mother_lastname = StringField('Mother Lastname', validators=[DataRequired()])
+
+
+    submit = SubmitField('Submit')

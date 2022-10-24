@@ -32,7 +32,7 @@
                         <a class="nav-link p-4 ml-4" href="#">Notifications</a>
                     </li>
                      <li class="nav-item">   
-                       <a class="nav-link p-4 ml-4" href="#">Logout</a>
+                       <a class="nav-link p-4 ml-4" href="{{ url_for('logout') }}">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -48,9 +48,9 @@
                 {{user[2]}} {{user[3]}}
               </strong>
           </a>
-            <a class="sidebar-info row" href="#">Create Student</a>
-            <a class="sidebar-info row" href="#">Saved Recipes</a>
-            <a class="sidebar-info row" href="#">Friend's List</a>
+            <a class="sidebar-info row" href="#">Class List</a>
+            <a class="sidebar-info row" href="{{url_for('createStudent')}}">Create Student</a>
+            <a class="sidebar-info row" href="#">Activate Account</a>
           </div> 
         </div>
       </div>
