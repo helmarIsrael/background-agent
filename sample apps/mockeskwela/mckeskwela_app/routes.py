@@ -1,3 +1,4 @@
+from getpass import getuser
 from flask import render_template, redirect, request, url_for, flash, session
 from mckeskwela_app.forms import CreateStudentForm, SignUpForm, LoginForm
 from mckeskwela_app import app
@@ -22,10 +23,14 @@ def login():
         elif db.validateLogin() == 2:
             flash('Invalid Login. Wrong Password', 'danger')
         else:
-            user = db.login()
+            # user = db.login()
+            # session['user'] = user
+            # return redirect(url_for('home'))
+            logUser = db.login()
+            getUser = models.mckeskwla(user_id=logUser[0][0])
+            user = getUser.get_user()
             session['user'] = user
             return redirect(url_for('home'))
-        
 
     return render_template('login.html', form=form)
 
@@ -63,7 +68,9 @@ def signup():
         session.permanent = True
         login = models.mckeskwla(username=new_username,
                                 password=form.password.data)
-        user = login.login()
+        logUser = login.login()
+        getUser = models.mckeskwla(user_id=logUser[0][0])
+        user = getUser.get_user()
         session['user'] = user
         return redirect(url_for('home'))
         
@@ -100,8 +107,8 @@ def createStudent():
     if form.validate_on_submit() and request.method == 'POST':
         if form.school.data == None:
             form.school.data = 'No School'
-        parent_id = str(uuid.uuid4())[:8]
-        # mother_id = str(uuid.uuid4())[:8]
+        father_id = str(uuid.uuid4())[:8]
+        mother_id = str(uuid.uuid4())[:8]
         print(f'''Teacher_id: {user[0][0]} firstname: {form.firstname.data}
                 lastname: {form.lastname.data}
                 gender: {form.gender.data}

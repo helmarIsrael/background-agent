@@ -77,13 +77,13 @@ class mckeskwla(object):
 
     def validateLogin(self):
         cursor = mysql.connection.cursor()
-        sql = "SELECT * FROM teachers WHERE username = '{}'".format(self.username)
+        sql = "SELECT * FROM user WHERE username = '{}'".format(self.username)
 
         cursor.execute(sql)
         display = cursor.fetchall()
         if display:
             for item in display:
-                if item[6] != self.password:
+                if item[2] != self.password:
                     return 2
                 else:
                     return 0
@@ -100,3 +100,15 @@ class mckeskwla(object):
         cursor.execute(sql)
         display = cursor.fetchall()
         return display
+
+
+
+    def get_user(self):
+        cursor = mysql.connection.cursor()
+
+        sql = "SELECT t.* FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        return display
+

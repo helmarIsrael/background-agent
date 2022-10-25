@@ -25,7 +25,7 @@ class SignUpForm(FlaskForm):
     firstname = StringField('Firstname', validators=[DataRequired()])
     lastname = StringField('Lastname', validators=[DataRequired()])
     gender = myCustomSelectField('Gender', choices=[('','Choose...'),('Male','Male'),('Female','Female')], validators=[DataRequired()])
-    # username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[
         DataRequired(), Length(min=5, max=20)])
     division =  myCustomSelectField('Division', choices=[('','Choose...'),('Division 1','Division 1'),('Division 2','Division 2'), ('Division 3','Division 3')])
