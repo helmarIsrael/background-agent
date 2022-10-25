@@ -8,7 +8,7 @@ class mckeskwla(object):
                 father_firstname=None, father_lastname=None, 
                 mother_firstname=None, mother_lastname=None,
                 student_unique=None, parent_unique=None,
-                teacher_id = None
+                teacher_id = None, user_id=None
                 ):
     
         self.teacher_type = teacher_type
@@ -31,12 +31,23 @@ class mckeskwla(object):
         self.parent_unique = parent_unique
         self.teacher_id = teacher_id
 
+        self.user_id = user_id
+    
     def addNewUser(self):
         cursor = mysql.connection.cursor()
-        sql = """INSERT INTO teachers(teacher_type, firstname, lastname, gender, 
-                                        username, password, division, district, school)
-					VALUES ('%s', '%s', '%s','%s', '%s', '%s','%s', '%s', '%s')""" % (self.teacher_type, self.firstname, self.lastname, self.gender, 
-                                        self.username, self.password, self.division, self.district, self.school)
+        sql = """INSERT INTO user(user_id, username, password, user_type)
+					VALUES ('%s', '%s', '%s', '%s')""" % (self.user_id, self.username, self.password, self.teacher_type)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+
+    def addTeacher(self):
+        cursor = mysql.connection.cursor()
+        sql = """INSERT INTO teachers(teacher_id, teacher_type, firstname, lastname, gender, 
+                                        division, district, school, user_id)
+					VALUES ('%s','%s', '%s', '%s','%s','%s', '%s', '%s', '%s')""" % (self.teacher_id, self.teacher_type, self.firstname, self.lastname, self.gender, 
+                                        self.division, self.district, self.school, self.user_id)
 
         cursor.execute(sql)
         mysql.connection.commit()
@@ -54,8 +65,10 @@ class mckeskwla(object):
     
     def addParent(self):
         cursor = mysql.connection.cursor()
-        sql = """INSERT INTO parents(unique_id, child_id, teacher_id, firstname, lastname)
-					VALUES ('%s', '%s', '%s','%s', '%s')""" % (self.parent_unique, self.student_unique, self.teacher_id, self.firstname, self.lastname)
+        sql = """INSERT INTO parents(unique_id, child_id, teacher_id, father_firstname, father_lastname, mother_firstname, mother_lastname)
+					VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s')""" % (self.parent_unique, self.student_unique, self.teacher_id,
+                                                                            self.father_firstname, self.father_lastname, 
+                                                                            self.mother_firstname, self.mother_lastname)
 
         cursor.execute(sql)
         mysql.connection.commit()
@@ -82,7 +95,7 @@ class mckeskwla(object):
     def login(self):
         cursor = mysql.connection.cursor()
 
-        sql = "SELECT * FROM teachers WHERE username = '{}' and password = '{}'".format(self.username, self.password)
+        sql = "SELECT * FROM user WHERE username = '{}' and password = '{}'".format(self.username, self.password)
 
         cursor.execute(sql)
         display = cursor.fetchall()

@@ -29,30 +29,45 @@ def login():
 
     return render_template('login.html', form=form)
 
-@app.route('/signUp/<string:user>', methods=['GET', 'POST'])
-def signup(user):
+@app.route('/signUp', methods=['GET', 'POST'])
+def signup():
     form = SignUpForm()
-    if user == 'teacher':
-        if form.validate_on_submit() and request.method == 'POST':
+    if form.validate_on_submit() and request.method == 'POST':
+        if form.district.data == None:
             form.district.data = 'No District'
+        if form.school.data == None:
             form.school.data = 'No School'
-            
-            print(f'''type: {form.teach_type.data} firstname: {form.firstname.data}
-                    lastname: {form.lastname.data}
-                    gender: {form.gender.data}
-                    username: {form.username.data}
-                    password: {form.password.data}
-                    division: {form.division.data}
-                    district: {form.district.data}
-                    school: {form.school.data}
-                    ''')
-            db = models.mckeskwla(teacher_type=form.teach_type.data, firstname=form.firstname.data, lastname=form.lastname.data,
-                                    gender=form.gender.data, username=form.username.data, password=form.password.data,
-                                    division=form.division.data, district=form.district.data, school=form.school.data  
-                                    )
-            db.addNewUser()
-            
-        return render_template('signUp.html', form=form)
+        new_user_id = str(uuid.uuid4())[:8]
+        
+        teach_type = form.teach_type.data
+        if teach_type == 'Superintendent':
+            new_teacher_id = f'super-{str(uuid.uuid4())[:5]}'
+        elif teach_type == 'Division Supervisor':
+            new_teacher_id = f'divSup-{str(uuid.uuid4())[:5]}'
+        elif teach_type == 'District Supervisor':
+            new_teacher_id = f'distSup-{str(uuid.uuid4())[:5]}' 
+        elif teach_type == 'School Head':
+            new_teacher_id = f'schoolHead-{str(uuid.uuid4())[:5]}'
+        elif teach_type == 'Public Teacher':
+            new_teacher_id = f'teacher-{str(uuid.uuid4())[:5]}'
+        new_username = f'{form.firstname.data}.{form.lastname.data}'
+        print(f'user id: {new_user_id}\nteacher id: {new_teacher_id}')
+
+        addUser_db = models.mckeskwla(user_id=new_user_id, username=new_username, password=form.password.data, teacher_type=form.teach_type.data)
+        addTeach_db = models.mckeskwla(teacher_id=new_teacher_id, teacher_type=form.teach_type.data, firstname=form.firstname.data, lastname=form.lastname.data,
+                                        gender=form.gender.data, division=form.division.data, district=form.district.data, 
+                                        school=form.school.data, user_id=new_user_id )
+        addUser_db.addNewUser()
+        addTeach_db.addTeacher()
+
+        session.permanent = True
+        login = models.mckeskwla(username=new_username,
+                                password=form.password.data)
+        user = login.login()
+        session['user'] = user
+        return redirect(url_for('home'))
+        
+    return render_template('signUp.html', form=form)
 
 
 @app.route('/home', methods=['GET', 'POST'])
@@ -85,8 +100,8 @@ def createStudent():
     if form.validate_on_submit() and request.method == 'POST':
         if form.school.data == None:
             form.school.data = 'No School'
-        father_id = str(uuid.uuid4())[:8]
-        mother_id = str(uuid.uuid4())[:8]
+        parent_id = str(uuid.uuid4())[:8]
+        # mother_id = str(uuid.uuid4())[:8]
         print(f'''Teacher_id: {user[0][0]} firstname: {form.firstname.data}
                 lastname: {form.lastname.data}
                 gender: {form.gender.data}
@@ -94,15 +109,21 @@ def createStudent():
                 school: {form.school.data}\n
                 Father Firstname: {form.father_firstname.data}
                 Father Lastname: {form.father_lastname.data}
-                Father ID: {father_id}
+                Father ID: {parent_id}
                 Mother Firstname: {form.mother_firstname.data}
                 Mother Lastname: {form.mother_lastname.data}
-                Mother ID: {mother_id}
+                Mother ID: {parent_id}
                 ''')
-        # db = models.mckeskwla(teacher_type=form.teach_type.data, firstname=form.firstname.data, lastname=form.lastname.data,
-        #                         gender=form.gender.data, username=form.username.data, password=form.password.data,
-        #                         division=form.division.data, district=form.district.data, school=form.school.data  
-        #                         )
-        # db.addNewUser()
+        db = models.mckeskwla(student_unique=form.unique_id.data, firstname=form.firstname.data, lastname=form.lastname.data,
+                            gender=form.gender.data, school=form.school.data, teacher_id=user[0][0],parent_unique=parent_id )
+        
+        db.addStudent()
+
+        db = models.mckeskwla(parent_unique=parent_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
+                            father_firstname=form.father_firstname.data, father_lastname=form.father_lastname.data,
+                            mother_firstname=form.mother_firstname.data, mother_lastname=form.mother_lastname.data)
+     
+        db.addParent()
+        return redirect(url_for('home'))
         
     return render_template('student_signup.html', form=form)

@@ -109,17 +109,11 @@
                     <div class="col-md-6 mb-4 pb-2">
     
                       <div class="form-outline">
-                        {{ form.username.label(class="font-weight-bold") }}
-                        {% if form.username.errors %}
-                          {{ form.username(class = "form-control is-invalid") }}
-                          <div class="invalid-feedback">
-                              {% for errors in form.username.errors %}
-                                  <span>{{ errors }}</span>
-                              {% endfor %}
-                          </div>
-                        {% else %}
-                          {{ form.username(class="form-control") }}
-                        {% endif %}
+                        <strong>Username</strong>
+                        <br>
+                        <p>
+                          Upon submission, your Username will be in the format <strong>firstname.lastname</strong>
+                        </p>
                       </div>
     
                     </div>
