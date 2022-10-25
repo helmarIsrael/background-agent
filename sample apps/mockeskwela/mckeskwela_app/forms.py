@@ -43,7 +43,7 @@ class CreateStudentForm(FlaskForm):
     lastname = StringField('Lastname', validators=[DataRequired()])
     gender = myCustomSelectField('Gender', choices=[('','Choose...'),('Male','Male'),('Female','Female')], validators=[DataRequired()])
     unique_id = StringField('Unique I.D', validators=[DataRequired()])
-    school = StringField('School')
+    school = StringField('School', validators=[DataRequired()])
 
     father_firstname = StringField('Father Firstname', validators=[DataRequired()])
     father_lastname = StringField('Father Lastname', validators=[DataRequired()])
