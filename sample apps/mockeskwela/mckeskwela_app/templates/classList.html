@@ -14,13 +14,13 @@
     />
 </head>
 <body>
-    <div class="container-fluid w-100 h-100">
     <div class="row align-items-center h-100">
       <div class="container">
         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
           <div class="card-body p-4 p-md-5">
             <div class="row d-flex justify-content-between">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Class List</h3>
+              <div class="ml-2"><a href="{{url_for('home')}}" class="btn btn-sm btn-primary"> Go Back Home</a></div>
                 <table class="table table-bordered m-0 text-center p-4" id="table">
                     <thead>
                     <tr class=" header bg-info text-light">
@@ -47,6 +47,24 @@
         </div>
       </div>
     </div>
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="student_modal">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
         
        
 </body>
@@ -55,6 +73,9 @@
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
       crossorigin="anonymous">
 </script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     // load()
@@ -69,7 +90,6 @@
         method:'GET',
         url:`/getStudents`,
         success:function(response){
-            console.log(response.students)
             buildTable(response.students)
         }
     })
@@ -88,14 +108,83 @@
                 <td>${data[i].gender}</td>
                 <td>${data[i].school}</td>
 
-                <td><a  href="#" type="button" class="btn btn-primary">
-                More...
-                </a></td>
+                <td>
+                    <button type="button" onClick=view_student('${data[i].id}') class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        View More
+                    </button>   
+                </td>
             </tr>`
         table.innerHTML += row
-
-
+        }
     }
+
+
+    function view_student(m){
+        
+        jx({
+        method:'GET',
+        url:`/getParents/${m}`,
+        success:function(response){
+           buildModal(response)
+        }
+    })
+    }
+
+    function buildModal(data){
+        console.log(data.child[0].fname)
+        child = data.child[0]
+        dad = data.dad[0]
+        mom = data.mom[0]
+        var x = document.getElementById('student_modal')
+        x.innerHTML = `
+            <div class="m-2">
+                <div class="row d-flex justify-content-between">
+            <h3>Student Data</h3>
+        </div>
+        <div class="p-3">
+            <div class="row d-flex justify-content-between">
+                <strong><p>Student Name</p></strong>
+                <strong><p>Gender</p></strong>
+                <strong><p>School</p></strong>
+            </div>
+            <div class="row d-flex justify-content-between">
+                <p>${child.fname} ${child.lname}</p>
+                <p>${child.gender}</p>   
+                <p>${child.school}</p>
+            </div>    
+        
+        
+        </div>
+
+        <div class="row">
+            <h3>Parents</h3>
+        </div>
+
+        <div class="p-3">
+            <div class="row d-flex justify-content-between">
+                <strong class=""><p>Father Full Name</p></strong>
+                <strong class=""><p>Mother Full Name</p></strong>
+            </div>
+
+            <div class="row d-flex justify-content-between">
+                <p class="pl-3">${dad.fname} ${dad.lname}</p>
+                <p class="pr-3">${mom.fname} ${mom.lname}</p> 
+            </div>
+
+        </div>
+
+    
+            
+            
+            
+            </div>
+        
+
+
+        
+        
+        
+        `
     }
 </script>
 </html>

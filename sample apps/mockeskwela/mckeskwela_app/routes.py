@@ -171,3 +171,16 @@ def getStudents():
         student_array.append(studentDict)
     
     return jsonify({'students': student_array})
+
+
+
+@app.route('/getParents/<string:id>')
+def getParents(id):
+    user = session['user']
+    db = models.mckeskwla(student_unique=id, teacher_id=user[0][0])
+    dad = db.get_dad()
+    mom = db.get_mom()
+    child =db.get_child()
+    
+    
+    return jsonify({'child':child ,'dad': dad, 'mom':mom})

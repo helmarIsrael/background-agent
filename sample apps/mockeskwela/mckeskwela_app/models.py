@@ -129,3 +129,73 @@ class mckeskwla(object):
         cursor.execute(sql)
         display = cursor.fetchall()
         return display
+
+
+    def get_dad(self):
+        cursor = mysql.connection.cursor()
+
+        dad = []
+
+        dad_sql = """SELECT p.* FROM parents AS p LEFT JOIN students as s 
+                    ON p.unique_id = s.father_id  WHERE s.unique_id = '{}' 
+                    AND p.teacher_id = '{}';""".format(self.student_unique, self.teacher_id)
+
+        cursor.execute(dad_sql)
+        dad_display = cursor.fetchall()
+        
+        for item in dad_display:
+            dadDict = {}
+            dadDict['id'] = item[1]
+            dadDict['teacher_id'] = item[2]
+            dadDict['child_id'] =item[3]
+            dadDict['fname'] = item[4].upper()
+            dadDict['lname'] = item[5].upper()
+            dad.append(dadDict)
+
+        return dad
+
+    
+    def get_mom(self):
+        cursor = mysql.connection.cursor()
+
+        mom = []
+
+        mom_sql = """SELECT p.* FROM parents AS p LEFT JOIN students as s 
+                    ON p.unique_id = s.mother_id  WHERE s.unique_id = '{}' 
+                    AND p.teacher_id = '{}';""".format(self.student_unique, self.teacher_id)
+
+        cursor.execute(mom_sql)
+        mom_display = cursor.fetchall()
+        
+        for item in mom_display:
+            momDict = {}
+            momDict['id'] = item[1]
+            momDict['teacher_id'] = item[2]
+            momDict['child_id'] =item[3]
+            momDict['fname'] = item[4].upper()
+            momDict['lname'] = item[5].upper()
+            mom.append(momDict)
+
+        return mom
+
+    
+    def get_child(self):
+        cursor = mysql.connection.cursor()
+
+        child = []
+
+        sql = """SELECT * FROM students WHERE unique_id = '{}' AND teacher_id = '{}';""".format(self.student_unique, self.teacher_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        
+        for item in display:
+            studentDict = {}
+            studentDict['id'] = item[1]
+            studentDict['fname'] = item[2].upper()
+            studentDict['lname'] = item[3].upper()
+            studentDict['gender'] = item[4]
+            studentDict['school'] = item[5]
+            child.append(studentDict)
+
+        return child
