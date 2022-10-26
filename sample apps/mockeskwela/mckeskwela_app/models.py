@@ -113,3 +113,19 @@ class mckeskwla(object):
         display = cursor.fetchall()
         return display
 
+
+
+
+
+    def get_student(self):
+        cursor = mysql.connection.cursor()
+
+        # sql = '''SELECT s.*, p.firstname, p.lastname FROM students as s 
+        #         LEFT JOIN parents as p ON s.unique_id = p.child_id 
+        #         WHERE s.teacher_id = {} AND p.teacher_id = {}'''.format(self.teacher_id)
+
+        sql = "SELECT * from students WHERE teacher_id = '{}'".format(self.teacher_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        return display

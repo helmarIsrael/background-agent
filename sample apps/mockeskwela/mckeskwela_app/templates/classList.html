@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock.Eskwela</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/login.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="container-fluid w-100 h-100">
+    <div class="row align-items-center h-100">
+      <div class="container">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <div class="row d-flex justify-content-between">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Class List</h3>
+                <table class="table table-bordered m-0 text-center p-4" id="table">
+                    <thead>
+                    <tr class=" header bg-info text-light">
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">School</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+        
+                    </thead>
+                    <tbody id="student_table">
+
+                    </tbody>
+                </table>
+                
+            
+                
+              <div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+        
+       
+</body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    // load()
+
+    var jx = $.ajax
+    // function load(){
+    // var node = document.getElementById("student_table");
+    // while (node.hasChildNodes()) {
+    //     node.removeChild(node.lastChild);
+    // }
+    $.ajax({
+        method:'GET',
+        url:`/getStudents`,
+        success:function(response){
+            console.log(response.students)
+            buildTable(response.students)
+        }
+    })
+    
+
+    
+
+    function buildTable(data){
+    var table = document.getElementById('student_table')
+
+    for (var i = 0; i < data.length; i++){
+        var row = `<tr>
+                <td>${data[i].id}</td>
+                <td>${data[i].fname}</td>
+                <td>${data[i].lname}</td>
+                <td>${data[i].gender}</td>
+                <td>${data[i].school}</td>
+
+                <td><a  href="#" type="button" class="btn btn-primary">
+                More...
+                </a></td>
+            </tr>`
+        table.innerHTML += row
+
+
+    }
+    }
+</script>
+</html>

@@ -1,5 +1,5 @@
 from getpass import getuser
-from flask import render_template, redirect, request, url_for, flash, session
+from flask import render_template, redirect, request, url_for, flash, session, jsonify
 from mckeskwela_app.forms import CreateStudentForm, SignUpForm, LoginForm
 from mckeskwela_app import app
 import mckeskwela_app.models as models
@@ -99,13 +99,16 @@ def logout():
 
 
 
-
+@app.route('/classList', methods=['GET', 'POST'])
+def classList():
+    return render_template('classList.html')
 
 @app.route('/createStudent', methods=['GET', 'POST'])
 def createStudent():
     user = session['user']
     form = CreateStudentForm()
     form.unique_id.data = str(uuid.uuid4())[:8]
+    form.school.data = user[0][7]
     if form.validate_on_submit() and request.method == 'POST':
         if form.school.data == None:
             form.school.data = 'No School'
@@ -144,3 +147,27 @@ def createStudent():
         return redirect(url_for('home'))
         
     return render_template('student_signup.html', form=form)
+
+
+
+
+@app.route('/getStudents')
+def getStudents():
+    user = session['user']
+    db = models.mckeskwla(teacher_id=user[0][0])
+    students = db.get_student()
+    student_array = []
+
+
+    print(students)
+
+    for item in students:
+        studentDict = {}
+        studentDict['id'] = item[1]
+        studentDict['fname'] = item[2].upper()
+        studentDict['lname'] = item[3].upper()
+        studentDict['gender'] = item[4]
+        studentDict['school'] = item[5]
+        student_array.append(studentDict)
+    
+    return jsonify({'students': student_array})

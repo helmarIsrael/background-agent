@@ -31,7 +31,8 @@ class SignUpForm(FlaskForm):
     division =  myCustomSelectField('Division', choices=[('','Choose...'),('Division 1','Division 1'),('Division 2','Division 2'), ('Division 3','Division 3')])
     district = myCustomSelectField('District', choices=[('','Choose...'),('District 1','District 1'),('District 2','District 2')])
 
-    school = StringField('School')
+    school = myCustomSelectField('School', choices=[('','Choose...'),('School 1','School 1'),('School 2','School 2'), ('School 3','School 3')])
+
 
     submit = SubmitField('Submit')
 
@@ -43,7 +44,7 @@ class CreateStudentForm(FlaskForm):
     lastname = StringField('Lastname', validators=[DataRequired()])
     gender = myCustomSelectField('Gender', choices=[('','Choose...'),('Male','Male'),('Female','Female')], validators=[DataRequired()])
     unique_id = StringField('Unique I.D', validators=[DataRequired()])
-    school = StringField('School', validators=[DataRequired()])
+    school = myCustomSelectField('School', choices=[('','Choose...'),('School 1','School 1'),('School 2','School 2'), ('School 3','School 3')])
 
     father_firstname = StringField('Father Firstname', validators=[DataRequired()])
     father_lastname = StringField('Father Lastname', validators=[DataRequired()])
