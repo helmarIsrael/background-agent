@@ -7,8 +7,8 @@ class mckeskwla(object):
                 division=None, district=None, school=None,
                 father_firstname=None, father_lastname=None, 
                 mother_firstname=None, mother_lastname=None,
-                student_unique=None, parent_unique=None,
-                teacher_id = None, user_id=None
+                student_unique=None, father_id=None, mother_id=None,
+                teacher_id = None, user_id=None, parent_id=None
                 ):
     
         self.teacher_type = teacher_type
@@ -28,7 +28,9 @@ class mckeskwla(object):
         self.mother_lastname  = mother_lastname
 
         self.student_unique = student_unique
-        self.parent_unique = parent_unique
+        self.parent_id = parent_id
+        self.father_id = father_id
+        self.mother_id = mother_id
         self.teacher_id = teacher_id
 
         self.user_id = user_id
@@ -56,19 +58,18 @@ class mckeskwla(object):
     def addStudent(self):
         cursor = mysql.connection.cursor()
         sql = """INSERT INTO students(unique_id, firstname, lastname, gender, 
-                                        school, teacher_id, parent_id)
-					VALUES ('%s', '%s', '%s','%s', '%s', '%s','%s')""" % (self.student_unique, self.firstname, self.lastname, self.gender, 
-                                        self.school, self.teacher_id, self.parent_unique)
+                                        school, teacher_id, father_id, mother_id)
+					VALUES ('%s', '%s', '%s','%s', '%s', '%s','%s', '%s')""" % (self.student_unique, self.firstname, self.lastname, self.gender, 
+                                        self.school, self.teacher_id, self.father_id, self.mother_id)
 
         cursor.execute(sql)
         mysql.connection.commit()
     
     def addParent(self):
         cursor = mysql.connection.cursor()
-        sql = """INSERT INTO parents(unique_id, child_id, teacher_id, father_firstname, father_lastname, mother_firstname, mother_lastname)
-					VALUES ('%s', '%s', '%s','%s', '%s', '%s', '%s')""" % (self.parent_unique, self.student_unique, self.teacher_id,
-                                                                            self.father_firstname, self.father_lastname, 
-                                                                            self.mother_firstname, self.mother_lastname)
+        sql = """INSERT INTO parents(unique_id, child_id, teacher_id, firstname, lastname)
+					VALUES ('%s', '%s', '%s','%s', '%s')""" % (self.parent_id, self.student_unique, self.teacher_id,
+                                                                            self.firstname, self.lastname)
 
         cursor.execute(sql)
         mysql.connection.commit()

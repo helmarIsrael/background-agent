@@ -56,6 +56,8 @@ def signup():
         elif teach_type == 'Public Teacher':
             new_teacher_id = f'teacher-{str(uuid.uuid4())[:5]}'
         new_username = f'{form.firstname.data}.{form.lastname.data}'
+
+
         print(f'user id: {new_user_id}\nteacher id: {new_teacher_id}')
 
         addUser_db = models.mckeskwla(user_id=new_user_id, username=new_username, password=form.password.data, teacher_type=form.teach_type.data)
@@ -107,30 +109,38 @@ def createStudent():
     if form.validate_on_submit() and request.method == 'POST':
         if form.school.data == None:
             form.school.data = 'No School'
-        father_id = str(uuid.uuid4())[:8]
-        mother_id = str(uuid.uuid4())[:8]
-        print(f'''Teacher_id: {user[0][0]} firstname: {form.firstname.data}
-                lastname: {form.lastname.data}
-                gender: {form.gender.data}
-                unique_id: {form.unique_id.data}
-                school: {form.school.data}\n
-                Father Firstname: {form.father_firstname.data}
-                Father Lastname: {form.father_lastname.data}
-                Father ID: {parent_id}
-                Mother Firstname: {form.mother_firstname.data}
-                Mother Lastname: {form.mother_lastname.data}
-                Mother ID: {parent_id}
-                ''')
-        db = models.mckeskwla(student_unique=form.unique_id.data, firstname=form.firstname.data, lastname=form.lastname.data,
-                            gender=form.gender.data, school=form.school.data, teacher_id=user[0][0],parent_unique=parent_id )
+        new_father_id = f'father-{str(uuid.uuid4())[:5]}'
+        new_mother_id = f'mother-{str(uuid.uuid4())[:5]}'
+        # print(f'''Teacher_id: {user[0][0]} firstname: {form.firstname.data}
+        #         lastname: {form.lastname.data}
+        #         gender: {form.gender.data}
+        #         unique_id: {form.unique_id.data}
+        #         school: {form.school.data}\n
+        #         Father Firstname: {form.father_firstname.data}
+        #         Father Lastname: {form.father_lastname.data}
+        #         Father ID: {parent_id}
+        #         Mother Firstname: {form.mother_firstname.data}
+        #         Mother Lastname: {form.mother_lastname.data}
+        #         Mother ID: {parent_id}
+        #         ''')
+        addStudent_db = models.mckeskwla(student_unique=form.unique_id.data, firstname=form.firstname.data, lastname=form.lastname.data,
+                            gender=form.gender.data, school=form.school.data, teacher_id=user[0][0],father_id=new_father_id, mother_id=new_mother_id )
         
-        db.addStudent()
+        
 
-        db = models.mckeskwla(parent_unique=parent_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
-                            father_firstname=form.father_firstname.data, father_lastname=form.father_lastname.data,
-                            mother_firstname=form.mother_firstname.data, mother_lastname=form.mother_lastname.data)
+        addFather_db = models.mckeskwla(parent_id=new_father_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
+                            firstname=form.father_firstname.data, lastname=form.father_lastname.data)
      
-        db.addParent()
+        
+
+        addMother_db = models.mckeskwla(parent_id=new_mother_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
+                            firstname=form.mother_firstname.data, lastname=form.mother_lastname.data)
+
+        addStudent_db.addStudent()
+        addFather_db.addParent()
+        addMother_db.addParent()
+
+
         return redirect(url_for('home'))
         
     return render_template('student_signup.html', form=form)
