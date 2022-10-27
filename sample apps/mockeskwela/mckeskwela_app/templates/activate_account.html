@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock.Eskwela</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/login.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+</head>
+<body>
+    <div class="row align-items-center h-100">
+      <div class="container">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+          <div class="card-body p-4 p-md-5">
+            <div class="row d-flex justify-content-between">
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Class List</h3>
+              <div class="ml-2"><a href="{{url_for('home')}}" class="btn btn-sm btn-primary"> Go Back Home</a></div>
+                <table class="table table-bordered m-0 text-center p-4" id="table">
+                    <thead>
+                    <tr class=" header bg-info text-light">
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">School</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+        
+                    </thead>
+                    <tbody id="student_table">
+
+                    </tbody>
+                </table>
+                
+            
+                
+              <div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">View Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="student_modal">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-danger" data-dismiss="modal" style="border-radius: 5px;">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    
+        
+       
+</body>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var jx = $.ajax
+    $.ajax({
+        method:'GET',
+        url:`/getStudents`,
+        success:function(response){
+            buildTable(response.students)
+        }
+    })
+    
+
+    
+
+    function buildTable(data){
+    var table = document.getElementById('student_table')
+
+    for (var i = 0; i < data.length; i++){
+        var row = `<tr>
+                <td>${data[i].id}</td>
+                <td>${data[i].fname}</td>
+                <td>${data[i].lname}</td>
+                <td>${data[i].gender}</td>
+                <td>${data[i].school}</td>
+
+                <td>
+                    <button type="button" onClick=view_student('${data[i].id}','view') class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        View More
+                    </button>
+                    ${data[i].activated ? '' : `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#activateModal">
+                        Activate Account
+                    </button>
+                    <div class="modal" id="activateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Activate Account?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="activate_modal_body">
+                                Activating Account means an account of the student and the parents will be generated.
+                                Username format will be <strong>firstname.lastname</strong> and <strong>password</strong> will be generated.
+                                <br><br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn-danger" data-dismiss="modal" style="border-radius: 5px;">Close</button>
+                                <button type="button" id="activate_btn" onClick=view_student('${data[i].id}','activate') class="btn btn-primary">Activate Account</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    `}
+                    
+                </td>
+            </tr>`
+        table.innerHTML += row
+        }
+    }
+
+
+    function view_student(m, from){
+        
+        jx({
+        method:'GET',
+        url:`/getParents/${m}`,
+        success:function(response){
+            if(from == 'view'){
+                buildModal(response)
+            } else {
+                activate_modal(response)
+            }
+           
+        }
+    })
+    }
+
+    function activate_modal(data){
+        console.log('activate')
+        student = `${data.child[0].fname}.${data.child[0].lname}`
+        father = `${data.dad[0].fname}.${data.dad[0].lname}`
+        mother = `${data.mom[0].fname}.${data.mom[0].lname}`
+
+        var request = new XMLHttpRequest()
+        var x = document.getElementById('activate_modal_body')
+        
+        request.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(request.responseText);
+            child = data.child[0]
+            dad = data.dad[0]
+            mom = data.mom[0]
+            x.innerHTML += `<div class="row d-flex justify-content-between">
+                                <h3 class="ml-3">Account Details</h3>
+                                <p><strong>Please take a picture or any kind of means to save the account details below</strong></p>
+                            </div>
+                            <div class="row ml-1">
+                                <strong><p>Student Username: </strong>${child.username}</p>
+                                <strong class="ml-3"><p>Password: </strong>${child.password}</p>
+                            </div>
+
+                            <div class="row ml-1">
+                                <strong><p>Father Username: </strong>${dad.username}</p>
+                                <strong class="ml-3"><p>Password: </strong>${dad.password}</p>
+                            </div>
+
+                            <div class="row ml-1">
+                                <strong><p>Mother Username: </strong>${mom.username}</p>
+                                <strong class="ml-3"><p>Password: </strong>${mom.password}</p>
+                            </div>
+                            `
+
+                            document.getElementById('activate_btn').disabled = true
+            }
+        };
+
+        request.open("GET", '/activate_accounts/'+student+'/'+father+'/'+mother, true )
+        request.send()
+    }
+
+    function buildModal(data){
+        console.log("view modal")
+        child = data.child[0]
+        dad = data.dad[0]
+        mom = data.mom[0]
+        var x = document.getElementById('student_modal')
+        x.innerHTML = `
+            <div class="m-2">
+                <div class="row d-flex justify-content-between">
+            <h3>Student Data</h3>
+        </div>
+        <div class="p-3">
+            <div class="row d-flex justify-content-between">
+                <strong><p>Student Name</p></strong>
+                <strong><p>Gender</p></strong>
+                <strong><p>School</p></strong>
+            </div>
+            <div class="row d-flex justify-content-between">
+                <p>${child.fname} ${child.lname}</p>
+                <p>${child.gender}</p>   
+                <p>${child.school}</p>
+            </div>    
+        
+        
+        </div>
+
+        <div class="row">
+            <h3>Parents</h3>
+        </div>
+
+        <div class="p-3">
+            <div class="row d-flex justify-content-between">
+                <strong class=""><p>Father Full Name</p></strong>
+                <strong class=""><p>Mother Full Name</p></strong>
+            </div>
+
+            <div class="row d-flex justify-content-between">
+                <p class="pl-3">${dad.fname} ${dad.lname}</p>
+                <p class="pr-3">${mom.fname} ${mom.lname}</p> 
+            </div>
+
+        </div>            
+            </div>
+        
+
+
+        
+        
+        
+        `
+    }
+</script>
+</html>

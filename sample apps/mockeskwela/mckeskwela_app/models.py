@@ -150,6 +150,7 @@ class mckeskwla(object):
             dadDict['child_id'] =item[3]
             dadDict['fname'] = item[4].upper()
             dadDict['lname'] = item[5].upper()
+            dadDict['activated'] = item[7]
             dad.append(dadDict)
 
         return dad
@@ -174,6 +175,7 @@ class mckeskwla(object):
             momDict['child_id'] =item[3]
             momDict['fname'] = item[4].upper()
             momDict['lname'] = item[5].upper()
+            momDict['activated'] =item[7]
             mom.append(momDict)
 
         return mom
@@ -196,6 +198,11 @@ class mckeskwla(object):
             studentDict['lname'] = item[3].upper()
             studentDict['gender'] = item[4]
             studentDict['school'] = item[5]
+            studentDict['activated'] = item[10]
             child.append(studentDict)
 
         return child
+
+    
+
+    
