@@ -28,7 +28,7 @@ def login():
             # session['user'] = user
             # return redirect(url_for('home'))
             logUser = db.login()
-            getUser = models.mckeskwla(user_id=logUser[0][0])
+            getUser = models.mckeskwla(user_id=logUser[0][0], user_type=logUser[0][3])
             user = getUser.get_user()
             session['user'] = user
             return redirect(url_for('home'))
@@ -85,6 +85,7 @@ def home():
     if 'user' in session:
         user_request = False
         user = session['user']
+        print(user)
         return render_template('home.html', user=user[0], title='Home')
     else:
         return redirect(url_for('login'))
@@ -217,34 +218,49 @@ def getParents(id):
     return jsonify({'child':child ,'dad': dad, 'mom':mom})
 
 
-@app.route('/activate_accounts/<string:childUsername>/<string:fatherUsername>/<string:motherUsername>')
-def activate_accounts(childUsername, fatherUsername, motherUsername):
-    child_username = childUsername.lower()
+@app.route('/activate_accounts/<string:child>/<string:dad>/<string:mom>')
+def activate_accounts(child, dad, mom):
+    child_list = child.split(",")
+    child_username = child_list[0].lower()
     child_password = str(uuid.uuid4())[:5]
     child_user_id = str(uuid.uuid4())[:8]
+    child_id = child_list[1]
 
-    dad_username = fatherUsername.lower()
+    dad_list = dad.split(",")
+    dad_username = dad_list[0].lower()
     dad_password = str(uuid.uuid4())[:5]
     dad_user_id = str(uuid.uuid4())[:8]
+    dad_id = dad_list[1]
 
-    mom_username = motherUsername.lower()
+    mom_list = mom.split(",")
+    mom_username = mom_list[0].lower()
     mom_password = str(uuid.uuid4())[:5]
     mom_user_id = str(uuid.uuid4())[:8]
+    mom_id = mom_list[1]
 
-    print(f''' Child Username: {child_username} password: {child_password}
-    Father Username: {dad_username} password: {dad_password}
-    Mother Username: {mom_username} password: {mom_password}''')
+    print(f'''Child_ID: {child_id} Child Username: {child_username} password: {child_password} user_id: {child_user_id}
+    Dad_ID: {dad_id} Father Username: {dad_username} password: {dad_password} user_id: {dad_user_id}
+    Mom_ID: {mom_id} Mother Username: {mom_username} password: {mom_password} user_id: {mom_user_id}''')
 
-    child = [{'username': child_username, 'password': child_password}]
-    dad = [{'username': dad_username, 'password': dad_password}]
-    mom = [{'username': mom_username , 'password': mom_password}]
+    child_details = [{'username': child_username, 'password': child_password}]
+    dad_details = [{'username': dad_username, 'password': dad_password}]
+    mom_details = [{'username': mom_username , 'password': mom_password}]
     
 
     add_child = models.mckeskwla(user_id=child_user_id, username=child_username, password=child_password, teacher_type='student')
     add_dad = models.mckeskwla(user_id=dad_user_id, username=dad_username, password=dad_password, teacher_type='parent')
     add_mom = models.mckeskwla(user_id=mom_user_id, username=mom_username, password=mom_password, teacher_type='parent')
     
-    ####  ANG KULANG KAY IUPDATE ANG 'actived' UG ANG 'user_id' SA BOTH STUDENT UG PARENT
+    activate_child = models.mckeskwla(user_id=child_user_id, student_unique=child_id)
+    activate_dad = models.mckeskwla(user_id=dad_user_id, student_unique=dad_id)
+    activate_mom = models.mckeskwla(user_id=mom_user_id, student_unique=mom_id)
 
+    add_child.addNewUser()
+    add_dad.addNewUser()
+    add_mom.addNewUser()
+
+    activate_child.activate_child()
+    activate_dad.activate_parent()
+    activate_mom.activate_parent()
     
-    return jsonify({'child':child, 'dad':dad, 'mom':mom})
+    return jsonify({'child':child_details, 'dad':dad_details, 'mom':mom_details})

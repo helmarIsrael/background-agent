@@ -19,7 +19,7 @@
         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
           <div class="card-body p-4 p-md-5">
             <div class="row d-flex justify-content-between">
-              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Class List</h3>
+              <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Activate Accounts</h3>
               <div class="ml-2"><a href="{{url_for('home')}}" class="btn btn-sm btn-primary"> Go Back Home</a></div>
                 <table class="table table-bordered m-0 text-center p-4" id="table">
                     <thead>
@@ -161,9 +161,9 @@
 
     function activate_modal(data){
         console.log('activate')
-        student = `${data.child[0].fname}.${data.child[0].lname}`
-        father = `${data.dad[0].fname}.${data.dad[0].lname}`
-        mother = `${data.mom[0].fname}.${data.mom[0].lname}`
+        student = [`${data.child[0].fname}.${data.child[0].lname}`, data.child[0].id]
+        father = [`${data.dad[0].fname}.${data.dad[0].lname}` , data.dad[0].id]
+        mother = [`${data.mom[0].fname}.${data.mom[0].lname}`, data.mom[0].id]
 
         var request = new XMLHttpRequest()
         var x = document.getElementById('activate_modal_body')

@@ -8,7 +8,7 @@ class mckeskwla(object):
                 father_firstname=None, father_lastname=None, 
                 mother_firstname=None, mother_lastname=None,
                 student_unique=None, father_id=None, mother_id=None,
-                teacher_id = None, user_id=None, parent_id=None
+                teacher_id = None, user_id=None, parent_id=None, user_type=None
                 ):
     
         self.teacher_type = teacher_type
@@ -34,6 +34,7 @@ class mckeskwla(object):
         self.teacher_id = teacher_id
 
         self.user_id = user_id
+        self.user_type = user_type
     
     def addNewUser(self):
         cursor = mysql.connection.cursor()
@@ -106,8 +107,12 @@ class mckeskwla(object):
 
     def get_user(self):
         cursor = mysql.connection.cursor()
-
-        sql = "SELECT t.* FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+        if self.user_type == 'parent':
+            sql = "SELECT p.* FROM parents as p LEFT JOIN user as u ON p.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+        elif self.user_type =='student':
+            sql = "SELECT s.* FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+        else:
+            sql = "SELECT t.* FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
 
         cursor.execute(sql)
         display = cursor.fetchall()
@@ -205,4 +210,23 @@ class mckeskwla(object):
 
     
 
+    def activate_child(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+            UPDATE students SET user_id = '%s', activated = 1 WHERE unique_id = '%s'
+        """ % (self.user_id, self.student_unique)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+
     
+    def activate_parent(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+            UPDATE parents SET users_id = '%s', activated = 1 WHERE unique_id = '%s'
+        """ % (self.user_id, self.student_unique)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
