@@ -1,6 +1,7 @@
 from enum import unique
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, PasswordField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, SubmitField, SelectField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired, Length, ValidationError, DataRequired, Email
 import mckeskwela_app.models as models
 import re
@@ -54,3 +55,13 @@ class CreateStudentForm(FlaskForm):
 
 
     submit = SubmitField('Submit')
+
+
+
+
+
+class CreatePost(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
+

@@ -1,9 +1,11 @@
 from getpass import getuser
 import json
+import timeago
 from flask import render_template, redirect, request, url_for, flash, session, jsonify
-from mckeskwela_app.forms import CreateStudentForm, SignUpForm, LoginForm
+from mckeskwela_app.forms import CreatePost, CreateStudentForm, SignUpForm, LoginForm
 from mckeskwela_app import app
 import mckeskwela_app.models as models
+from datetime import datetime
 import uuid
 
 
@@ -82,11 +84,37 @@ def signup():
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
+    form = CreatePost()
     if 'user' in session:
         user_request = False
         user = session['user']
-        print(user)
-        return render_template('home.html', user=user[0], title='Home')
+        id_user = user[0][12]
+
+        curr_dt = datetime.now()
+        post_tstamp= int(round(curr_dt.timestamp()))
+
+        db = models.mckeskwla(user_id=id_user)
+        get_post = db.get_currentUser_posts()
+        posts = []
+        for item in get_post:
+            tstamp_datetime = str(datetime.fromtimestamp(int(item[3])))
+            # print(tstamp_datetime)
+            # print(timeago.format(tstamp_datetime, curr_dt))
+            # item[3] = f'{timeago.format(str(item[3]), str(curr_dt))}'
+            # posts.append(item)
+            item[3] = str(timeago.format(tstamp_datetime, curr_dt))
+            posts.append(item)
+        print(posts)
+        postID =  f'post-{str(uuid.uuid4())[:5]}'
+        if form.validate_on_submit() and request.method == 'POST':
+            create = models.mckeskwla(post_id=postID, post_title=form.title.data,
+                                 post_content=form.content.data, post_timestamp=post_tstamp,
+                                 user_id=id_user)
+            create.addPost()
+            form.title.data = None
+            form.content.data = None
+            return redirect(url_for('home'))
+        return render_template('home.html', user=user[0], title='Home', form=form, posts=posts)
     else:
         return redirect(url_for('login'))
 

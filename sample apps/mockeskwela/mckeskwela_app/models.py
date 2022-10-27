@@ -1,3 +1,4 @@
+from pickle import NONE
 from mckeskwela_app import mysql
 
 
@@ -8,7 +9,8 @@ class mckeskwla(object):
                 father_firstname=None, father_lastname=None, 
                 mother_firstname=None, mother_lastname=None,
                 student_unique=None, father_id=None, mother_id=None,
-                teacher_id = None, user_id=None, parent_id=None, user_type=None
+                teacher_id = None, user_id=None, parent_id=None, user_type=None,
+                post_id=None, post_title = None, post_content = None, post_timestamp = None
                 ):
     
         self.teacher_type = teacher_type
@@ -35,7 +37,17 @@ class mckeskwla(object):
 
         self.user_id = user_id
         self.user_type = user_type
+
+        self.post_id = post_id
+        self.post_title = post_title
+        self.post_content = post_content
+        self.post_timestmap = post_timestamp
     
+
+
+####################################################################################################
+#################################################### CREATION AND LOGIN ####################################3
+###################################################################################################
     def addNewUser(self):
         cursor = mysql.connection.cursor()
         sql = """INSERT INTO user(user_id, username, password, user_type)
@@ -104,15 +116,17 @@ class mckeskwla(object):
         return display
 
 
-
+####################################################################################################
+#################################################### FETCHING ####################################3
+####################################################################################################
     def get_user(self):
         cursor = mysql.connection.cursor()
         if self.user_type == 'parent':
-            sql = "SELECT p.* FROM parents as p LEFT JOIN user as u ON p.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT p.*, u.user_type, u.user_id FROM parents as p LEFT JOIN user as u ON p.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
         elif self.user_type =='student':
-            sql = "SELECT s.* FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT s.*, u.user_type, u.user_id FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
         else:
-            sql = "SELECT t.* FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT t.* u.user_type, u.user_id FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
 
         cursor.execute(sql)
         display = cursor.fetchall()
@@ -124,10 +138,6 @@ class mckeskwla(object):
 
     def get_student(self):
         cursor = mysql.connection.cursor()
-
-        # sql = '''SELECT s.*, p.firstname, p.lastname FROM students as s 
-        #         LEFT JOIN parents as p ON s.unique_id = p.child_id 
-        #         WHERE s.teacher_id = {} AND p.teacher_id = {}'''.format(self.teacher_id)
 
         sql = "SELECT * from students WHERE teacher_id = '{}'".format(self.teacher_id)
 
@@ -209,7 +219,9 @@ class mckeskwla(object):
         return child
 
     
-
+####################################################################################################
+####################################### ACTIVATION ###################################################
+###################################################################################################
     def activate_child(self):
         cursor = mysql.connection.cursor()
         sql = """
@@ -230,3 +242,53 @@ class mckeskwla(object):
         cursor.execute(sql)
         mysql.connection.commit()
 
+
+
+
+####################################################################################################
+###################################### POSTS ###################################################
+###################################################################################################
+
+
+
+    def addPost(self):
+        cursor = mysql.connection.cursor()
+        sql = """INSERT INTO posts (post_id, title, content, datetime_posted, user_id)
+					 VALUES ('%s','%s', '%s', '%s','%s')""" % (self.post_id, self.post_title,
+                                                             self.post_content,
+                                                             self.post_timestmap,
+                                                             self.user_id)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+        # sql2 = """SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT max(recipe_id) FROM recipe)"""
+
+        # cursor.execute(sql2)
+        # display = cursor.fetchall()
+
+        # return display[0][0]
+
+
+    def get_currentUser_posts(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT pst.*, s.firstname, s.lastname, u.user_type FROM 
+                    ((posts as pst LEFT JOIN students as s ON  s.user_id = pst.user_id) 
+                        LEFT JOIN user as u ON u.user_id = s.user_id) WHERE pst.user_id = '{}'
+                        ORDER BY datetime_posted DESC;
+
+        """.format(self.user_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+
+        result = [list(i) for i in display]
+        return result
+
+        # sql2 = """SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT max(recipe_id) FROM recipe)"""
+
+        # cursor.execute(sql2)
+        # display = cursor.fetchall()
+
+        # return display[0][0]

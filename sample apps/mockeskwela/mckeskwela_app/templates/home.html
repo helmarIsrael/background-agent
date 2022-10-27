@@ -20,101 +20,95 @@
       </article>
     
 </div>
-<div class="post bg-light p-0 mt-2 mb-4">
-    <article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata m-3">
-            <img class = "rounded-circle article-img" src="#" style=" height:40px; width: 40px;">
-              <a class="ml-2 article-author" href="#">dsfsdfs</a>
-              <small class="ml-2 font-weight-bold">cvdsfsdgg</small>
-                <p  class="disabled-btn saved  ml-auto p-2"><i class='far fa-bookmark' style="font-size: 1em"></i></p>
-          </div>
-             <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">adbsahfd</a>
-              <p class="article-content ml-3 mb-0" style="white-space: pre-wrap;
 
-              overflow-wrap: break-word;">asdasd</p>
-             <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{asdasd</small>
-            
-        </div> 
-      </article>
-      <div class="row ml-3">
-        <div class="star-widget">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-          <small class="ml-2">Average Rating</small>
+
+  <div class="modal fade" id="ModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title display-4" id="exampleModalCenteredLabel">New Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.csrf_token }}
 
-        <div class="col ml-4 mb-2 align-self-center">
-          <a class="article-save" href="#">View Comments</a>
-        </div>
-      </div>
-</div>
-<div class="post bg-light p-0 mt-2 mb-4">
-    <article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata m-3">
-            <img class = "rounded-circle article-img" src="#" style=" height:40px; width: 40px;">
-              <a class="ml-2 article-author" href="#">dsfsdfs</a>
-              <small class="ml-2 font-weight-bold">cvdsfsdgg</small>
-                <p  class="disabled-btn saved  ml-auto p-2"><i class='far fa-bookmark' style="font-size: 1em"></i></p>
-          </div>
-             <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">adbsahfd</a>
-              <p class="article-content ml-3 mb-0" style="white-space: pre-wrap;
+                <div class="form-group">
+                    {{ form.title.label(class="form-control-label") }}
+                    {% if form.title.errors %}
+                        {{ form.title(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.title(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
 
-              overflow-wrap: break-word;">asdasd</p>
-             <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{asdasd</small>
-            
-        </div> 
-      </article>
-      <div class="row ml-3">
-        <div class="star-widget">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-          <small class="ml-2">Average Rating</small>
-        </div>
+                <div class="form-group">
+                    <div class="row">
+                      {{ form.content.label(class="form-control-label col-2") }}
+                    </div>
 
-        <div class="col ml-4 mb-2 align-self-center">
-          <a class="article-save" href="#">View Comments</a>
+                    {% if form.content.errors %}
+                        {{ form.content(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.content.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.content(class="form-control form-control-lg content") }}
+                    {% endif %}
+                </div>
+                <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-light btn-outline-dark col mt-3") }}
+                </div>
+            </form>
         </div>
       </div>
-</div>
-<div class="post bg-light p-0 mt-2 mb-4">
-    <article class="media content-section">
-        <div class="media-body">
-          <div class="article-metadata m-3">
-            <img class = "rounded-circle article-img" src="#" style=" height:40px; width: 40px;">
-              <a class="ml-2 article-author" href="#">dsfsdfs</a>
-              <small class="ml-2 font-weight-bold">cvdsfsdgg</small>
-                <p  class="disabled-btn saved  ml-auto p-2"><i class='far fa-bookmark' style="font-size: 1em"></i></p>
+    </div>
+  </div>
+  {% if posts %}
+    {% for item in posts %}
+      <div class="post bg-light p-0 mt-2 mb-4">
+        <article class="media content-section">
+            <div class="media-body">
+              <div class="article-metadata m-3">
+                <img class = "rounded-circle article-img" src="{{url_for('static', filename='images/default.jpg')}}" style=" height:40px; width: 40px;">
+                  <a class="ml-2 article-author" href="#">{{ item[7] }} {{item[8]}}</a>
+                  <small class="ml-2 font-weight-bold">{{ item[9] }}</small>
+              </div>
+                <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">{{ item[1] }}</a>
+                  <p class="article-content ml-3 mb-0 m-3" style="white-space: pre-wrap;
+
+                  overflow-wrap: break-word;">{{ item[2] }}</p>
+                <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{{ item[3] }}</small>
+                
+            </div> 
+          </article>
+          <div class="row ml-3">
+            <p class="btn btn-sm" type="button"><i class="fas fa-thumbs-up"></i></p>
+            <div class="star-widget">
+              
+              <small class="ml-2">2 Likes</small>
+            </div>
+
+            <div class="col ml-4 mb-2">
+              <a class="article-save" href="#">View Comments</a>
+            </div>
           </div>
-             <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">adbsahfd</a>
-              <p class="article-content ml-3 mb-0" style="white-space: pre-wrap;
-
-              overflow-wrap: break-word;">asdasd</p>
-             <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{asdasd</small>
-            
-        </div> 
-      </article>
-      <div class="row ml-3">
-        <div class="star-widget">
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-          <small class="ml-2">Average Rating</small>
-        </div>
-
-        <div class="col ml-4 mb-2 align-self-center">
-          <a class="article-save" href="#">View Comments</a>
-        </div>
       </div>
-</div>
+    {% endfor %}
+  {% else %}
+  {% endif %}
+
+
 {% endblock %}
 

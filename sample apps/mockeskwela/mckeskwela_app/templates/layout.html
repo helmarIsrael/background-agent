@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     />
     <link rel="shortcut icon" href="#">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/535619369f.js" crossorigin="anonymous"></script>
 </head>
 <body>
    <header class="mb-5">
@@ -43,14 +43,17 @@
         <div class="sidebar-info-sect row">
           <div class="sidebar-top col">
             <a class="sidebar-info " href="#">
-              <img class = "rounded-circle article-img mr-2" src="#" style=" height: 50px;width: 50px;">
+              <img class = "rounded-circle article-img mr-2" src="{{url_for('static', filename='images/default.jpg')}}" style=" height: 50px;width: 50px;">
               <strong>
                 {{user[2]}} {{user[3]}}
               </strong>
           </a>
+          {% if user[11] == 'parent' or user[11] == 'student' %}
+          {% else %}
             <a class="sidebar-info row" href="{{url_for('classList')}}">Class List</a>
             <a class="sidebar-info row" href="{{url_for('createStudent')}}">Create Student</a>
             <a class="sidebar-info row" href="{{url_for('activate_account')}}">Activate Account</a>
+          {% endif %}
           </div> 
         </div>
       </div>
