@@ -45,7 +45,7 @@ def signup():
             form.district.data = 'No District'
         if form.school.data == None:
             form.school.data = 'No School'
-        new_user_id = str(uuid.uuid4())[:8]
+        new_user_id = f'user-{str(uuid.uuid4())[:5]}'
         
         teach_type = form.teach_type.data
         if teach_type == 'Superintendent':
@@ -104,7 +104,7 @@ def home():
             tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
             item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
-        print(posts)
+        # print(posts)
         postID =  f'post-{str(uuid.uuid4())[:5]}'
         if form.validate_on_submit() and request.method == 'POST':
             create = models.mckeskwla(post_id=postID, poster_name =poster, 
@@ -140,8 +140,8 @@ def classList():
 def createStudent():
     user = session['user']
     form = CreateStudentForm()
-    form.unique_id.data = str(uuid.uuid4())[:8]
-    form.school.data = user[0][7]
+    form.unique_id.data = f'student-{str(uuid.uuid4())[:5]}'
+    form.school.data = user[0][10]
     if form.validate_on_submit() and request.method == 'POST':
         if form.school.data == None:
             form.school.data = 'No School'
@@ -160,16 +160,16 @@ def createStudent():
         #         Mother ID: {parent_id}
         #         ''')
         addStudent_db = models.mckeskwla(student_unique=form.unique_id.data, firstname=form.firstname.data, lastname=form.lastname.data,
-                            gender=form.gender.data, school=form.school.data, teacher_id=user[0][0],father_id=new_father_id, mother_id=new_mother_id )
+                            gender=form.gender.data, school=form.school.data, teacher_id=user[0][6],father_id=new_father_id, mother_id=new_mother_id )
         
         
 
-        addFather_db = models.mckeskwla(parent_id=new_father_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
+        addFather_db = models.mckeskwla(parent_id=new_father_id, student_unique=form.unique_id.data, teacher_id=user[0][6], 
                             firstname=form.father_firstname.data, lastname=form.father_lastname.data)
      
         
 
-        addMother_db = models.mckeskwla(parent_id=new_mother_id, student_unique=form.unique_id.data, teacher_id=user[0][0], 
+        addMother_db = models.mckeskwla(parent_id=new_mother_id, student_unique=form.unique_id.data, teacher_id=user[0][6], 
                             firstname=form.mother_firstname.data, lastname=form.mother_lastname.data)
 
         addStudent_db.addStudent()
@@ -219,18 +219,18 @@ def activate_account():
 @app.route('/getStudents')
 def getStudents():
     user = session['user']
-    db = models.mckeskwla(teacher_id=user[0][0])
+    db = models.mckeskwla(teacher_id=user[0][6])
     students = db.get_student()
     student_array = []
-
+    print(students)
 
     for item in students:
         studentDict = {}
         studentDict['id'] = item[1]
-        studentDict['fname'] = item[2].upper()
-        studentDict['lname'] = item[3].upper()
-        studentDict['gender'] = item[4]
-        studentDict['school'] = item[5]
+        studentDict['fname'] = item[3].upper()
+        studentDict['lname'] = item[4].upper()
+        studentDict['gender'] = item[6]
+        studentDict['school'] = item[7]
         studentDict['activated'] = item[10]
         student_array.append(studentDict)
     
@@ -241,7 +241,7 @@ def getStudents():
 @app.route('/getParents/<string:id>')
 def getParents(id):
     user = session['user']
-    db = models.mckeskwla(student_unique=id, teacher_id=user[0][0])
+    db = models.mckeskwla(student_unique=id, teacher_id=user[0][6])
     dad = db.get_dad()
     mom = db.get_mom()
     child =db.get_child()

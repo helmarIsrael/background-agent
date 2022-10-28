@@ -127,7 +127,7 @@ class mckeskwla(object):
         elif self.user_type =='student':
             sql = "SELECT u.user_type, s.* FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
         else:
-            sql = "SELECT t.* u.user_type, u.user_id FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT u.user_type, u.user_id, t.* FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
 
         cursor.execute(sql)
         display = cursor.fetchall()
@@ -158,14 +158,14 @@ class mckeskwla(object):
 
         cursor.execute(dad_sql)
         dad_display = cursor.fetchall()
-        
+        print(dad_display)
         for item in dad_display:
             dadDict = {}
             dadDict['id'] = item[1]
-            dadDict['teacher_id'] = item[2]
-            dadDict['child_id'] =item[3]
-            dadDict['fname'] = item[4].upper()
-            dadDict['lname'] = item[5].upper()
+            dadDict['teacher_id'] = item[5]
+            dadDict['child_id'] =item[6]
+            dadDict['fname'] = item[3].upper()
+            dadDict['lname'] = item[4].upper()
             dadDict['activated'] = item[7]
             dad.append(dadDict)
 
@@ -187,10 +187,10 @@ class mckeskwla(object):
         for item in mom_display:
             momDict = {}
             momDict['id'] = item[1]
-            momDict['teacher_id'] = item[2]
-            momDict['child_id'] =item[3]
-            momDict['fname'] = item[4].upper()
-            momDict['lname'] = item[5].upper()
+            momDict['teacher_id'] = item[5]
+            momDict['child_id'] =item[6]
+            momDict['fname'] = item[3].upper()
+            momDict['lname'] = item[4].upper()
             momDict['activated'] =item[7]
             mom.append(momDict)
 
@@ -210,11 +210,12 @@ class mckeskwla(object):
         for item in display:
             studentDict = {}
             studentDict['id'] = item[1]
-            studentDict['fname'] = item[2].upper()
-            studentDict['lname'] = item[3].upper()
-            studentDict['gender'] = item[4]
-            studentDict['school'] = item[5]
+            studentDict['fname'] = item[3].upper()
+            studentDict['lname'] = item[4].upper()
+            studentDict['gender'] = item[6]
+            studentDict['school'] = item[7]
             studentDict['activated'] = item[10]
+
             child.append(studentDict)
 
         return child
