@@ -101,8 +101,69 @@
               <small class="ml-2">2 Likes</small>
             </div>
 
-            <div class="col ml-4 mb-2">
-              <a class="article-save" href="#">View Comments</a>
+            <div class="col mb-2">
+              <button class="viewComment" data-toggle="modal" data-target="#commentModal">View Comments</button>
+            </div>
+
+            <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Comments on {{ item[1] }}'s Post </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="card card-inner m-2">
+                      <div class="card-body">
+                          <div class="row">
+                              <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
+                                  <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
+                                  <p class="text-secondary text-center">September 30, 2020    </p>
+                              </div>
+                              <div class="col-md-10">
+                                  <p><a href="#"><strong>Maniruzzaman Akash</strong></a></p>
+                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="card card-inner m-2">
+                      <div class="card-body">
+                          <div class="row">
+                              <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
+                                  <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
+                                  <p class="text-secondary text-center">September 30, 2020    </p>
+                              </div>
+                              <div class="col-md-10">
+                                  <p><a href="#"><strong>Maniruzzaman Akash</strong></a></p>
+                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="card card-inner m-2">
+                      <div class="card-body">
+                          <div class="row">
+                              <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
+                                  <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
+                                  <p class="text-secondary text-center">September 30, 2020    </p>
+                              </div>
+                              <div class="col-md-10">
+                                  <p><a href="#"><strong>Maniruzzaman Akash</strong></a></p>
+                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn-sm btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
       </div>

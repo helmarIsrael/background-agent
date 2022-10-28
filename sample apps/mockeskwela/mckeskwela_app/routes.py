@@ -61,8 +61,6 @@ def signup():
         new_username = f'{form.firstname.data}.{form.lastname.data}'
 
 
-        print(f'user id: {new_user_id}\nteacher id: {new_teacher_id}')
-
         addUser_db = models.mckeskwla(user_id=new_user_id, username=new_username, password=form.password.data, teacher_type=form.teach_type.data)
         addTeach_db = models.mckeskwla(teacher_id=new_teacher_id, teacher_type=form.teach_type.data, firstname=form.firstname.data, lastname=form.lastname.data,
                                         gender=form.gender.data, division=form.division.data, district=form.district.data, 

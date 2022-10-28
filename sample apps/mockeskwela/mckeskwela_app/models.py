@@ -158,7 +158,7 @@ class mckeskwla(object):
 
         cursor.execute(dad_sql)
         dad_display = cursor.fetchall()
-        print(dad_display)
+
         for item in dad_display:
             dadDict = {}
             dadDict['id'] = item[1]

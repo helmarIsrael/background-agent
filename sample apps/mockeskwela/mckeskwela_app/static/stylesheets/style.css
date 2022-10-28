@@ -451,7 +451,20 @@ POSTS SECT
 
 .body-sect .post p{
   font-size: .9em;
+
 }
+
+.body-sect .post .viewComment{
+  color:var(--primary-color);
+  background-color: rgba(255, 255, 255, 0);
+  border: none;
+  border-radius: 0.2em;
+}
+.body-sect .post .viewComment:hover {
+  background-color: rgba(226, 224, 224, 0.801);
+}
+
+
 .body-sect .post a, small{
   color: var(--primary-color);
 }
@@ -817,18 +830,26 @@ border-color: var(--primary-color);
 COMMENTS SECT
 
 */
+.body-sect .post-sect .post .modal .card-inner{
+  font-size: 1em;
+}
+
+.body-sect .post-sect .post .modal .card-inner .img{
+  height: 4em;
+  width: 4em;
+}
+
+
+
 
 
 .body-sect .post-sect .comments {
+
   border:none;
   border-radius: 0px;
   border-top:2px solid #f0f2f5;
 }
- .body-sect .post-sect .comments .card-inner{
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
-}
+
 
 
 
