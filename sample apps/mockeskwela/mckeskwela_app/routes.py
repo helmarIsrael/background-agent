@@ -88,28 +88,32 @@ def home():
     if 'user' in session:
         user_request = False
         user = session['user']
-        id_user = user[0][12]
+        id_user = user[0][3]
+        auth_id = user[0][6] # ID OF THE ONE WHO ACTIVATED OR AUTHORIZED THIS ACCOUNT
+        poster = f'{user[0][4]} {user[0][5]}'
+        poster_type = user[0][0]
+        print(user)
 
         curr_dt = datetime.now()
         post_tstamp= int(round(curr_dt.timestamp()))
 
-        db = models.mckeskwla(user_id=id_user)
-        get_post = db.get_currentUser_posts()
+        db = models.mckeskwla(teacher_id=auth_id)
+        get_post = db.getPosts()
         posts = []
         for item in get_post:
-            tstamp_datetime = str(datetime.fromtimestamp(int(item[3])))
-            # print(tstamp_datetime)
-            # print(timeago.format(tstamp_datetime, curr_dt))
-            # item[3] = f'{timeago.format(str(item[3]), str(curr_dt))}'
-            # posts.append(item)
-            item[3] = str(timeago.format(tstamp_datetime, curr_dt))
+            tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
+            item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
         print(posts)
         postID =  f'post-{str(uuid.uuid4())[:5]}'
         if form.validate_on_submit() and request.method == 'POST':
-            create = models.mckeskwla(post_id=postID, post_title=form.title.data,
-                                 post_content=form.content.data, post_timestamp=post_tstamp,
-                                 user_id=id_user)
+            create = models.mckeskwla(post_id=postID, poster_name =poster, 
+                                        user_type=poster_type,
+                                        user_id=id_user, teacher_id=auth_id,
+                                        post_title=form.title.data,
+                                        post_content=form.content.data, 
+                                        post_timestamp=post_tstamp,
+                                 )
             create.addPost()
             form.title.data = None
             form.content.data = None

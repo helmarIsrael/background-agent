@@ -7,7 +7,7 @@
 <div class="create-post bg-light p-2 mt-2 mb-4">
     <article class="media content-section">
         <div class="media-body">
-            <a class="account-user mr-2" href="#">{{user[2]}} {{user[3]}}</a>
+            <a class="account-user mr-2" href="#">{{user[4]}} {{user[5]}}</a>
             <br>
             <div class="container d-flex flex-wrap justify-content-center ">
                 <button class="btn w-75 mt-3 mb-3" type="button"data-toggle="modal" data-target="#ModalScrollable">
@@ -82,14 +82,15 @@
             <div class="media-body">
               <div class="article-metadata m-3">
                 <img class = "rounded-circle article-img" src="{{url_for('static', filename='images/default.jpg')}}" style=" height:40px; width: 40px;">
-                  <a class="ml-2 article-author" href="#">{{ item[7] }} {{item[8]}}</a>
-                  <small class="ml-2 font-weight-bold">{{ item[9] }}</small>
+                  <a class="ml-2 article-author" href="#">{{ item[1] }}</a>
+                  <small class="ml-2 font-weight-bold">{{ item[2] }}</small>
+                  <small class="ml-2 text-muted">Authorized by {{ item[4] }}</small>
               </div>
-                <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">{{ item[1] }}</a>
+                <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="#">{{ item[5] }}</a>
                   <p class="article-content ml-3 mb-0 m-3" style="white-space: pre-wrap;
 
-                  overflow-wrap: break-word;">{{ item[2] }}</p>
-                <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{{ item[3] }}</small>
+                  overflow-wrap: break-word;">{{ item[6] }}</p>
+                <small class="text-muted m-0 ml-3" style="margin-top: 0em !important">{{ item[7] }}</small>
                 
             </div> 
           </article>

@@ -45,10 +45,10 @@
             <a class="sidebar-info " href="#">
               <img class = "rounded-circle article-img mr-2" src="{{url_for('static', filename='images/default.jpg')}}" style=" height: 50px;width: 50px;">
               <strong>
-                {{user[2]}} {{user[3]}}
+                {{user[4]}} {{user[5]}}
               </strong>
           </a>
-          {% if user[11] == 'parent' or user[11] == 'student' %}
+          {% if user[0] == 'parent' or user[0] == 'student' %}
           {% else %}
             <a class="sidebar-info row" href="{{url_for('classList')}}">Class List</a>
             <a class="sidebar-info row" href="{{url_for('createStudent')}}">Create Student</a>

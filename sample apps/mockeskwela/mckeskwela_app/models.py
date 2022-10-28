@@ -10,8 +10,8 @@ class mckeskwla(object):
                 mother_firstname=None, mother_lastname=None,
                 student_unique=None, father_id=None, mother_id=None,
                 teacher_id = None, user_id=None, parent_id=None, user_type=None,
-                post_id=None, post_title = None, post_content = None, post_timestamp = None
-                ):
+                post_id=None, post_title = None, post_content = None, post_timestamp = None,
+                poster_name=None):
     
         self.teacher_type = teacher_type
         self.firstname = firstname
@@ -42,6 +42,7 @@ class mckeskwla(object):
         self.post_title = post_title
         self.post_content = post_content
         self.post_timestmap = post_timestamp
+        self.poster_name = poster_name
     
 
 
@@ -122,9 +123,9 @@ class mckeskwla(object):
     def get_user(self):
         cursor = mysql.connection.cursor()
         if self.user_type == 'parent':
-            sql = "SELECT p.*, u.user_type, u.user_id FROM parents as p LEFT JOIN user as u ON p.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT u.user_type, p.* FROM parents as p LEFT JOIN user as u ON p.users_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
         elif self.user_type =='student':
-            sql = "SELECT s.*, u.user_type, u.user_id FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
+            sql = "SELECT u.user_type, s.* FROM students as s LEFT JOIN user as u ON s.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
         else:
             sql = "SELECT t.* u.user_type, u.user_id FROM teachers as t LEFT JOIN user as u ON t.user_id = u.user_id WHERE u.user_id = '{}'".format(self.user_id)
 
@@ -253,21 +254,14 @@ class mckeskwla(object):
 
     def addPost(self):
         cursor = mysql.connection.cursor()
-        sql = """INSERT INTO posts (post_id, title, content, datetime_posted, user_id)
-					 VALUES ('%s','%s', '%s', '%s','%s')""" % (self.post_id, self.post_title,
-                                                             self.post_content,
-                                                             self.post_timestmap,
-                                                             self.user_id)
+        sql = """INSERT INTO posts (post_id, poster_name, poster_user_type, user_id,
+                 auth_id, title, content, datetime_posted)
+					 VALUES ('%s','%s', '%s', '%s','%s', '%s', '%s', '%s')""" % (self.post_id, self.poster_name, self.user_type,
+                     self.user_id, self.teacher_id, self.post_title, self.post_content, self.post_timestmap)
 
         cursor.execute(sql)
         mysql.connection.commit()
 
-        # sql2 = """SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT max(recipe_id) FROM recipe)"""
-
-        # cursor.execute(sql2)
-        # display = cursor.fetchall()
-
-        # return display[0][0]
 
 
     def get_currentUser_posts(self):
@@ -286,9 +280,17 @@ class mckeskwla(object):
         result = [list(i) for i in display]
         return result
 
-        # sql2 = """SELECT recipe_id FROM recipe WHERE recipe_id = (SELECT max(recipe_id) FROM recipe)"""
+    
 
-        # cursor.execute(sql2)
-        # display = cursor.fetchall()
+    def getPosts(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT * from posts WHERE auth_id = '{}' ORDER BY datetime_posted DESC
 
-        # return display[0][0]
+        """.format(self.teacher_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+
+        result = [list(i) for i in display]
+        return result
