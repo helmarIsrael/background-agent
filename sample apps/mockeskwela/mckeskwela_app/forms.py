@@ -69,4 +69,6 @@ class CreatePost(FlaskForm):
 
 class addCommment(FlaskForm):
     comment = TextAreaField('Add Comment', validators=[DataRequired()])
-    submit = SubmitField('Comment')
+    post_id = StringField('post_id', validators=[DataRequired()])
+    user_id = StringField('user_id', validators=[DataRequired()])
+    comment_submit = SubmitField('Comment')

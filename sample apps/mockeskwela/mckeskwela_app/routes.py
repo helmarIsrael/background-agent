@@ -103,24 +103,44 @@ def home():
             tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
             item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
-        # print(posts)
+        print(posts)
+
+        filled = request.args.get('filled')
+        if filled is None:
+            filled = False
         postID =  f'post-{str(uuid.uuid4())[:5]}'
-        if form.validate_on_submit() and request.method == 'POST':
-            create = models.mckeskwla(post_id=postID, poster_name =poster, 
-                                        user_type=poster_type,
-                                        user_id=id_user, teacher_id=auth_id,
-                                        post_title=form.title.data,
-                                        post_content=form.content.data, 
-                                        post_timestamp=post_tstamp,
-                                 )
-            create.addPost()
-            form.title.data = None
-            form.content.data = None
-            return redirect(url_for('home'))
         comment_id =  f'comment-{str(uuid.uuid4())[:5]}'
-        if commentForm.validate_on_submit() and request.method == 'POST':
-            print(f'comment: {commentForm.comment.data}\ncomment id: {comment_id}\ncomment timestamp: {post_tstamp}')
-            commentForm.comment.data = '' ## IFIX NGA AFTER MAG SUBMIT NIG IRELOAD KAY DLI NA MAG CONFIRM FOR RESUBMISSION
+        if form.is_submitted():
+            if form.validate_on_submit() and request.method == 'POST':
+                create = models.mckeskwla(post_id=postID, poster_name =poster, 
+                                            user_type=poster_type,
+                                            user_id=id_user, teacher_id=auth_id,
+                                            post_title=form.title.data,
+                                            post_content=form.content.data, 
+                                            post_timestamp=post_tstamp,
+                                    )
+                create.addPost()
+                form.title.data = None
+                form.content.data = None
+                filled = True
+                print("asdvajvhvaousdq")
+                return redirect(url_for('home'))
+        if commentForm.is_submitted():
+            if request.method == 'POST':
+                comment_content = commentForm.comment.data
+                comment_postID = commentForm.post_id.data
+                comment_userID = commentForm.user_id.data
+                print(f'''comment: {commentForm.comment.data}\ncomment id: {comment_id}\ncomment timestamp: {post_tstamp},
+                post_id: {commentForm.post_id.data},
+                user_id: {commentForm.user_id.data}''')
+
+                comment = models.mckeskwla(comment_id=comment_id, user_id=comment_userID,
+                                            post_id=comment_postID, comment=comment_content,
+                                            comment_timestamp=post_tstamp)
+
+                comment.addComment()
+                commentForm.comment.data = ''
+                filled = True
         return render_template('home.html', user=user[0], title='Home', form=form, posts=posts, commentForm=commentForm)
     else:
         return redirect(url_for('login'))

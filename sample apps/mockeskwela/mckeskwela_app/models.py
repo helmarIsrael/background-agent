@@ -11,7 +11,7 @@ class mckeskwla(object):
                 student_unique=None, father_id=None, mother_id=None,
                 teacher_id = None, user_id=None, parent_id=None, user_type=None,
                 post_id=None, post_title = None, post_content = None, post_timestamp = None,
-                poster_name=None):
+                poster_name=None, comment=None, comment_id=None, comment_timestamp = None):
     
         self.teacher_type = teacher_type
         self.firstname = firstname
@@ -43,6 +43,10 @@ class mckeskwla(object):
         self.post_content = post_content
         self.post_timestmap = post_timestamp
         self.poster_name = poster_name
+
+        self.comment = comment
+        self.comment_id = comment_id
+        self.comment_timestamp = comment_timestamp
     
 
 
@@ -118,7 +122,7 @@ class mckeskwla(object):
 
 
 ####################################################################################################
-#################################################### FETCHING ####################################3
+#################################################### FETCHING USER DATA ####################################3
 ####################################################################################################
     def get_user(self):
         cursor = mysql.connection.cursor()
@@ -295,3 +299,19 @@ class mckeskwla(object):
 
         result = [list(i) for i in display]
         return result
+
+    
+
+####################################################################################################
+###################################### COMMENT AND REACTS ###################################################
+###################################################################################################
+
+    def addComment(self):
+        cursor = mysql.connection.cursor()
+        sql = """INSERT INTO comments (comment_id, user_id, post_id, comment,
+                 comment_timestamp)
+					 VALUES('%s', '%s', '%s', '%s','%s')""" % (self.comment_id, self.user_id, self.post_id, 
+                                                        self.comment, self.comment_timestamp)
+
+        cursor.execute(sql)
+        mysql.connection.commit()

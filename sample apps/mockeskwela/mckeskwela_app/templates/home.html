@@ -102,7 +102,7 @@
             </div>
 
             <div class="col mb-2">
-              <button onclick="showComments('{{item[1]}}','{{item[0]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">View Comments</button>
+              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">View Comments</button>
             </div>
 
             <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -133,11 +133,37 @@
                             {% else %}
                                 {{ commentForm.comment(class="w-100") }}
                             {% endif %}
+
+
+                            {% if commentForm.user_id.errors %}
+                                {{ commentForm.user_id(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in commentForm.user_id.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ commentForm.user_id(class="w-100" , style="display: None;") }}
+                            {% endif %}
+
+
+                            {% if commentForm.post_id.errors %}
+                                {{ commentForm.post_id(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in commentForm.post_id.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ commentForm.post_id(class="w-100",  style="display: None;") }}
+                            {% endif %}
+
+
                            </div>
       
                         <div class="col pt-1">
                             <div class="mt-5">
-                              {{ commentForm.submit(class="btn-sm btn-primary") }}
+                              {{ commentForm.comment_submit(class="btn-sm btn-primary" ) }}
                             </div>
                         </div>
                       </form>
@@ -154,9 +180,13 @@
   {% else %}
   {% endif %}
   <script>
-    function showComments (poster_name, post_id){
+    function showComments (poster_name, post_id, user_id){
       var comments = document.getElementById('commentModal-body')    
       var poster = document.getElementById('posterLabel')
+
+      document.getElementById('post_id').value = `${post_id}`
+      document.getElementById('user_id').value = `${user_id}`
+
 
       poster.innerHTML = `Comments on ${poster_name}'s Post`
       comments.innerHTML = `
@@ -182,7 +212,7 @@
                                   <p class="text-secondary text-center">September 30, 2020    </p>
                               </div>
                               <div class="col-md-10">
-                                  <p><a href="#"><strong>Maniruzzaman Akash</strong></a></p>
+                                  <p><a href="#"><strong>${user_id}</strong></a></p>
                                   <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
                               </div>
                           </div>
