@@ -102,7 +102,13 @@ def home():
         for item in get_post:
             db = models.mckeskwla(post_id=item[0])
             count = db.getCommentCount()
+            likeCount = db.getLikeCount()
+            like_db = models.mckeskwla(user_id=id_user, post_id=item[0])
+            isLiked = like_db.isLiked()
             item.append(count)
+            item.append(likeCount)
+            item.append(isLiked)
+            
             tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
             item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
@@ -132,7 +138,7 @@ def home():
                 comment_content = commentForm.comment.data
                 comment_postID = commentForm.post_id.data
                 comment_userID = commentForm.user_id.data
-                commentor = commentForm.commentor.data
+                commentor = f'{user[0][4]} {user[0][5]}'
                 print(f'''comment: {commentForm.comment.data}\ncomment id: {comment_id}\ncomment timestamp: {post_tstamp},
                 post_id: {commentForm.post_id.data},
                 user_id: {commentForm.user_id.data}''')
@@ -337,3 +343,29 @@ def activate_accounts(child, dad, mom):
     activate_mom.activate_parent()
     
     return jsonify({'child':child_details, 'dad':dad_details, 'mom':mom_details})
+
+
+
+
+@app.route('/likePost/<string:post_id>/<string:action>')
+def likePost(post_id, action):
+    user = session['user']
+    liker = f'{user[0][4]} {user[0][5]}'
+    user_id = user[0][3]
+    like_id =  f'like-{str(uuid.uuid4())[:5]}'
+    curr_dt = datetime.now()
+    like_timestamp= int(round(curr_dt.timestamp()))
+    liked = 1
+    if action == 'getLiked':
+        db = models.mckeskwla(like_id=like_id, user_id=user_id, post_id=post_id,
+                            liker=liker, liked=liked, post_timestamp=like_timestamp)
+        db.likePost()
+        count = models.mckeskwla(post_id=post_id)
+        likes = count.getLikeCount()
+    else:
+        db = models.mckeskwla(user_id=user_id, post_id=post_id)
+        db.dislikePost()
+        count = models.mckeskwla(post_id=post_id)
+        likes = count.getLikeCount()
+
+    return jsonify({'likes':likes})

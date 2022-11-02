@@ -670,7 +670,7 @@ POSTS SECT
   color:white;
   font-weight: lighter;
   box-shadow: 0 0 0 0.2rem #571b9857;
-  font-size:1.3em !important;"
+  font-size:1.3em !important;
 }
 
 
@@ -839,6 +839,11 @@ COMMENTS SECT
   width: 4em;
 }
 
+
+.body-sect .post-sect .post .like{
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
 
 
 

@@ -11,7 +11,8 @@ class mckeskwla(object):
                 student_unique=None, father_id=None, mother_id=None,
                 teacher_id = None, user_id=None, parent_id=None, user_type=None,
                 post_id=None, post_title = None, post_content = None, post_timestamp = None,
-                poster_name=None, comment=None, comment_id=None, comment_timestamp = None):
+                poster_name=None, comment=None, comment_id=None, comment_timestamp = None,
+                like_id = None, liker = None, liked = None):
     
         self.teacher_type = teacher_type
         self.firstname = firstname
@@ -48,6 +49,9 @@ class mckeskwla(object):
         self.comment_id = comment_id
         self.comment_timestamp = comment_timestamp
     
+        self.like_id =like_id
+        self.liker = liker
+        self.liked = liked
 
 
 ####################################################################################################
@@ -342,3 +346,54 @@ class mckeskwla(object):
         display = cursor.fetchall()
 
         return display
+
+    
+
+    def likePost(self):
+        cursor = mysql.connection.cursor()
+        sql = """INSERT INTO likes (like_id, user_id, post_id, liker, liked,
+                 timestamp)
+					 VALUES('%s', '%s', '%s', '%s','%s', '%s')""" % (self.like_id, self.user_id, self.post_id, self.liker, 
+                                                        self.liked, self.post_timestmap)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+    def dislikePost(self):
+        cursor = mysql.connection.cursor()
+        sql = """DELETE FROM likes WHERE user_id = '{}' AND  post_id = '{}'""".format(self.user_id, self.post_id)
+
+        cursor.execute(sql)
+        mysql.connection.commit()
+
+    def getLikeCount(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT COUNT(*) FROM likes WHERE post_id = '{}';
+
+        """.format(self.post_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        count = display[0][0]
+        
+
+        return count
+
+    def isLiked(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT * FROM likes WHERE user_id = '{}' AND post_id = '{}';
+
+        """.format(self.user_id, self.post_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        
+        if display:
+            return 1
+        else:
+            return 0
+
+
+    

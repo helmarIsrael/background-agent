@@ -95,14 +95,17 @@
             </div> 
           </article>
           <div class="row ml-3">
-            <p class="btn btn-sm" type="button"><i style="font-size: large;"class="fas fa-thumbs-up like"></i></p>
+            {% if item[10] != 1 %}
+              <p id="{{item[0]}}" class="btn btn-sm" onclick="toggleLike('{{item[0]}}', '{{item[3]}}')" type="button"><i style="font-size: large;"class="fas fa-thumbs-up"></i></p>
+            {% else %}
+            <p id="{{item[0]}}" class="btn btn-sm like" onclick="toggleLike('{{item[0]}}', '{{item[3]}}')" type="button"><i style="font-size: large;"class="fas fa-thumbs-up"></i></p>
+            {% endif %}
             <div class="star-widget">
-              
-              <small class="ml-2">2 Likes</small>
+              <small class="ml-2" id="{{item[0]}}likeCount">{{item[9]}} Like(s)</small>
             </div>
 
             <div class="col mb-2">
-              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">{{item[8]}} Comments</button>
+              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">{{item[8]}} Comment(s)</button>
             </div>
 
             <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -159,18 +162,6 @@
                             {% endif %}
 
 
-                            {% if commentForm.commentor.errors %}
-                                {{ commentForm.commentor(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in commentForm.commentor.errors %}
-                                        <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ commentForm.commentor(class="w-100",  style="display: None;") }}
-                            {% endif %}
-
-
                            </div>
       
                         <div class="col pt-1">
@@ -180,8 +171,6 @@
                         </div>
                       </form>
                     </div>
-                    <!-- <button type="button" class="btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn-sm btn-primary">Save changes</button> -->
                   </div>
                 </div>
               </div>
@@ -199,7 +188,6 @@
 
       document.getElementById('post_id').value = `${post_id}`
       document.getElementById('user_id').value = `${user_id}`
-      document.getElementById('commentor').value = `${poster_name}`
       
       jx({
         method:'GET',
@@ -242,6 +230,39 @@
       }
       
     }
+  
+  
+    function toggleLike(post_id){
+      like_btn = document.getElementById(`${post_id}`)
+
+      var request = new XMLHttpRequest()
+      
+
+      if (like_btn.classList.contains('like')){
+        request.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var data = JSON.parse(request.responseText);
+              likes = data['likes']
+              document.getElementById(`${post_id}likeCount`).innerHTML = `${likes} Like(s)`
+            }
+        }
+        request.open("GET", '/likePost/'+post_id+'/getDisliked', true )
+        request.send()
+        like_btn.classList.remove("like")
+      } else {
+        request.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var data = JSON.parse(request.responseText);
+              likes = data['likes']
+              document.getElementById(`${post_id}likeCount`).innerHTML = `${likes} Like(s)`
+            }
+        }
+        request.open("GET", '/likePost/'+post_id+'/getLiked', true )
+        request.send()
+        like_btn.classList.add("like")
+      }
+    }
+  
   </script>
 
 {% endblock %}
