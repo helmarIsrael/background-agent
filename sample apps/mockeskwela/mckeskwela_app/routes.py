@@ -2,7 +2,7 @@ from getpass import getuser
 import json
 import timeago
 from flask import render_template, redirect, request, url_for, flash, session, jsonify
-from mckeskwela_app.forms import CreatePost, CreateStudentForm, SignUpForm, LoginForm
+from mckeskwela_app.forms import CreatePost, CreateStudentForm, SignUpForm, LoginForm, addCommment
 from mckeskwela_app import app
 import mckeskwela_app.models as models
 from datetime import datetime
@@ -83,6 +83,7 @@ def signup():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     form = CreatePost()
+    commentForm = addCommment()
     if 'user' in session:
         user_request = False
         user = session['user']
@@ -116,7 +117,11 @@ def home():
             form.title.data = None
             form.content.data = None
             return redirect(url_for('home'))
-        return render_template('home.html', user=user[0], title='Home', form=form, posts=posts)
+        comment_id =  f'comment-{str(uuid.uuid4())[:5]}'
+        if commentForm.validate_on_submit() and request.method == 'POST':
+            print(f'comment: {commentForm.comment.data}\ncomment id: {comment_id}\ncomment timestamp: {post_tstamp}')
+            commentForm.comment.data = '' ## IFIX NGA AFTER MAG SUBMIT NIG IRELOAD KAY DLI NA MAG CONFIRM FOR RESUBMISSION
+        return render_template('home.html', user=user[0], title='Home', form=form, posts=posts, commentForm=commentForm)
     else:
         return redirect(url_for('login'))
 
