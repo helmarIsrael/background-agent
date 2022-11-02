@@ -100,10 +100,12 @@ def home():
         get_post = db.getPosts()
         posts = []
         for item in get_post:
+            db = models.mckeskwla(post_id=item[0])
+            count = db.getCommentCount()
+            item.append(count)
             tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
             item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
-        print(posts)
 
         filled = request.args.get('filled')
         if filled is None:
@@ -130,12 +132,13 @@ def home():
                 comment_content = commentForm.comment.data
                 comment_postID = commentForm.post_id.data
                 comment_userID = commentForm.user_id.data
+                commentor = commentForm.commentor.data
                 print(f'''comment: {commentForm.comment.data}\ncomment id: {comment_id}\ncomment timestamp: {post_tstamp},
                 post_id: {commentForm.post_id.data},
                 user_id: {commentForm.user_id.data}''')
 
                 comment = models.mckeskwla(comment_id=comment_id, user_id=comment_userID,
-                                            post_id=comment_postID, comment=comment_content,
+                                            post_id=comment_postID, poster_name=commentor, comment=comment_content,
                                             comment_timestamp=post_tstamp)
 
                 comment.addComment()
@@ -233,10 +236,25 @@ def activate_account():
 
 
 
+@app.route('/getComments/<string:id>')
+def getComments(id):
+    db = models.mckeskwla(post_id=id)
+    comms = db.getComments()
+    comments_list = []
+    curr_dt = datetime.now()
+    
+    for item in comms:
+        comments_dict = {}
+        comments_dict['id'] = item[0]
+        comments_dict['user_id'] = item[1]
+        comments_dict['post_id'] = item[2]
+        comments_dict['commentor'] = item[3]
+        comments_dict['comment'] = item[4]
+        tstamp_datetime = str(datetime.fromtimestamp(int(item[5])))
+        comments_dict['timestamp'] = str(timeago.format(tstamp_datetime, curr_dt))
+        comments_list.append(comments_dict)
 
-
-
-
+    return jsonify({'comments': comments_list})
 
 
 @app.route('/getStudents')

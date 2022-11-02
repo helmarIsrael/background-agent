@@ -95,14 +95,14 @@
             </div> 
           </article>
           <div class="row ml-3">
-            <p class="btn btn-sm" type="button"><i class="fas fa-thumbs-up"></i></p>
+            <p class="btn btn-sm" type="button"><i style="font-size: large;"class="fas fa-thumbs-up like"></i></p>
             <div class="star-widget">
               
               <small class="ml-2">2 Likes</small>
             </div>
 
             <div class="col mb-2">
-              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">View Comments</button>
+              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">{{item[8]}} Comments</button>
             </div>
 
             <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -159,6 +159,18 @@
                             {% endif %}
 
 
+                            {% if commentForm.commentor.errors %}
+                                {{ commentForm.commentor(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in commentForm.commentor.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ commentForm.commentor(class="w-100",  style="display: None;") }}
+                            {% endif %}
+
+
                            </div>
       
                         <div class="col pt-1">
@@ -179,60 +191,56 @@
     {% endfor %}
   {% else %}
   {% endif %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
   <script>
-    function showComments (poster_name, post_id, user_id){
-      var comments = document.getElementById('commentModal-body')    
+    var jx = $.ajax
+    function showComments (poster_name, post_id, user_id){  
       var poster = document.getElementById('posterLabel')
 
       document.getElementById('post_id').value = `${post_id}`
       document.getElementById('user_id').value = `${user_id}`
-
-
+      document.getElementById('commentor').value = `${poster_name}`
+      
+      jx({
+        method:'GET',
+        url:`/getComments/${post_id}`,
+        success:function(response){
+            buildComments(response['comments'])
+        }
+      })
+      
       poster.innerHTML = `Comments on ${poster_name}'s Post`
-      comments.innerHTML = `
-      <div class="card card-inner m-2">
-                      <div class="card-body">
-                          <div class="row">
-                              <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
-                                  <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
-                                  <p class="text-secondary text-center">September 30, 2020    </p>
-                              </div>
-                              <div class="col-md-10">
-                                  <p><a href="#"><strong>${post_id}</strong></a></p>
-                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                              </div>
-                          </div>
-                      </div>
-                    </div>
+      
+    }
+
+
+    function buildComments(data){
+      console.log(data)
+      var comment_body = document.getElementById('commentModal-body')
+      comment_body.innerHTML = ''
+      if (data.length != 0){
+        for (var i = 0; i < data.length; i++){
+        comment_body.innerHTML += `
                     <div class="card card-inner m-2">
                       <div class="card-body">
                           <div class="row">
                               <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
                                   <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
-                                  <p class="text-secondary text-center">September 30, 2020    </p>
+                                  <small class="text-secondary text-center">${data[i].timestamp}</small>
                               </div>
                               <div class="col-md-10">
-                                  <p><a href="#"><strong>${user_id}</strong></a></p>
-                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                  <h5><a href="#"><strong>${data[i].commentor}</strong></a></h5>
+                                  <p>${data[i].comment}</p>
                               </div>
                           </div>
                       </div>
                     </div>
-                    <div class="card card-inner m-2">
-                      <div class="card-body">
-                          <div class="row">
-                              <div class="col-md-2  d-flex flex-wrap justify-content-center align-items-center">
-                                  <img src="{{url_for('static', filename='images/default.jpg')}}" class="img rounded-circle img-fluid"/>
-                                  <p class="text-secondary text-center">September 30, 2020    </p>
-                              </div>
-                              <div class="col-md-10">
-                                  <p><a href="#"><strong>Maniruzzaman Akash</strong></a></p>
-                                  <p>Lorem Ipsum is simply dummy text of the pr make  but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                              </div>
-                          </div>
-                      </div>
-                    </div>
-      `
+                  `
+        }
+      } else {
+        comment_body.innerHTML = '<h1>No Comments</h1>'
+      }
+      
     }
   </script>
 

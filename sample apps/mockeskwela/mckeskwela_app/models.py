@@ -308,10 +308,37 @@ class mckeskwla(object):
 
     def addComment(self):
         cursor = mysql.connection.cursor()
-        sql = """INSERT INTO comments (comment_id, user_id, post_id, comment,
+        sql = """INSERT INTO comments (comment_id, user_id, post_id, commentor, comment,
                  comment_timestamp)
-					 VALUES('%s', '%s', '%s', '%s','%s')""" % (self.comment_id, self.user_id, self.post_id, 
+					 VALUES('%s', '%s', '%s', '%s','%s', '%s')""" % (self.comment_id, self.user_id, self.post_id, self.poster_name, 
                                                         self.comment, self.comment_timestamp)
 
         cursor.execute(sql)
         mysql.connection.commit()
+
+    def getCommentCount(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT COUNT(*) FROM comments WHERE post_id = '{}';
+
+        """.format(self.post_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+        count = display[0][0]
+        
+
+        return count
+
+    
+    def getComments(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT * FROM comments WHERE post_id = '{}' ORDER BY comment_timestamp DESC;
+
+        """.format(self.post_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+
+        return display
