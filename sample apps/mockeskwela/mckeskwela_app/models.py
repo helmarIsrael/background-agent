@@ -306,6 +306,21 @@ class mckeskwla(object):
 
     
 
+    def viewPost(self):
+        cursor = mysql.connection.cursor()
+        sql = """
+                SELECT * from posts WHERE auth_id = '{}' AND post_id = '{}' ORDER BY datetime_posted DESC
+
+        """.format(self.teacher_id, self.post_id)
+
+        cursor.execute(sql)
+        display = cursor.fetchall()
+
+        result = [list(i) for i in display]
+        return result
+
+    
+
 ####################################################################################################
 ###################################### COMMENT AND REACTS ###################################################
 ###################################################################################################

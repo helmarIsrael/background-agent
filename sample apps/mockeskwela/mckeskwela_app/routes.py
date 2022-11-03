@@ -79,6 +79,13 @@ def signup():
         
     return render_template('signUp.html', form=form)
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('login'))
+
+
+
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
@@ -131,7 +138,6 @@ def home():
                 form.title.data = None
                 form.content.data = None
                 filled = True
-                print("asdvajvhvaousdq")
                 return redirect(url_for('home'))
         if commentForm.is_submitted():
             if request.method == 'POST':
@@ -154,14 +160,33 @@ def home():
     else:
         return redirect(url_for('login'))
 
+@app.route('/viewpost/<string:id>', methods=['GET', 'POST'])
+def viewpost(id):
+    commentForm = addCommment()
+    if 'user' in session:
+        user_request = False
+        user = session['user']
+        auth_id = user[0][6] # ID OF THE ONE WHO ACTIVATED OR AUTHORIZED THIS ACCOUNT
+        curr_dt = datetime.now()
 
-
-
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    return redirect(url_for('login'))
-
+        db = models.mckeskwla(teacher_id=auth_id, post_id=id)
+        post = db.viewPost()
+        view_post = []
+        for item in post:
+            db = models.mckeskwla(post_id=item[0])
+            count = db.getCommentCount()
+            likeCount = db.getLikeCount()
+            like_db = models.mckeskwla(user_id=user[0][3], post_id=item[0])
+            isLiked = like_db.isLiked()
+            item.append(count)
+            item.append(likeCount)
+            item.append(isLiked)
+            
+            tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
+            item[7] = str(timeago.format(tstamp_datetime, curr_dt))
+            view_post.append(item)
+        print(view_post)
+    return render_template('view_post.html', user=user[0], commentForm=commentForm, post=view_post)
 
 
 @app.route('/classList', methods=['GET', 'POST'])
