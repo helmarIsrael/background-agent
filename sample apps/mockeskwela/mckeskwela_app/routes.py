@@ -94,6 +94,7 @@ def home():
     if 'user' in session:
         user_request = False
         user = session['user']
+        user_type = user[0][0]
         id_user = user[0][3]
         auth_id = user[0][6] # ID OF THE ONE WHO ACTIVATED OR AUTHORIZED THIS ACCOUNT
         poster = f'{user[0][4]} {user[0][5]}'
@@ -102,8 +103,12 @@ def home():
 
         curr_dt = datetime.now()
         post_tstamp= int(round(curr_dt.timestamp()))
-
-        db = models.mckeskwla(teacher_id=auth_id)
+        if user_type == 'student' or user_type == 'parent':
+            db = models.mckeskwla(teacher_id=auth_id, user_type=user_type)
+        else:
+            db = models.mckeskwla(teacher_id=auth_id, user_type=user_type, 
+                                    school=user[0][10], division=user[0][8], 
+                                    user_id=id_user)
         get_post = db.getPosts()
         posts = []
         for item in get_post:
@@ -119,7 +124,7 @@ def home():
             tstamp_datetime = str(datetime.fromtimestamp(int(item[7])))
             item[7] = str(timeago.format(tstamp_datetime, curr_dt))
             posts.append(item)
-
+        print(f'\n{posts}')
         filled = request.args.get('filled')
         if filled is None:
             filled = False

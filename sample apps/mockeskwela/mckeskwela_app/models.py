@@ -293,10 +293,38 @@ class mckeskwla(object):
 
     def getPosts(self):
         cursor = mysql.connection.cursor()
-        sql = """
-                SELECT * from posts WHERE auth_id = '{}' ORDER BY datetime_posted DESC
 
-        """.format(self.teacher_id)
+        if self.user_type == 'student' or self.user_type == 'parent':
+            sql = """
+                    SELECT * from posts WHERE auth_id = '{}' ORDER BY datetime_posted DESC
+
+            """.format(self.teacher_id)
+        elif self.user_type == 'Public Teacher':
+            sql = """
+                   SELECT pst.*, t.school, t.division FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type) 
+                    LEFT JOIN teachers as t ON u.user_id = t.user_id) 
+                    WHERE auth_id = '{}' or t.school = '{}' or (t.teacher_type = 'Division Supervisor' and t.division = '{}') ORDER BY datetime_posted DESC;
+
+            """.format(self.teacher_id, self.school, self.division)
+
+        elif self.user_type == 'School Head':
+            sql = """
+                   SELECT pst.*, t.school FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type) 
+                    LEFT JOIN teachers as t ON u.user_id = t.user_id) 
+                    WHERE t.school = '{}' ORDER BY datetime_posted DESC;
+
+            """.format(self.school)
+        
+        
+        if self.user_type == 'Division Supervisor' or self.user_type == 'parent':
+            sql = """
+                    SELECT pst.*, t.school, t.division FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type)
+                    LEFT JOIN teachers as t ON u.user_id = t.user_id) 
+                    WHERE t.teacher_type='Public Teacher' AND t.division = '{}' OR pst.user_id = '{}' 
+                    ORDER BY datetime_posted DESC;
+
+            """.format(self.division, self.user_id)
+        
 
         cursor.execute(sql)
         display = cursor.fetchall()

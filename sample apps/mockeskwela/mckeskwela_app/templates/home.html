@@ -83,7 +83,24 @@
               <div class="article-metadata m-3">
                 <img class = "rounded-circle article-img" src="{{url_for('static', filename='images/default.jpg')}}" style=" height:40px; width: 40px;">
                   <a class="ml-2 article-author" href="#">{{ item[1] }}</a>
+                  {% if item[2] == 'Division Supervisor' %}
+                    <small class="ml-2 font-weight-bold" style="color:rgb(206, 137, 8);">{{ item[2] }}</small>
+                  {% elif item[2] == 'School Head' %}
+                    <small class="ml-2 font-weight-bold" style="color: rgba(211, 8, 8, 0.76);">{{ item[2] }}</small>
+                  {% elif item[2] == 'Public Teacher' %}
+                    <small class="ml-2 font-weight-bold" style="color: rgba(4, 146, 4, 0.76);">{{ item[2] }}</small>
+                  {% elif item[2] == 'parent' %}
+                    <small class="ml-2 font-weight-bold" style="color: brown;">{{ item[2] }}</small>
+                  {% else %}
                   <small class="ml-2 font-weight-bold">{{ item[2] }}</small>
+                  {% endif %}
+
+                  {% if item[8] == 'No School' %}
+                    <small class="ml-2 font-weight-bold">{{ item[9] }}</small>
+                  {% elif item[8] != None %}
+                  <small class="ml-2 font-weight-bold">{{ item[8] }}</small>
+                  {% else %}
+                  {% endif %}
                   <small class="ml-2 text-muted">Authorized by {{ item[4] }}</small>
               </div>
                 <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="{{url_for('viewpost', id=item[0])}}">{{ item[5] }}</a>
@@ -95,17 +112,17 @@
             </div> 
           </article>
           <div class="row ml-3">
-            {% if item[10] != 1 %}
+            {% if item[-1] != 1 %}
               <p id="{{item[0]}}" class="btn btn-sm" onclick="toggleLike('{{item[0]}}')" type="button"><i style="font-size: large;"class="fas fa-thumbs-up"></i></p>
             {% else %}
             <p id="{{item[0]}}" class="btn btn-sm like" onclick="toggleLike('{{item[0]}}')" type="button"><i style="font-size: large;"class="fas fa-thumbs-up"></i></p>
             {% endif %}
             <div class="star-widget">
-              <small class="ml-2" id="{{item[0]}}likeCount">{{item[9]}} Like(s)</small>
+              <small class="ml-2" id="{{item[0]}}likeCount">{{item[-2]}} Like(s)</small>
             </div>
 
             <div class="col mb-2">
-              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">{{item[8]}} Comment(s)</button>
+              <button onclick="showComments('{{item[1]}}','{{item[0]}}', '{{item[3]}}')" class="viewComment" data-toggle="modal" data-target="#commentModal">{{item[-3]}} Comment(s)</button>
             </div>
 
             <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
