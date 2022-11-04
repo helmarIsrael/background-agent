@@ -238,7 +238,7 @@ def createStudent():
         addFather_db.addParent()
         addMother_db.addParent()
 
-
+        flash('New Student Added', 'success')
         return redirect(url_for('home'))
         
     return render_template('student_signup.html', form=form)
@@ -332,19 +332,19 @@ def activate_accounts(child, dad, mom):
     child_list = child.split(",")
     child_username = child_list[0].lower()
     child_password = str(uuid.uuid4())[:5]
-    child_user_id = str(uuid.uuid4())[:8]
+    child_user_id = f'user-{str(uuid.uuid4())[:5]}'
     child_id = child_list[1]
 
     dad_list = dad.split(",")
     dad_username = dad_list[0].lower()
     dad_password = str(uuid.uuid4())[:5]
-    dad_user_id = str(uuid.uuid4())[:8]
+    dad_user_id = f'user-{str(uuid.uuid4())[:5]}'
     dad_id = dad_list[1]
 
     mom_list = mom.split(",")
     mom_username = mom_list[0].lower()
     mom_password = str(uuid.uuid4())[:5]
-    mom_user_id = str(uuid.uuid4())[:8]
+    mom_user_id = f'user-{str(uuid.uuid4())[:5]}'
     mom_id = mom_list[1]
 
     print(f'''Child_ID: {child_id} Child Username: {child_username} password: {child_password} user_id: {child_user_id}

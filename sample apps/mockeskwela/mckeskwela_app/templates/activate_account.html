@@ -13,7 +13,7 @@
       crossorigin="anonymous"
     />
 </head>
-<body>
+<body onload="load()">
     <div class="row align-items-center h-100">
       <div class="container">
         <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
@@ -81,13 +81,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     var jx = $.ajax
-    $.ajax({
-        method:'GET',
-        url:`/getStudents`,
-        success:function(response){
-            buildTable(response.students)
+    function load(clg, fltr){
+        var node = document.getElementById("student_table");
+        while (node.hasChildNodes()) {
+          node.removeChild(node.lastChild);
         }
-    })
+        jx({
+          method:'GET',
+          url:`/getStudents`,
+          success:function(response){
+              buildTable(response.students)
+          }
+        })
+      }
+
+
+
+    // $.ajax({
+    //     method:'GET',
+    //     url:`/getStudents`,
+    //     success:function(response){
+    //         buildTable(response.students)
+    //     }
+    // })
+
     
 
     
@@ -193,16 +210,22 @@
                             </div>
                             `
 
-                            document.getElementById('activate_btn').disabled = true
+            document.getElementById('activate_btn').disabled = true
+
             }
+
+            load()
         };
 
         request.open("GET", '/activate_accounts/'+student+'/'+father+'/'+mother, true )
         request.send()
+       
+
     }
 
     function buildModal(data){
         console.log("view modal")
+        console.log(data)
         child = data.child[0]
         dad = data.dad[0]
         mom = data.mom[0]
