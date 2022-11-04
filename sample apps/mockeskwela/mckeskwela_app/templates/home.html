@@ -20,7 +20,42 @@
       </article>
     
 </div>
-
+  
+<div class="modal" id="viewMoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{user[4]}} {{user[5]}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="View More">
+            <div class="ml-3">
+              <h4>
+                <small><strong>Position</strong></small>
+              </h4>
+              <h4>
+                <p class="sidebar-info row ml-3" style="color: rgba(4, 146, 4, 0.76);">{{user[0]}}</p>
+              </h4>
+              
+              <h4>
+                <small><strong>School</strong></small>
+              </h4>
+              <h4><p class="sidebar-info row ml-3">{{user[10]}}</p></h4>
+  
+              <h4><small><strong>District</strong></small></h4>
+              <h4><p class="sidebar-info row ml-3">{{user[9]}}</p></h4>
+             
+              <h4><small><strong>Division</strong></small></h4>
+              <h4><p class="sidebar-info row ml-3">{{user[8]}}</p></h4>  
+            </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="modal fade" id="ModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
@@ -83,7 +118,11 @@
               <div class="article-metadata m-3">
                 <img class = "rounded-circle article-img" src="{{url_for('static', filename='images/default.jpg')}}" style=" height:40px; width: 40px;">
                   <a class="ml-2 article-author" href="#">{{ item[1] }}</a>
-                  {% if item[2] == 'Division Supervisor' %}
+                  {% if item[2] == 'Superintendent' %}
+                    <small class="ml-2 font-weight-bold" style="color:rgb(8, 174, 185);">{{ item[2] }}</small>
+                  {% elif item[2] == 'District Supervisor' %}
+                    <small class="ml-2 font-weight-bold" style="color:rgb(209, 209, 12);">{{ item[2] }}</small>
+                  {% elif item[2] == 'Division Supervisor' %}
                     <small class="ml-2 font-weight-bold" style="color:rgb(206, 137, 8);">{{ item[2] }}</small>
                   {% elif item[2] == 'School Head' %}
                     <small class="ml-2 font-weight-bold" style="color: rgba(211, 8, 8, 0.76);">{{ item[2] }}</small>
@@ -95,13 +134,18 @@
                   <small class="ml-2 font-weight-bold">{{ item[2] }}</small>
                   {% endif %}
 
+                  
                   {% if item[8] == 'No School' %}
-                    <small class="ml-2 font-weight-bold">{{ item[9] }}</small>
+                    {% if item[9] == 'No District' %}
+                      <small class="ml-2 font-weight-bold">{{ item[10] }}</small>
+                    {% else %}
+                      <small class="ml-2 font-weight-bold">{{ item[9] }}</small>
+                    {% endif %}
                   {% elif item[8] != None %}
-                  <small class="ml-2 font-weight-bold">{{ item[8] }}</small>
+                    <small class="ml-2 font-weight-bold">{{ item[8] }}</small>
                   {% else %}
                   {% endif %}
-                  <small class="ml-2 text-muted">Authorized by {{ item[4] }}</small>
+                    <small class="ml-2 text-muted">Authorized by {{ item[4] }}</small>
               </div>
                 <a class="article-title ml-3 font-weight-bold" style="font-size: 2em;" href="{{url_for('viewpost', id=item[0])}}">{{ item[5] }}</a>
                   <p class="article-content ml-3 mb-0 m-3" style="white-space: pre-wrap;

@@ -309,20 +309,42 @@ class mckeskwla(object):
 
         elif self.user_type == 'School Head':
             sql = """
-                   SELECT pst.*, t.school FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type) 
+                   SELECT pst.*, t.school, t.district, t.division FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type) 
                     LEFT JOIN teachers as t ON u.user_id = t.user_id) 
-                    WHERE t.school = '{}' ORDER BY datetime_posted DESC;
+                    WHERE t.school = '{}' OR 
+                    (t.teacher_type='District Supervisor' and t.district='{}')
+                    OR (t.teacher_type='Superintendent' and t.division = '{}')
+                     ORDER BY datetime_posted DESC;
 
-            """.format(self.school)
+            """.format(self.school, self.district, self.division)
         
         
-        if self.user_type == 'Division Supervisor' or self.user_type == 'parent':
+        elif self.user_type == 'Division Supervisor':
             sql = """
                     SELECT pst.*, t.school, t.division FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type)
                     LEFT JOIN teachers as t ON u.user_id = t.user_id) 
                     WHERE t.teacher_type='Public Teacher' AND t.division = '{}' OR pst.user_id = '{}' 
                     ORDER BY datetime_posted DESC;
 
+            """.format(self.division, self.user_id)
+
+        elif self.user_type == 'District Supervisor':
+            sql = """SELECT pst.*, t.school, t.division 
+                        FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type)
+                        LEFT JOIN teachers as t ON u.user_id = t.user_id) 
+                        WHERE t.teacher_type='School Head' AND t.district = '{}' 
+                        OR pst.user_id = '{}' ORDER BY datetime_posted DESC;
+            
+            """.format(self.district, self.user_id)
+
+        
+        elif self.user_type == 'Superintendent':
+            sql = """SELECT pst.*, t.school, t.division 
+                        FROM ((posts as pst LEFT JOIN user as u ON pst.poster_user_type = u.user_type)
+                        LEFT JOIN teachers as t ON u.user_id = t.user_id) 
+                        WHERE t.teacher_type='School Head' AND t.division = '{}' 
+                        OR pst.user_id = '{}' ORDER BY datetime_posted DESC;
+            
             """.format(self.division, self.user_id)
         
 

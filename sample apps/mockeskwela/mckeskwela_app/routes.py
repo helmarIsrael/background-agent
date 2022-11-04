@@ -107,8 +107,8 @@ def home():
             db = models.mckeskwla(teacher_id=auth_id, user_type=user_type)
         else:
             db = models.mckeskwla(teacher_id=auth_id, user_type=user_type, 
-                                    school=user[0][10], division=user[0][8], 
-                                    user_id=id_user)
+                                    school=user[0][10], division=user[0][8],
+                                    district=user[0][9], user_id=id_user)
         get_post = db.getPosts()
         posts = []
         for item in get_post:
