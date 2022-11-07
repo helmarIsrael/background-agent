@@ -1720,7 +1720,7 @@ def syslogcred():
             return {"status": "error", "message": jsonifycred["item"]}
 
         credentials = jsonifycred["item"][0]
-
+        
         userdetails = credentials[u"userdetails"].split("*")
         schoolassin = credentials[u"userschool"].split("*")
         #print credentials[u"designated"]

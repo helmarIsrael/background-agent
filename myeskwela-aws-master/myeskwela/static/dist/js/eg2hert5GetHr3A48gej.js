@@ -4550,6 +4550,7 @@
                     url: apputils.rest + '/bulletin',
                     type:"POST",
                     data: JSON.stringify({
+                        messageTextOnly: $("#taBulletin").val(),
                         message: $("#taBulletin").val()  + files + apputils.newline(),
                         schoolid:$("#name-rightbadge").data("schoolid"),
                         semid:$("#name-rightbadge").data("semid"),

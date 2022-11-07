@@ -1706,9 +1706,11 @@ def syslogcred():
             return {"status": "error", "message": jsonifycred["item"]}
 
         credentials = jsonifycred["item"][0]
-
+        # print(f'\n\nCredentials: {credentials}\n\n')
         userdetails = credentials[u"userdetails"].split("*")
+        # print(f'\n\nUser Details: {userdetails}\n\n')
         schoolassin = credentials[u"userschool"].split("*")
+        # print(f'\n\nSchool Assign: {schoolassin}\n\n')
         #print credentials[u"designated"]
         designated = []
         if credentials[u"designated"] != 'none':
@@ -1774,6 +1776,29 @@ def syslogcred():
                            "}"
                 })
         todayis = date.today().strftime("%d %B %Y")
+        clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
+                "userdetails": {"name": userdetails[0], "position": userdetails[1]},
+                "userschool": {"id": schoolassin[0],
+                               "name": schoolassin[1],
+                               "region": schoolassin[2],
+                               "division": schoolassin[3],
+                               "district": schoolassin[4]
+                               },
+                "designated": designated,
+                "religions": credentials[u"religions"].split(","),
+                "imgsrc": pic.getImgSrcUrl(credentials[u"imgsrc"]),
+                "date": todayis,
+                "semid": credentials[u"semid"],
+                "freeid": credentials[u"freeid"],
+                "load": load,
+                "nstatus": credentials[u"nstatus"].split(",")[:-1],
+                "quarter": credentials[u"quarter"],
+                "lrn": credentials[u"lrn"],
+                "mystu": mystu
+                }
+
+        # print(f'\n\nCredentials: {clean_cred}\n\n')
+
         return {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
                 "userschool": {"id": schoolassin[0],
@@ -3542,10 +3567,17 @@ def bulletinpost():
     params = request.get_json()
     schoolid = params["schoolid"]
     semid = params["semid"]
+    messageTextOnly = params["messageTextOnly"]
     message = params["message"]
     token = params["token"]
     group = params["group"]
-    username = auth.username()
+    username = auth.username() 
+
+    print(f'''Username: {username}\nToken: {token}
+    Section:None\nDue Date: 01/02/2018\n\nMessage: {message}
+    \n\nGroup: {group}\nTimeline Type: Bulletin Board\n
+    isDefault: {True}\nPublicity: 3\nSemeseter ID: {semid}\n
+    School ID: {schoolid}\nMessageTextOnly: {messageTextOnly}''')
 
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
@@ -6829,4 +6861,4 @@ def formatres(result):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, threaded=True)
+    app.run(debug=True, threaded=True)
