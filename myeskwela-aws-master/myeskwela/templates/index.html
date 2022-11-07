@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+      {{ JSGlue.include() }}
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-KYL65RS4MN"></script>
+    <script>
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag()
+      {
+          dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-KYL65RS4MN');
+    </script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> my.eskwela </title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/jquery-datetime/jquery.datetimepicker.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/skins/skin-yellow-light.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/bootstrap-table.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/pnotify.custom.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fullcalendar/fullcalendar.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/dropbox.css') }}">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/daterangepicker/daterangepicker-bs3.css') }}">
+    <!-- jquery time picker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datepicker/datepicker3.css') }}">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/iCheck/all.css') }}">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/colorpicker/bootstrap-colorpicker.min.css') }}">
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/timepicker/bootstrap-timepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/introjs/minified/introjs.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/jquery-ui.min.css') }}">
+    <!-- <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0&appId=1350228441713788&autoLogAppEvents=1"></script> -->
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+     
+  </head>
+
+  <body class=" skin-yellow-light sidebar-mini ">
+
+              <!-- Load Facebook SDK for JavaScript -->
+              <div id="fb-root"></div>
+              <script>
+                     window.fbAsyncInit = function() {
+                              FB.init({
+                                xfbml            : true,
+                                version          : 'v9.0'
+                              });
+                            };
+
+                            (function(d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0];
+                            if (d.getElementById(id)) return;
+                            js = d.createElement(s); js.id = id;
+                            js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+                            fjs.parentNode.insertBefore(js, fjs);
+                          }(document, 'script', 'facebook-jssdk'));
+              </script>
+
+              <!-- Your Chat Plugin code -->
+                <div class="fb-customerchat"
+                        attribution=setup_tool
+                        page_id="349805148492741"
+                        theme_color="#ffc300"
+                        greeting_dialog_display="hide"
+                        >
+                </div>
+
+    <div class="wrapper">
+      <header class="main-header">
+        <a href="#" class="logo">
+          <span class="logo-mini"><i class="icon fa fa-group"></i></span>
+          <span class="logo-lg"><b>my.</b>eskwela</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img id="img-rightbadge" src="{{ url_for('static', filename='dist/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
+                  <span id="name-rightbadge" class="hidden-xs">Alexander Pierce</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li class="user-header">
+                    <img id="img-downbadge" src="{{ url_for('static', filename='dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+                    <p>
+                       <label id="name-downbadge">Alexander Pierce </label> <br />
+                       <label id="user-position">  <small>Administrator</small> </label>
+                    </p>
+                  </li>
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <!-- put some button here -->
+                    </div>
+                    <div class="pull-right">
+                      <button class="btn btn-default btn-flat" onclick="view.resetall();">Sign out</button>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <div class="user-panel">
+            <div class="pull-left image">
+              <img id="img-leftbadge" src="{{ url_for('static', filename='dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+              <label id="name-leftbadge">Alexander Pierce</label>
+              <br />
+              <label id="name-userops"></label>
+                <br />
+              <label id="name-schoolyear"></label>
+            </div>
+          </div>
+          <ul class="sidebar-menu" id="user-menus">
+          </ul><!-- /.sidebar-menu -->
+        </section>
+      </aside>
+
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>
+            <span id="schoolname">Your</span>
+            <small>School Information System</small>
+               <div class="fb-like text-center"  data-href="https://www.facebook.com/myeskwela" data-width="" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
+          </h1>
+        </section>
+        <section class="content">
+            <div id="announce" class="row">
+                {% if message.message %}
+                   <div class="col-md-12">
+                        <div class="box box-announce">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{ message.message.header }}</h3>
+                            </div>
+                            <div class="box-body callout callout-warning">
+                                <h1>{{ message.message.contents }}</h1>
+                            </div>
+                            <div class="box-footer">
+                                {{ message.message.footer }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+          <div id="main" class="row">
+          </div>
+
+        </section>
+
+      </div>
+
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            Mindanao State University - Iligan Institute of Technology
+        </div>
+
+
+        <strong>Copyright &copy; 2015 <a href="#">my.eskwela</a>.</strong>
+          All rights reserved.
+
+      </footer>
+
+    </div><!-- ./wrapper -->
+    <!-- <script src='https://meet.jit.si/external_api.js'></script> -->
+              <script src="{{ url_for('static', filename='dist/js/jitsi.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/jQuery/jQuery-2.1.4.min.js' ) }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+     <script src="{{ url_for('static', filename='plugins/jquery-datetime/jquery.datetimepicker.full.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/chartjs/Chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/jquery.cookie.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/shim.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/jszip.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/xlsx.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/bootstrap-table.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/FileSaver/FileSaver.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/tableExport.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/pnotify.custom.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/jquery.filedrop.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/message/aes.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/message/mode-cfb-min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/fullcalendar/fullcalendar.min.js') }}"></script>
+    <!-- Barcode Reader  -->
+    <script src="{{ url_for('static', filename='dist/js/html5-qrcode.min.js') }}"></script>
+    <!-- date-range-picker -->
+    <script src="{{ url_for('static', filename='plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{{ url_for('static', filename='plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
+    <!-- bootstrap time picker -->
+    <script src="{{ url_for('static', filename='plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+    <!-- Pagination -->
+    <script src="{{ url_for('static', filename='plugins/pagination/jquery.twbsPagination.js') }}"></script>
+    <!--Countdown Timer-->
+    <script src="{{ url_for('static', filename='plugins/countdown/jquery.countdownTimer.js') }}"></script>
+    <!-- SlimScroll -->
+    <script src="{{ url_for('static', filename='plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
+    <!-- FastClick -->
+    <script src="{{ url_for('static', filename='plugins/fastclick/fastclick.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/introjs/minified/intro.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/app.min.js') }}"></script>
+              <script src="{{ url_for('static', filename='dist/js/jquery-ui.min.js') }}"></script>
+    <!--script src="dist/js/apper.js"></script-->
+    <script src="{{ url_for('static', filename='dist/js/apper.min.js') }}"></script>
+  </body>
+
+</html>

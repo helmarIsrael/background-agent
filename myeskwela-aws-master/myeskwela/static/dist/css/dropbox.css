@@ -1,0 +1,8 @@
+#dropbox{
+    border: 1px solid grey;
+    border-radius: 3px;
+    position: relative;
+    min-height: 20px;
+    overflow: hidden;
+    width: 200px;
+}
