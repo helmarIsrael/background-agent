@@ -1722,7 +1722,7 @@ def syslogcred():
                 #print c
                 designatedarr = c.split("*")
                 designated.append({"grade": designatedarr[0].replace('none', ''), "section": designatedarr[1]})
-
+        
         # religionoptions is just an array
         load = []
         if credentials[u'load'] != 'none':
@@ -3947,6 +3947,11 @@ def assignmentpost():
     semid = params["semid"]
     schoolid = params["schoolid"]
 
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', message)
+    msg_type = 'assignment'
+    # print(f'section: {section}')
+
     res = spcall("post_timeline", (
         username, token, section, duedate,
         message,
@@ -3956,6 +3961,37 @@ def assignmentpost():
         semid,
         schoolid
     ), group, True)
+
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+    # print(credentials[u'load'])
+    for loaditem in credentials[u'load'].split(',')[:-1]:
+        loadinfo = loaditem.split("*")
+        if loadinfo[4] == section:
+            assignment_section = loadinfo[0].replace('none', '') + ' ' + loadinfo[5]
+    # print(f'''Username: {username}
+    # Token: {token}
+    # Section:{assignment_section}
+    # Due Date: {duedate}
+    # Message: {message}
+    # User Type: {group}
+    # Timeline Type: {msg_type}
+    # isDefault: {False}
+    # Publicity: 3
+    # Semeseter ID: {semid}
+    # School ID: {schoolid}
+    # MessageTextOnly: {messageTextOnly}''')
+    
+    notif = pub.notifications(username=username,
+        poster=poster, msg_payload=messageTextOnly, 
+        type=msg_type, user_type=group,
+        due_date=duedate, section=assignment_section
+        )
+    notif.notify()
+
 
     if 'Error' in res[0][0]:
         return jsonify(
