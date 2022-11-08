@@ -16,6 +16,8 @@ from flask_jsglue import JSGlue
 from werkzeug.utils import secure_filename
 import random, string
 
+import pubnubex as pub
+
 #### cloudpic.py ####
 import cloudinary
 import cloudinary.uploader
@@ -3576,13 +3578,22 @@ def bulletinpost():
 
     CLEANR = re.compile('<.*?>') 
     messageTextOnly = re.sub(CLEANR, '', message)
-    msg_type = 'timeline'
+    msg_type = 'Bulletin Board'
+    
+    # print(f'''Username: {username}
+    # Token: {token}
+    # Section:None
+    # Due Date: 01/02/2018
+    # Message: {message}
+    # User Type: {group}
+    # Timeline Type: {msg_type}
+    # isDefault: {True}
+    # Publicity: 3
+    # Semeseter ID: {semid}
+    # School ID: {schoolid}
+    # MessageTextOnly: {messageTextOnly}''')
 
-    print(f'''Username: {username}\nToken: {token}
-    Section:None\nDue Date: 01/02/2018\n\nMessage: {message}
-    \n\nGroup: {group}\nTimeline Type: Bulletin Board\n
-    isDefault: {True}\nPublicity: 3\nSemeseter ID: {semid}\n
-    School ID: {schoolid}\nMessageTextOnly: {messageTextOnly}''')
+    # print(group)
 
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
@@ -3594,6 +3605,14 @@ def bulletinpost():
                   True, 3, semid, schoolid
                   ), group, True)
 
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+    notif = pub.notifications(username=username,
+    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+    notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
