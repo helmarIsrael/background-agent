@@ -45,7 +45,7 @@ def my_publish_callback(envelope, status):
 class notifications(object):
     def __init__(self, msg_payload=None, user_type=None, 
                 username=None, poster=None, type=None,
-                due_date=None, section=None ):
+                due_date=None, section=None, start_date=None ):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -53,6 +53,7 @@ class notifications(object):
         self.type = type
         self.due_date = due_date
         self.section = section
+        self.start_date = start_date
 
         pnconfig = PNConfiguration()
         pnconfig.subscribe_key = 'sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0'
@@ -95,3 +96,15 @@ class notifications(object):
                         'due_date':duedate, 'section': section})\
                 .pn_async(my_publish_callback)
 
+        elif type == 'event':
+            start_date = self.start_date
+            duedate = self.due_date
+            poster = f'{self.poster} has posted an Event!'
+            self.pubnub.publish()\
+                .channel(self.ch)\
+                .message({'poster':poster,'text': msg_payload, 'type': type, 
+                        'username': username, 'user_type': user_type, 
+                        'channel':self.ch, 'timestamp': timestamp, 
+                        'due_date':duedate, 
+                        'start_date': start_date})\
+                .pn_async(my_publish_callback)

@@ -2604,6 +2604,7 @@ def publishclassrecord(par_offeringid):
     quarter = params["quarter"]
     group = params["group"]
 
+    
     lockres = spcall("publishgrades",
                      (
                          par_offeringid,
@@ -4017,6 +4018,13 @@ def eventpost():
     group = params["group"]
     #default = spcall("getdefault", ())[0][0]
 
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', message)
+    msg_type = 'event'
+
+    
+
+
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
 
@@ -4025,6 +4033,19 @@ def eventpost():
                                    message + '@begin:' + begindate +
                                    "#@end:" + enddate, group, 'event', True, 3, semid, schoolid
                                    ), group, True)
+
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+
+    notif = pub.notifications(username=username,
+        poster=poster, msg_payload=messageTextOnly, 
+        type=msg_type, user_type=group, start_date=begindate,
+        due_date=enddate
+        )
+    notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'error', 'message': res[0][0]})
