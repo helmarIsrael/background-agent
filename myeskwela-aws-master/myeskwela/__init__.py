@@ -21,6 +21,8 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+import re
+
 class megaServer:
     def __init__(self):
         mega = Mega()
@@ -3567,11 +3569,14 @@ def bulletinpost():
     params = request.get_json()
     schoolid = params["schoolid"]
     semid = params["semid"]
-    messageTextOnly = params["messageTextOnly"]
     message = params["message"]
     token = params["token"]
     group = params["group"]
     username = auth.username() 
+
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', message)
+    msg_type = 'timeline'
 
     print(f'''Username: {username}\nToken: {token}
     Section:None\nDue Date: 01/02/2018\n\nMessage: {message}
