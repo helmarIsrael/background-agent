@@ -45,7 +45,8 @@ def my_publish_callback(envelope, status):
 class notifications(object):
     def __init__(self, msg_payload=None, user_type=None, 
                 username=None, poster=None, type=None,
-                due_date=None, section=None, start_date=None ):
+                due_date=None, section=None, start_date=None,
+                receiver_id=None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -54,6 +55,7 @@ class notifications(object):
         self.due_date = due_date
         self.section = section
         self.start_date = start_date
+        self.receiver_id = receiver_id
 
         pnconfig = PNConfiguration()
         pnconfig.subscribe_key = 'sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0'
@@ -78,7 +80,6 @@ class notifications(object):
         type = self.type
         timestamp = self.get_timestamp()
         if type == 'Bulletin Board':
-            print(type)
             poster = f'{self.poster} has posted!'
             self.pubnub.publish()\
                 .channel(self.ch)\
@@ -107,4 +108,19 @@ class notifications(object):
                         'channel':self.ch, 'timestamp': timestamp, 
                         'due_date':duedate, 
                         'start_date': start_date})\
+                .pn_async(my_publish_callback)
+
+        elif type == 'comment':
+            receiver_id = self.receiver_id
+            poster = f'''{self.poster} has commented on {receiver_id}'s Post!'''
+            self.pubnub.publish()\
+                .channel(self.ch)\
+                .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':self.ch, 'timestamp': timestamp})\
+                .pn_async(my_publish_callback)
+        elif type == 'reaction':
+            poster = f'{self.poster} has reacted!'
+            msg_payload = f'{self.poster} has reacted with {msg_payload} on a post'
+            self.pubnub.publish()\
+                .channel(self.ch)\
+                .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':self.ch, 'timestamp': timestamp})\
                 .pn_async(my_publish_callback)

@@ -1,0 +1,1 @@
+SELECT updatepassword('cardo.magtanggol', '1');

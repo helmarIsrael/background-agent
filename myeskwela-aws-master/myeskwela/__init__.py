@@ -3558,6 +3558,19 @@ def bcastvirtualclassroom():
                   True, 3, semid, schoolid
                   ), group, True)
 
+    msg_type = 'Bulletin Board'  
+    messageTextOnly = 'Posted a video Conference'
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
+    messageTextOnly = f'{poster} has posted a Video Conference'
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+    notif.notify()
+
+    
+
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
 
@@ -3581,20 +3594,6 @@ def bulletinpost():
     messageTextOnly = re.sub(CLEANR, '', message)
     msg_type = 'Bulletin Board'
     
-    # print(f'''Username: {username}
-    # Token: {token}
-    # Section:None
-    # Due Date: 01/02/2018
-    # Message: {message}
-    # User Type: {group}
-    # Timeline Type: {msg_type}
-    # isDefault: {True}
-    # Publicity: 3
-    # Semeseter ID: {semid}
-    # School ID: {schoolid}
-    # MessageTextOnly: {messageTextOnly}''')
-
-    # print(group)
 
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
@@ -3606,13 +3605,13 @@ def bulletinpost():
                   True, 3, semid, schoolid
                   ), group, True)
 
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
+
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
-    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
     notif.notify()
 
     if 'Error' in res[0][0]:
@@ -4034,12 +4033,10 @@ def eventpost():
                                    "#@end:" + enddate, group, 'event', True, 3, semid, schoolid
                                    ), group, True)
 
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
-
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group, start_date=begindate,
@@ -6008,6 +6005,13 @@ def forwardtline():
     group = params["group"]
     tltype = params["tltype"]
 
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', message)
+    msg_type = tltype
+
+    print(messageTextOnly)
+    print(msg_type)
+
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
 
@@ -6018,6 +6022,13 @@ def forwardtline():
                   True, 3, semid, schoolid
                   ), group, True)
 
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+    notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
@@ -6039,6 +6050,12 @@ def postcomment():
     timelinets = params["timelinets"]
     comment = params["comment"]
 
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', comment)
+    msg_type = 'comment'
+
+    # print(messageTextOnly)
+    print(f'initiator id: {initiatorid}\nreceiver id: {receiverid}')
     #print username, token
 
     if len(cleandat(comment, ' ', '')) == 0:
@@ -6052,7 +6069,15 @@ def postcomment():
                ),
                group,
                True)[0][0]
+    person = spcall("getpersonname", (initiatorid,),)[0][0]
+    person = person.split("*")
+    commentor = f'{person[1]} {person[0]}'
+    # print(commentor)
 
+    notif = pub.notifications(username=username, receiver_id=receiverid,
+    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+    notif.notify()
+    
     #print result
 
     if 'Error' in result:
@@ -6106,6 +6131,20 @@ def postreaction():
     timelinets = params["timelinets"]
     reaction = params["reaction"]
 
+
+    
+    if reaction == '1':
+        messageTextOnly = 'Like'
+    elif reaction == '2':
+        messageTextOnly = 'Happy'
+    elif reaction == '3':
+        messageTextOnly = 'Sad'
+    elif reaction == '4':
+        messageTextOnly = 'Angry'
+    elif reaction == '5':
+        messageTextOnly = 'Surprised'
+
+    msg_type = 'reaction'
     res = spcall(
             "post_reaction",
             (
@@ -6120,6 +6159,13 @@ def postreaction():
             group,
             True
         )[0][0]
+
+    person = spcall("getpersonname", (initiatorid,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+    notif.notify()
 
     if 'Error' in res:
         return jsonify({"status": "error", "message": res})
