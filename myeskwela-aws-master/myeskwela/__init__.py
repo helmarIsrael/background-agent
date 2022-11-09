@@ -3156,6 +3156,7 @@ def gettimelines():
     getchild = params["getchild"]
     timelines = formatres(spcall("poptimelines", (lrn, auth.username(), page, token, getchild == 'getchild'), "super", True))
 
+
     if timelines["status"] == "Error":
         return jsonify({"status": "error", "message": timelines["item"][0]})
 
@@ -3566,7 +3567,7 @@ def bcastvirtualclassroom():
     poster = f'{person[1]} {person[0]}'
     messageTextOnly = f'{poster} has posted a Video Conference'
     notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=virtualroomid)
     notif.notify()
 
     
@@ -3605,13 +3606,18 @@ def bulletinpost():
                   True, 3, semid, schoolid
                   ), group, True)
 
-
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+    channel = credentials[u"vroomid"]
+    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    # person = spcall("getpersonname", (person_id,),)[0][0]
+    # person = person.split("*")
+    # poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
     notif.notify()
 
     if 'Error' in res[0][0]:
@@ -3967,28 +3973,17 @@ def assignmentpost():
     credentials = jsonifycred["item"][0]
     userdetails = credentials[u"userdetails"].split("*")
     poster = userdetails[0]
-    # print(credentials[u'load'])
+    channel = credentials[u"vroomid"]
     for loaditem in credentials[u'load'].split(',')[:-1]:
         loadinfo = loaditem.split("*")
         if loadinfo[4] == section:
             assignment_section = loadinfo[0].replace('none', '') + ' ' + loadinfo[5]
-    # print(f'''Username: {username}
-    # Token: {token}
-    # Section:{assignment_section}
-    # Due Date: {duedate}
-    # Message: {message}
-    # User Type: {group}
-    # Timeline Type: {msg_type}
-    # isDefault: {False}
-    # Publicity: 3
-    # Semeseter ID: {semid}
-    # School ID: {schoolid}
-    # MessageTextOnly: {messageTextOnly}''')
     
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group,
-        due_date=duedate, section=assignment_section
+        due_date=duedate, section=assignment_section,
+        ch=channel
         )
     notif.notify()
 
@@ -4033,14 +4028,20 @@ def eventpost():
                                    "#@end:" + enddate, group, 'event', True, 3, semid, schoolid
                                    ), group, True)
 
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+    channel = credentials[u"vroomid"]
+    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    # person = spcall("getpersonname", (person_id,),)[0][0]
+    # person = person.split("*")
+    # poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group, start_date=begindate,
-        due_date=enddate
+        due_date=enddate, ch=channel
         )
     notif.notify()
 
@@ -6021,13 +6022,21 @@ def forwardtline():
                   group, tltype,
                   True, 3, semid, schoolid
                   ), group, True)
+    
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    userdetails = credentials[u"userdetails"].split("*")
+    poster = userdetails[0]
+    channel = credentials[u"vroomid"]
 
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    # person = spcall("getpersonname", (person_id,),)[0][0]
+    # person = person.split("*")
+    # poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group,
+            ch=channel)
     notif.notify()
 
     if 'Error' in res[0][0]:
@@ -6069,13 +6078,18 @@ def postcomment():
                ),
                group,
                True)[0][0]
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    channel = credentials[u"vroomid"]
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     commentor = f'{person[1]} {person[0]}'
-    # print(commentor)
 
     notif = pub.notifications(username=username, receiver_id=receiverid,
-    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=commentor, msg_payload=messageTextOnly,
+            type=msg_type, user_type=group,
+            ch = channel)
     notif.notify()
     
     #print result
@@ -6160,11 +6174,17 @@ def postreaction():
             True
         )[0][0]
 
+    credential = spcall("login_credentials", (username,), "super", True)
+    jsonifycred = formatres(credential)
+    credentials = jsonifycred["item"][0]
+    channel = credentials[u"vroomid"]
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group)
+            poster=poster, msg_payload=messageTextOnly, 
+            type=msg_type, user_type=group,
+            ch=channel)
     notif.notify()
 
     if 'Error' in res:

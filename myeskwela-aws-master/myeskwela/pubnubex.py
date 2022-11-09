@@ -46,7 +46,7 @@ class notifications(object):
     def __init__(self, msg_payload=None, user_type=None, 
                 username=None, poster=None, type=None,
                 due_date=None, section=None, start_date=None,
-                receiver_id=None):
+                receiver_id=None, ch = None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -56,6 +56,7 @@ class notifications(object):
         self.section = section
         self.start_date = start_date
         self.receiver_id = receiver_id
+        self.ch = ch
 
         pnconfig = PNConfiguration()
         pnconfig.subscribe_key = 'sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0'
@@ -64,9 +65,8 @@ class notifications(object):
         pnconfig.uuid = "pythonista"
 
         
-        self.ch = 'myeskwela-testchan'#######################
-                              ############## KANING DUHA NEEDED DRI PARA MAGBALIK2 UG GAWAS ANG FLASH SA FRONTEND
-        self.pubnub = PubNub(pnconfig)############
+        # self.ch = 'myeskwela-testchan'
+        self.pubnub = PubNub(pnconfig)
 
     def get_timestamp(self):
         curr_dt = datetime.now()
@@ -112,7 +112,7 @@ class notifications(object):
 
         elif type == 'comment':
             receiver_id = self.receiver_id
-            poster = f'''{self.poster} has commented on {receiver_id}'s Post!'''
+            poster = f'''{self.poster} has commented on a class Post!'''
             self.pubnub.publish()\
                 .channel(self.ch)\
                 .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':self.ch, 'timestamp': timestamp})\

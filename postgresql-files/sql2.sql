@@ -1,1 +1,1 @@
-SELECT updatepassword('cardo.magtanggol', '1');
+SELECT updatepassword('john.doe', '1');

@@ -1,10 +1,3 @@
-SELECT * FROM usertext where USERNAME = 'fake.name';
+SELECT virtualroomid FROM adviser WHERE section = 'AERO'
 
-SELECT * FROM person where personid = 'S2022FAKENAME-1';
-
-
-
-SELECT * FROM ADVISER;
-
-
-SELECT * FROM TIMELINE ORDER BY ts DESC;
+a934fae687b6d918841b

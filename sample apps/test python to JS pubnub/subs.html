@@ -18,7 +18,7 @@
         
     <h1>Notifications</h1>
     <br>
-    <div id="messages">
+    <div id="messages" class="w-50">
         
 
     </div>
@@ -37,11 +37,11 @@
         // message.innerText = msg;
         if (msg.type == 'Bulletin Board' || 'comment') {
             document.getElementById('messages').innerHTML += `
-            <div class="card m-3">
+            <div class="card m-3 ">
                 <div class="card-body">
                 <h5 class="card-title">${msg.poster}</h5>
                 <h3 class="card-text">${msg.text}</h3>
-                <p class="text-muted"><strong>Post Type:</strong> ${msg.type}<br><strong>Username:</strong> ${msg.username}<br><strong>User Type:</strong> ${msg.user_type}</p>
+                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="text-muted"><strong>Post Type:</strong> ${msg.type}<br><strong>Username:</strong> ${msg.username}<br><strong>User Type:</strong> ${msg.user_type}</p>
                 </div>
                 <div class="card-footer text-muted">
                 ${msg.timestamp}
@@ -117,7 +117,7 @@
     );
 
     pubnub.subscribe({
-          channels: ["myeskwela-testchan"],
+          channels: ["a934fae687b6d918841b"],
       });
     // // run after page is loaded
     // window.onload = setupPubNub;
