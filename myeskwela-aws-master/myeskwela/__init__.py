@@ -3630,7 +3630,6 @@ def bulletinpost():
             notif.notify()
     else:
         channel = channels[0]
-        print(channel)
         notif = pub.notifications(username=username,
                     poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
         notif.notify()
@@ -4044,22 +4043,25 @@ def eventpost():
                                    "#@end:" + enddate, group, 'event', True, 3, semid, schoolid
                                    ), group, True)
 
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    # userdetails = credentials[u"userdetails"].split("*")
-    # poster = userdetails[0]
-    channel = credentials[u"vroomid"]
     person_id = spcall("getpersonidbyusername", (username,),)[0][0]
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    notif = pub.notifications(username=username,
-        poster=poster, msg_payload=messageTextOnly, 
-        type=msg_type, user_type=group, start_date=begindate,
-        due_date=enddate, ch=channel
-        )
-    notif.notify()
+    channels = []
+    channels.clear()
+    with open(r'./login_channel.txt', 'r') as fp:
+        for line in fp:
+            channels.append(line)
+    if len(channels) > 1:
+        for item in channels:
+            notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
+            notif.notify()
+    else:
+        channel = channels[0]
+        notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+        notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'error', 'message': res[0][0]})
@@ -6039,21 +6041,28 @@ def forwardtline():
                   True, 3, semid, schoolid
                   ), group, True)
     
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
-    channel = credentials[u"vroomid"]
+    
 
-    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    # person = spcall("getpersonname", (person_id,),)[0][0]
-    # person = person.split("*")
-    # poster = f'{person[1]} {person[0]}'
-    notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group,
-            ch=channel)
-    notif.notify()
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
+    channels = []
+    channels.clear()
+    with open(r'./login_channel.txt', 'r') as fp:
+        for line in fp:
+            channels.append(line)
+    if len(channels) > 1:
+        for item in channels:
+            notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
+            notif.notify()
+    else:
+        channel = channels[0]
+        print(channel)
+        notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+        notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
@@ -6094,19 +6103,27 @@ def postcomment():
                ),
                group,
                True)[0][0]
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    channel = credentials[u"vroomid"]
+    
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     commentor = f'{person[1]} {person[0]}'
 
-    notif = pub.notifications(username=username, receiver_id=receiverid,
-            poster=commentor, msg_payload=messageTextOnly,
-            type=msg_type, user_type=group,
-            ch = channel)
-    notif.notify()
+    channels = []
+    channels.clear()
+    with open(r'./login_channel.txt', 'r') as fp:
+        for line in fp:
+            channels.append(line)
+    if len(channels) > 1:
+        for item in channels:
+            notif = pub.notifications(username=username,
+                    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
+            notif.notify()
+    else:
+        channel = channels[0]
+        print(channel)
+        notif = pub.notifications(username=username,
+                    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+        notif.notify()
     
     #print result
 
@@ -6190,18 +6207,25 @@ def postreaction():
             True
         )[0][0]
 
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    channel = credentials[u"vroomid"]
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, 
-            type=msg_type, user_type=group,
-            ch=channel)
-    notif.notify()
+    channels = []
+    channels.clear()
+    with open(r'./login_channel.txt', 'r') as fp:
+        for line in fp:
+            channels.append(line)
+    if len(channels) > 1:
+        for item in channels:
+            notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
+            notif.notify()
+    else:
+        channel = channels[0]
+        print(channel)
+        notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+        notif.notify()
 
     if 'Error' in res:
         return jsonify({"status": "error", "message": res})
