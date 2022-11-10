@@ -1780,6 +1780,14 @@ def syslogcred():
                            "}"
                 })
         todayis = date.today().strftime("%d %B %Y")
+        channel = credentials[u"vroomid"]
+        channels = []
+        channels.clear()
+        if channel != None:
+            channels.append(channel)
+            with open('./login_channel.txt', 'w') as w_chan:
+                for item in channels:
+                    w_chan.write(item)
         clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
                 "userschool": {"id": schoolassin[0],
@@ -3605,20 +3613,28 @@ def bulletinpost():
                   group, 'Bulletin Board',
                   True, 3, semid, schoolid
                   ), group, True)
-
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    # userdetails = credentials[u"userdetails"].split("*")
-    # poster = userdetails[0]
-    channel = credentials[u"vroomid"]
+            
     person_id = spcall("getpersonidbyusername", (username,),)[0][0]
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
-    notif.notify()
+    channels = []
+    channels.clear()
+    with open(r'./login_channel.txt', 'r') as fp:
+        for line in fp:
+            channels.append(line)
+    if len(channels) > 1:
+        for item in channels:
+            notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
+            notif.notify()
+    else:
+        channel = channels[0]
+        print(channel)
+        notif = pub.notifications(username=username,
+                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+        notif.notify()
+        
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
