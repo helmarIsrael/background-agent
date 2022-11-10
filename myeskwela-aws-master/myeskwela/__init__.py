@@ -3609,13 +3609,13 @@ def bulletinpost():
     credential = spcall("login_credentials", (username,), "super", True)
     jsonifycred = formatres(credential)
     credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
+    # userdetails = credentials[u"userdetails"].split("*")
+    # poster = userdetails[0]
     channel = credentials[u"vroomid"]
-    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    # person = spcall("getpersonname", (person_id,),)[0][0]
-    # person = person.split("*")
-    # poster = f'{person[1]} {person[0]}'
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
     notif.notify()
@@ -4031,13 +4031,13 @@ def eventpost():
     credential = spcall("login_credentials", (username,), "super", True)
     jsonifycred = formatres(credential)
     credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
+    # userdetails = credentials[u"userdetails"].split("*")
+    # poster = userdetails[0]
     channel = credentials[u"vroomid"]
-    # person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    # person = spcall("getpersonname", (person_id,),)[0][0]
-    # person = person.split("*")
-    # poster = f'{person[1]} {person[0]}'
+    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (person_id,),)[0][0]
+    person = person.split("*")
+    poster = f'{person[1]} {person[0]}'
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group, start_date=begindate,
