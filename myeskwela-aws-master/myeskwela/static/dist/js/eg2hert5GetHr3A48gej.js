@@ -4679,7 +4679,8 @@
                         begindate:$("#txteventstartdate").val(),
                         enddate:$("#txteventenddate").val(),
                         token: $("#name-rightbadge").data("token"),
-                        group: $("#name-rightbadge").data("usertype")
+                        group: $("#name-rightbadge").data("usertype"),
+                        vroomid: $("#name-rightbadge").data("virtualroomid")
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -8455,7 +8456,8 @@
                                 message: loc_message,
                                 token:$("#name-rightbadge").data("token"),
                                 group: $("#name-rightbadge").data("usertype"),
-                                tltype: par_tltype
+                                tltype: par_tltype,
+                                vroomid: $("#name-rightbadge").data("virtualroomid")
                             }),
                         buttonid: par_btnid,
                         buttonlabel: "Forward",
@@ -8562,7 +8564,8 @@
                                     timelinets: par_timeline_ts,
                                     comment:$("#tacomment" + par_elid).val() +
                                         apputils.newline() +
-                                        files
+                                        files,
+                                    vroomid: $("#name-rightbadge").data("virtualroomid")
                             }),
                         buttonid: 'btncomment' + par_elid,
                         buttonlabel: "Post",
@@ -8713,7 +8716,8 @@
                                     initiatorid: par_initiator,
                                     receiverid: par_receiver,
                                     timelinets: par_timeline_ts,
-                                    reaction: par_reactionid
+                                    reaction: par_reactionid,
+                                    vroomid: $("#name-rightbadge").data("virtualroomid")
                             }),
                         buttonid: loc_btnid,
                         buttonlabel: par_btnlabel,

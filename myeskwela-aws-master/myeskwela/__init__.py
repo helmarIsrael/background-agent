@@ -1785,9 +1785,6 @@ def syslogcred():
         channels.clear()
         if channel != None:
             channels.append(channel)
-            with open('./login_channel.txt', 'w') as w_chan:
-                for item in channels:
-                    w_chan.write(item)
         clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
                 "userschool": {"id": schoolassin[0],
@@ -3620,11 +3617,7 @@ def bulletinpost():
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    channels = []
-    channels.clear()
-    with open(r'./login_channel.txt', 'r') as fp:
-        for line in fp:
-            channels.append(line)
+    channels = vroomid
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
@@ -4027,6 +4020,7 @@ def eventpost():
     enddate = params["enddate"]
     token = params["token"]
     group = params["group"]
+    vroomid = params["vroomid"]
     #default = spcall("getdefault", ())[0][0]
 
     CLEANR = re.compile('<.*?>') 
@@ -4049,11 +4043,8 @@ def eventpost():
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    channels = []
-    channels.clear()
-    with open(r'./login_channel.txt', 'r') as fp:
-        for line in fp:
-            channels.append(line)
+    channels = vroomid
+    print(channels)
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
@@ -6025,13 +6016,11 @@ def forwardtline():
     token = params["token"]
     group = params["group"]
     tltype = params["tltype"]
+    vroomid = params["vroomid"]
 
     CLEANR = re.compile('<.*?>') 
     messageTextOnly = re.sub(CLEANR, '', message)
     msg_type = tltype
-
-    print(messageTextOnly)
-    print(msg_type)
 
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
@@ -6049,11 +6038,7 @@ def forwardtline():
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    channels = []
-    channels.clear()
-    with open(r'./login_channel.txt', 'r') as fp:
-        for line in fp:
-            channels.append(line)
+    channels = vroomid
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
@@ -6061,7 +6046,6 @@ def forwardtline():
             notif.notify()
     else:
         channel = channels[0]
-        print(channel)
         notif = pub.notifications(username=username,
                     poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
         notif.notify()
@@ -6085,14 +6069,11 @@ def postcomment():
     receiverid = params["receiverid"]
     timelinets = params["timelinets"]
     comment = params["comment"]
+    vroomid = params["vroomid"]
 
     CLEANR = re.compile('<.*?>') 
     messageTextOnly = re.sub(CLEANR, '', comment)
     msg_type = 'comment'
-
-    # print(messageTextOnly)
-    print(f'initiator id: {initiatorid}\nreceiver id: {receiverid}')
-    #print username, token
 
     if len(cleandat(comment, ' ', '')) == 0:
         return jsonify({'status': 'error', 'message': 'Empty Comment'})
@@ -6110,11 +6091,7 @@ def postcomment():
     person = person.split("*")
     commentor = f'{person[1]} {person[0]}'
 
-    channels = []
-    channels.clear()
-    with open(r'./login_channel.txt', 'r') as fp:
-        for line in fp:
-            channels.append(line)
+    channels = vroomid
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
@@ -6122,7 +6099,6 @@ def postcomment():
             notif.notify()
     else:
         channel = channels[0]
-        print(channel)
         notif = pub.notifications(username=username,
                     poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
         notif.notify()
@@ -6179,6 +6155,7 @@ def postreaction():
     receiverid = params["receiverid"]
     timelinets = params["timelinets"]
     reaction = params["reaction"]
+    vroomid = params["vroomid"]
 
 
     
@@ -6212,11 +6189,8 @@ def postreaction():
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
-    channels = []
-    channels.clear()
-    with open(r'./login_channel.txt', 'r') as fp:
-        for line in fp:
-            channels.append(line)
+    channels = vroomid
+    
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
@@ -6224,7 +6198,6 @@ def postreaction():
             notif.notify()
     else:
         channel = channels[0]
-        print(channel)
         notif = pub.notifications(username=username,
                     poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
         notif.notify()
