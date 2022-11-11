@@ -1829,7 +1829,8 @@ def syslogcred():
                 "nstatus": credentials[u"nstatus"].split(",")[:-1],
                 "quarter": credentials[u"quarter"],
                 "lrn": credentials[u"lrn"],
-                "mystu": mystu
+                "mystu": mystu,
+                "virtualroomid": channels
                 }
     except:
         return {
@@ -3597,6 +3598,7 @@ def bulletinpost():
     message = params["message"]
     token = params["token"]
     group = params["group"]
+    vroomid = params["vroomid"]
     username = auth.username() 
 
     CLEANR = re.compile('<.*?>') 

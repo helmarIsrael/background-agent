@@ -2137,6 +2137,9 @@
                             $("#name-rightbadge").data("freeid", resp.freeid);
                             $("#name-rightbadge").data("quarter", resp.quarter);
                             $("#name-rightbadge").data("mystu", resp.mystu);
+
+                            $("#name-rightbadge").data("virtualroomid", resp.virtualroomid);
+                            
                             if (resp.usertype == "students")
                             { $("#name-rightbadge").data("lrn", resp.lrn); }
                             $("#name-rightbadge").data("religions", resp.religions);
@@ -4554,7 +4557,8 @@
                         schoolid:$("#name-rightbadge").data("schoolid"),
                         semid:$("#name-rightbadge").data("semid"),
                         token: $("#name-rightbadge").data("token"),
-                        group: $("#name-rightbadge").data("usertype")
+                        group: $("#name-rightbadge").data("usertype"),
+                        vroomid: $("#name-rightbadge").data("virtualroomid")
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
