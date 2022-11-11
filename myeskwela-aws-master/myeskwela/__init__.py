@@ -3596,10 +3596,12 @@ def bulletinpost():
     token = params["token"]
     group = params["group"]
     vroomid = params["vroomid"]
+    notif_msg = params["notif_msg"]
+    name = params["name"]
     username = auth.username() 
 
-    CLEANR = re.compile('<.*?>') 
-    messageTextOnly = re.sub(CLEANR, '', message)
+
+    messageTextOnly = notif_msg
     msg_type = 'Bulletin Board'
     
 
@@ -3613,10 +3615,7 @@ def bulletinpost():
                   True, 3, semid, schoolid
                   ), group, True)
             
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+    poster = name
     channels = vroomid
     if len(channels) > 1:
         for item in channels:
@@ -4021,13 +4020,16 @@ def eventpost():
     token = params["token"]
     group = params["group"]
     vroomid = params["vroomid"]
+    notif_msg = params["notif_msg"]
+    name = params["name"]
     #default = spcall("getdefault", ())[0][0]
 
-    CLEANR = re.compile('<.*?>') 
-    messageTextOnly = re.sub(CLEANR, '', message)
+
+
     msg_type = 'event'
 
-    
+    CLEANR = re.compile('<.*?>') 
+    messageTextOnly = re.sub(CLEANR, '', notif_msg)
 
 
     if len(message) == 0:
@@ -4039,21 +4041,25 @@ def eventpost():
                                    "#@end:" + enddate, group, 'event', True, 3, semid, schoolid
                                    ), group, True)
 
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+   
+    poster = name
     channels = vroomid
     print(channels)
     if len(channels) > 1:
         for item in channels:
             notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
-            notif.notify()
+                poster=poster, msg_payload=messageTextOnly, 
+                type=msg_type, user_type=group, start_date=begindate,
+                due_date=enddate, ch = item
+            )
+        notif.notify()
     else:
         channel = channels[0]
         notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
+                poster=poster, msg_payload=messageTextOnly, 
+                type=msg_type, user_type=group, start_date=begindate,
+                due_date=enddate, ch = channel
+            )
         notif.notify()
 
     if 'Error' in res[0][0]:
@@ -6017,6 +6023,7 @@ def forwardtline():
     group = params["group"]
     tltype = params["tltype"]
     vroomid = params["vroomid"]
+    name = params["name"]
 
     CLEANR = re.compile('<.*?>') 
     messageTextOnly = re.sub(CLEANR, '', message)
@@ -6033,11 +6040,7 @@ def forwardtline():
                   ), group, True)
     
     
-
-    person_id = spcall("getpersonidbyusername", (username,),)[0][0]
-    person = spcall("getpersonname", (person_id,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]}'
+    poster = name
     channels = vroomid
     if len(channels) > 1:
         for item in channels:
@@ -6070,9 +6073,9 @@ def postcomment():
     timelinets = params["timelinets"]
     comment = params["comment"]
     vroomid = params["vroomid"]
+    notif_msg = params["notif_msg"]
 
-    CLEANR = re.compile('<.*?>') 
-    messageTextOnly = re.sub(CLEANR, '', comment)
+    messageTextOnly = notif_msg
     msg_type = 'comment'
 
     if len(cleandat(comment, ' ', '')) == 0:

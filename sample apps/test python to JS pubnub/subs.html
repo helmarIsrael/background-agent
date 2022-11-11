@@ -35,7 +35,7 @@
         console.log(msg.text)
         // var message = document.createElement('div');
         // message.innerText = msg;
-        if (msg.type == 'Bulletin Board' || 'comment') {
+        if (msg.type == 'Bulletin Board' || msg.type == 'comment') {
             document.getElementById('messages').innerHTML += `
             <div class="card m-3 ">
                 <div class="card-body">

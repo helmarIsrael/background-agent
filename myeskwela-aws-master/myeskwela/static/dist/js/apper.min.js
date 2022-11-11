@@ -2139,6 +2139,7 @@
                             $("#name-rightbadge").data("mystu", resp.mystu);
 
                             $("#name-rightbadge").data("virtualroomid", resp.virtualroomid);
+                            $("#name-rightbadge").data("personname", resp.userdetails["name"])
                             
                             if (resp.usertype == "students")
                             { $("#name-rightbadge").data("lrn", resp.lrn); }
@@ -4558,7 +4559,9 @@
                         semid:$("#name-rightbadge").data("semid"),
                         token: $("#name-rightbadge").data("token"),
                         group: $("#name-rightbadge").data("usertype"),
-                        vroomid: $("#name-rightbadge").data("virtualroomid")
+                        vroomid: $("#name-rightbadge").data("virtualroomid"),
+                        notif_msg: $("#taBulletin").val(),
+                        name: $("#name-rightbadge").data("personname")
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -4680,7 +4683,10 @@
                         enddate:$("#txteventenddate").val(),
                         token: $("#name-rightbadge").data("token"),
                         group: $("#name-rightbadge").data("usertype"),
-                        vroomid: $("#name-rightbadge").data("virtualroomid")
+                        vroomid: $("#name-rightbadge").data("virtualroomid"),
+                        notif_msg: $("#taEvent").val(),
+                        name: $("#name-rightbadge").data("personname")
+                        
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -8457,7 +8463,8 @@
                                 token:$("#name-rightbadge").data("token"),
                                 group: $("#name-rightbadge").data("usertype"),
                                 tltype: par_tltype,
-                                vroomid: $("#name-rightbadge").data("virtualroomid")
+                                vroomid: $("#name-rightbadge").data("virtualroomid"),
+                                name: $("#name-rightbadge").data("personname")
                             }),
                         buttonid: par_btnid,
                         buttonlabel: "Forward",
@@ -8565,7 +8572,8 @@
                                     comment:$("#tacomment" + par_elid).val() +
                                         apputils.newline() +
                                         files,
-                                    vroomid: $("#name-rightbadge").data("virtualroomid")
+                                    vroomid: $("#name-rightbadge").data("virtualroomid"),
+                                    notif_msg: $("#tacomment" + par_elid).val()
                             }),
                         buttonid: 'btncomment' + par_elid,
                         buttonlabel: "Post",
@@ -9683,6 +9691,7 @@
                                     group: $("#name-rightbadge").data("usertype"),
                                     level:$("#name-rightbadge").data("grade"),
                                     section: $("#name-rightbadge").data("section"),
+                                    name: $("#name-rightbadge").data("personname"),
                                     offid: ''
                                 }),
                              contentType: "application/json; charset=utf-8",
