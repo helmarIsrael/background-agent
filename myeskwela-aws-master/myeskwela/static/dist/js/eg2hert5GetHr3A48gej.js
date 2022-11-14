@@ -4628,7 +4628,23 @@
                         token: $("#name-rightbadge").data("token"),
                         group: $("#name-rightbadge").data("usertype"),
                         semid: $("#name-rightbadge").data("semid"),
-                        schoolid: $("#name-rightbadge").data("schoolid")
+                        schoolid: $("#name-rightbadge").data("schoolid"),
+
+                        notif_section:function (x) {
+                            scode = '';
+                            loads = $("#name-rightbadge").data("subjects");
+                            for (i = 0; i < loads.length; i++)
+                            {
+                                if (loads[i].label === x)
+                                {
+                                    return loads[i].label;
+                                }
+
+                            }
+                            return scode;
+                        }($("#selassignment").val()),
+                        vroomid: $("#name-rightbadge").data("virtualroomid"),
+                        name: $("#name-rightbadge").data("personname")
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

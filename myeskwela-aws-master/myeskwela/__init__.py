@@ -3573,7 +3573,7 @@ def bcastvirtualclassroom():
     poster = f'{person[1]} {person[0]}'
     messageTextOnly = f'{poster} has posted a Video Conference'
     notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=virtualroomid)
+            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=virtualroomid)
     notif.notify()
 
     
@@ -3617,16 +3617,9 @@ def bulletinpost():
             
     poster = name
     channels = vroomid
-    if len(channels) > 1:
-        for item in channels:
-            notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
-            notif.notify()
-    else:
-        channel = channels[0]
-        notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
-        notif.notify()
+    notif = pub.notifications(username=username,
+                poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=channels)
+    notif.notify()
         
 
     if 'Error' in res[0][0]:
@@ -3961,6 +3954,9 @@ def assignmentpost():
     group = params["group"]
     semid = params["semid"]
     schoolid = params["schoolid"]
+    notif_section = params["notif_section"]
+    vroomid = params["vroomid"]
+    name = params["name"]
 
     CLEANR = re.compile('<.*?>') 
     messageTextOnly = re.sub(CLEANR, '', message)
@@ -3976,23 +3972,17 @@ def assignmentpost():
         semid,
         schoolid
     ), group, True)
-
-    credential = spcall("login_credentials", (username,), "super", True)
-    jsonifycred = formatres(credential)
-    credentials = jsonifycred["item"][0]
-    userdetails = credentials[u"userdetails"].split("*")
-    poster = userdetails[0]
-    channel = credentials[u"vroomid"]
-    for loaditem in credentials[u'load'].split(',')[:-1]:
-        loadinfo = loaditem.split("*")
-        if loadinfo[4] == section:
-            assignment_section = loadinfo[0].replace('none', '') + ' ' + loadinfo[5]
+    
+    
+    poster = name
+    channels = vroomid
+    assignment_section = notif_section
     
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group,
         due_date=duedate, section=assignment_section,
-        ch=channel
+        channels=channels
         )
     notif.notify()
 
@@ -4044,23 +4034,12 @@ def eventpost():
    
     poster = name
     channels = vroomid
-    print(channels)
-    if len(channels) > 1:
-        for item in channels:
-            notif = pub.notifications(username=username,
-                poster=poster, msg_payload=messageTextOnly, 
-                type=msg_type, user_type=group, start_date=begindate,
-                due_date=enddate, ch = item
-            )
-        notif.notify()
-    else:
-        channel = channels[0]
-        notif = pub.notifications(username=username,
-                poster=poster, msg_payload=messageTextOnly, 
-                type=msg_type, user_type=group, start_date=begindate,
-                due_date=enddate, ch = channel
-            )
-        notif.notify()
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, 
+            type=msg_type, user_type=group, start_date=begindate,
+            due_date=enddate, channels = channels
+        )
+    notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'error', 'message': res[0][0]})
@@ -6042,16 +6021,9 @@ def forwardtline():
     
     poster = name
     channels = vroomid
-    if len(channels) > 1:
-        for item in channels:
-            notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
-            notif.notify()
-    else:
-        channel = channels[0]
-        notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
-        notif.notify()
+    notif = pub.notifications(username=username,
+                poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=channels)
+    notif.notify()
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
@@ -6095,16 +6067,9 @@ def postcomment():
     commentor = f'{person[1]} {person[0]}'
 
     channels = vroomid
-    if len(channels) > 1:
-        for item in channels:
-            notif = pub.notifications(username=username,
-                    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
-            notif.notify()
-    else:
-        channel = channels[0]
-        notif = pub.notifications(username=username,
-                    poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
-        notif.notify()
+    notif = pub.notifications(username=username,
+                poster=commentor, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=channels)
+    notif.notify()
     
     #print result
 
@@ -6193,17 +6158,9 @@ def postreaction():
     person = person.split("*")
     poster = f'{person[1]} {person[0]}'
     channels = vroomid
-    
-    if len(channels) > 1:
-        for item in channels:
-            notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=item)
-            notif.notify()
-    else:
-        channel = channels[0]
-        notif = pub.notifications(username=username,
-                    poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, ch=channel)
-        notif.notify()
+    notif = pub.notifications(username=username,
+                poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=channels)
+    notif.notify()
 
     if 'Error' in res:
         return jsonify({"status": "error", "message": res})
