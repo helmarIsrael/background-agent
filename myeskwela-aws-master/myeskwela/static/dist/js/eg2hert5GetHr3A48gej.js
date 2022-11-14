@@ -218,6 +218,11 @@
                 return remtail(iconcolor);
             }
 
+            apputils.mnunotif = {
+                ico: "fa fa-bell-o",
+                label:"Notifications",
+                id:"mnunotif"
+            }
 
             apputils.mnuenroll = {
                 ico:"fa fa-registered",
@@ -11756,7 +11761,19 @@
                 view.calendarset();
 
             }
+            view.initnotif = function ()
+            {
+                $("#main").html(view.excolumn(12,view
+                    .simplebox({
+                        boxtype:"info",
+                        title:"Notifications",
+                        body:"<h1>NO notifications<h1>",
+                        footer:""
+                    })));
 
+                
+
+            }
 
             view.initchangepass = function ()
             {
@@ -12018,7 +12035,11 @@
                 $("#user-menus").html("");
                 $("#user-menus").append('<li class="header">Options</li>');
 
-
+                addmenuitem(apputils.mnunotif,
+                    function () {
+                        view.initnotif();
+                    }
+                    );
                 switch(persontype)
                 {
 

@@ -3617,6 +3617,8 @@ def bulletinpost():
             
     poster = name
     channels = vroomid
+
+    print(f'\n\n{channels}\n\n')
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, channels=channels)
     notif.notify()
