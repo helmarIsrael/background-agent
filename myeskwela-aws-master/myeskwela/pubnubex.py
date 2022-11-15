@@ -98,6 +98,12 @@ class notifications(object):
                                 'timestamp': timestamp, 'duedate': duedate,
                                 'startdate': startdate, 'section':section})\
                     .pn_async(my_publish_callback)
+                notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':item,
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate,
+                                'startdate': startdate, 'section':section}
+                self.savetodb(notif_dict)
 
         elif isinstance(channels, str):
             self.pubnub.publish()\
@@ -108,6 +114,13 @@ class notifications(object):
                                 'timestamp': timestamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section})\
                     .pn_async(my_publish_callback)
+            notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':channels,
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate, 
+                                'startdate': startdate, 'section':section}
+            
+            self.savetodb(notif_dict)
         else:
             self.pubnub.publish()\
                     .channel(channels[0])\
@@ -117,11 +130,19 @@ class notifications(object):
                                 'timestamp': timestamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section})\
                     .pn_async(my_publish_callback)
+
+            notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':channels[0],
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate, 
+                                'startdate': startdate, 'section':section}
+            
+            self.savetodb(notif_dict)
     
         
         
         
-    def savetodb(self):
+    def savetodb(self, data):
         notif_id = 'notifid'
         notif = 'notif'
         notif_type = 'type'
@@ -132,3 +153,5 @@ class notifications(object):
         receiverid = 'receiverid'
         duedate = 'duedate'
         startdate = 'startdate'
+
+        # print(data['poster'])
