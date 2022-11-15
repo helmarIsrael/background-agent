@@ -3558,7 +3558,7 @@ def bcastvirtualclassroom():
 
     message = "Join the  " + buttonact("success", "Video Conference", "model.joinvideocall('"+virtualroomid+"')", "btnjoin" + virtualroomid)
 
-    res = spcall("post_timeline",
+    res = spcall("post_timeline2",
                  (username, token, '',
                   '01/02/2018', message,
                   group, 'Bulletin Board',
@@ -3572,10 +3572,21 @@ def bcastvirtualclassroom():
     person = person.split("*")
     poster = f'{person[1]} {person[0]} has posted!'
     messageTextOnly = f'{poster} has posted a Video Conference'
+    receivers = []
+    initiatorid = res[0][0]['initiatorid']
+    timestamps = res[0][0]['responses'][0]['ts']
+    if len(res[0][0]['responses']) > 1:
+        for item in res[0][0]['responses']:
+            receivers.append(item['receiverid'])
+    else:
+        receivers.append(res[0][0]['responses'][0]['receiverid'])
+
+    
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, type=msg_type, 
             user_type=group, channels=virtualroomid, 
-            initiator_id=None, receiver_id=None, due_date=None, start_date=None, section=None)
+            initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
+            due_date=None, start_date=None, section=None)
     notif.notify()
 
     
@@ -3620,17 +3631,19 @@ def bulletinpost():
     poster = f'{name} has posted!'
     channels = vroomid
     receivers = []
+    timestamps = res[0][0]['responses'][0]['ts']
+    initiatorid = res[0][0]['initiatorid']
     if len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-
+        
     print(f'\n\n{channels}\n\n')
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
-                channels=channels, initiator_id=None, section=None,
-                receiver_id=receivers, due_date=None, start_date=None)
+                channels=channels, initiator_id=initiatorid, section=None,
+                receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None)
     notif.notify()
 
 
@@ -3985,15 +3998,17 @@ def assignmentpost():
         schoolid
     ), group, True)
     
+    
     receivers = []
+    initiatorid = res[0][0]['initiatorid']
+    timestamps = res[0][0]['responses'][0]['ts']
     if len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-
-   
     
+    print(res)
     poster = f'{name} has posted an assignment!'
     assignment_section = notif_section
 
@@ -4007,8 +4022,8 @@ def assignmentpost():
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group,
         section=assignment_section,
-        channels=channels, initiator_id=None, receiver_id=receivers, 
-        due_date=duedate, start_date=None
+        channels=channels, initiator_id=initiatorid, receiver_id=receivers, 
+        tstamp=timestamps, due_date=duedate, start_date=None
         )
     notif.notify()
 
@@ -4058,20 +4073,22 @@ def eventpost():
                                    ), group, True)
 
     receivers = []
+    initiatorid = res[0][0]['initiatorid']
+    timestamps = res[0][0]['responses'][0]['ts']
+
     if len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-
-
    
     poster = f'{name} has posted an event'
     channels = vroomid
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, 
             type=msg_type, user_type=group, channels = channels,
-            initiator_id=None, receiver_id=receivers, due_date=enddate, 
+            initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
+            due_date=enddate, 
             start_date=begindate, section=None    
         )
     notif.notify()
@@ -6054,18 +6071,22 @@ def forwardtline():
                   ), group, True)
     
     receivers = []
+    initiatorid = res[0][0]['initiatorid']
+    timestamps = res[0][0]['responses'][0]['ts']
     if len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-
+   
     poster = f'{name} has posted!'
     channels = vroomid
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, 
                 user_type=group, channels=channels, section=None,
-                initiator_id=None, receiver_id=receivers, due_date=None, start_date=None)
+                initiator_id=initiatorid, receiver_id=receivers,
+                tstamp=timestamps, 
+                due_date=None, start_date=None)
     notif.notify()
 
     if 'Error' in res[0][0]:
