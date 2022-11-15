@@ -2821,6 +2821,7 @@
           pubnub.addListener(
               {
                   message: function(m){
+                    
                       console.log(m.message)
                       $("#main").html(view.showNotif(m.message))
 

@@ -46,7 +46,7 @@ class notifications(object):
     def __init__(self, msg_payload=None, user_type=None, 
                 username=None, poster=None, type=None,
                 due_date=None, section=None, start_date=None,
-                receiver_id=None, channels=None):
+                receiver_id=None, channels=None, initiator_id = None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -56,6 +56,7 @@ class notifications(object):
         self.section = section
         self.start_date = start_date
         self.receiver_id = receiver_id
+        self.initiator_id = initiator_id
 
         self.channels = channels
         pnconfig = PNConfiguration()
@@ -74,134 +75,60 @@ class notifications(object):
         return msg_timestamp
 
     def notify(self):
+        poster = self.poster
+        text = self.msg_payload
+        type = self.type
         username = self.username
         user_type = self.user_type
-        msg_payload = self.msg_payload
-        type = self.type
         channels = self.channels
+        initiatorid = self.initiator_id
+        receiverid = self.receiver_id
         timestamp = self.get_timestamp()
-        if type == 'Bulletin Board':
-            poster = f'{self.poster} has posted!'
-            if len(channels) > 1:
-                for item in channels:
-                    self.pubnub.publish()\
-                        .channel(item)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':item, 'timestamp': timestamp})\
-                        .pn_async(my_publish_callback)
-            elif isinstance(channels, str):
+        duedate = self.due_date
+        startdate = self.start_date
+        section = self.section
+        
+        if isinstance(channels, str) == False and len(channels) > 1:
+            for item in channels:
                 self.pubnub.publish()\
-                        .channel(channels)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels, 'timestamp': timestamp})\
-                        .pn_async(my_publish_callback)
-            else:
-                self.pubnub.publish()\
-                        .channel(channels[0])\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels[0], 'timestamp': timestamp})\
-                        .pn_async(my_publish_callback)
-        elif type == 'assignment':
-            duedate = self.due_date
-            section = self.section
-            poster = f'{self.poster} has posted An Assignment!'
-            channels = self.channels
-            if len(channels) > 1:
-                for item in channels:
-                    self.pubnub.publish()\
-                        .channel(item)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':item, 'timestamp': timestamp, 
-                                'due_date':duedate, 'section': section})\
-                        .pn_async(my_publish_callback)
-            elif isinstance(channels, str):
-                self.pubnub.publish()\
-                        .channel(channels)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':channels, 'timestamp': timestamp, 
-                                'due_date':duedate, 'section': section})\
-                        .pn_async(my_publish_callback)
-            else:
-                self.pubnub.publish()\
-                        .channel(channels[0])\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':channels[0], 'timestamp': timestamp, 
-                                'due_date':duedate, 'section': section})\
-                        .pn_async(my_publish_callback)
+                    .channel(item)\
+                    .message({'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':item,
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate,
+                                'startdate': startdate, 'section':section})\
+                    .pn_async(my_publish_callback)
 
-        elif type == 'event':
-            start_date = self.start_date
-            duedate = self.due_date
-            poster = f'{self.poster} has posted an Event!'
-            channels = self.channels
-            if len(channels) > 1:
-                for item in channels:
-                    self.pubnub.publish()\
-                        .channel(item)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':item, 'timestamp': timestamp, 
-                                'due_date':duedate, 
-                                'start_date': start_date})\
-                        .pn_async(my_publish_callback)
-            elif isinstance(channels, str):
-                self.pubnub.publish()\
-                        .channel(channels)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':channels, 'timestamp': timestamp, 
-                                'due_date':duedate, 
-                                'start_date': start_date})\
-                        .pn_async(my_publish_callback)
-            else:
-                self.pubnub.publish()\
-                        .channel(channels[0])\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 
-                                'username': username, 'user_type': user_type, 
-                                'channel':channels[0], 'timestamp': timestamp, 
-                                'due_date':duedate, 
-                                'start_date': start_date})\
-                        .pn_async(my_publish_callback)
-
-        elif type == 'comment':
-            receiver_id = self.receiver_id
-            poster = f'''{self.poster} has commented on a class Post!'''
-            channels = self.channels
-            if len(channels) > 1:
-                for item in channels:
-                    self.pubnub.publish()\
-                        .channel(item)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':item, 'timestamp': timestamp})\
-                        .pn_async(my_publish_callback)
-            elif isinstance(channels, str):
-                self.pubnub.publish()\
+        elif isinstance(channels, str):
+            self.pubnub.publish()\
                     .channel(channels)\
-                    .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels, 'timestamp': timestamp})\
+                     .message({'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':channels,
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate, 
+                                'startdate': startdate, 'section':section})\
                     .pn_async(my_publish_callback)
-            else:
-                self.pubnub.publish()\
+        else:
+            self.pubnub.publish()\
                     .channel(channels[0])\
-                    .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels[0], 'timestamp': timestamp})\
+                    .message({'poster':poster,'text': text, 'type': type, 'username': username,
+                                'user_type': user_type, 'channel':channels[0],
+                                'initiatorid': initiatorid, 'receiverid': receiverid,
+                                'timestamp': timestamp, 'duedate': duedate, 
+                                'startdate': startdate, 'section':section})\
                     .pn_async(my_publish_callback)
-        elif type == 'reaction':
-            poster = f'{self.poster} has reacted!'
-            msg_payload = f'{self.poster} has reacted with {msg_payload} on a post'
-            if len(channels) > 1:
-                for item in channels:
-                    self.pubnub.publish()\
-                        .channel(item)\
-                        .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':item, 'timestamp': timestamp})\
-                        .pn_async(my_publish_callback)           
-            elif isinstance(channels, str):
-                self.pubnub.publish()\
-                    .channel(channels)\
-                    .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels, 'timestamp': timestamp})\
-                    .pn_async(my_publish_callback)
-            else:
-                self.pubnub.publish()\
-                    .channel(channels[0])\
-                    .message({'poster':poster,'text': msg_payload, 'type': type, 'username': username, 'user_type': user_type, 'channel':channels[0], 'timestamp': timestamp})\
-                    .pn_async(my_publish_callback)
-
-            
-       
+    
+        
+        
+        
+    def savetodb(self):
+        notif_id = 'notifid'
+        notif = 'notif'
+        notif_type = 'type'
+        username = 'username'
+        user_type = 'usertype'
+        channel = 'channel'
+        initiatorid = 'initiatorid'
+        receiverid = 'receiverid'
+        duedate = 'duedate'
+        startdate = 'startdate'
