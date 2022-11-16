@@ -3571,6 +3571,7 @@ def bcastvirtualclassroom():
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]} has posted!'
+    name = f'{person[1]} {person[0]}'
     messageTextOnly = f'{poster} has posted a Video Conference'
     receivers = []
     initiatorid = res[0][0]['initiatorid']
@@ -3586,7 +3587,8 @@ def bcastvirtualclassroom():
             poster=poster, msg_payload=messageTextOnly, type=msg_type, 
             user_type=group, channels=virtualroomid, 
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
-            due_date=None, start_date=None, section=None)
+            due_date=None, start_date=None, section=None,
+            name=name)
     notif.notify()
 
     
@@ -3643,7 +3645,8 @@ def bulletinpost():
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
                 channels=channels, initiator_id=initiatorid, section=None,
-                receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None)
+                receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
+                name=name)
     notif.notify()
 
 
@@ -4008,7 +4011,6 @@ def assignmentpost():
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
     
-    print(res)
     poster = f'{name} has posted an assignment!'
     assignment_section = notif_section
 
@@ -4023,7 +4025,8 @@ def assignmentpost():
         type=msg_type, user_type=group,
         section=assignment_section,
         channels=channels, initiator_id=initiatorid, receiver_id=receivers, 
-        tstamp=timestamps, due_date=duedate, start_date=None
+        tstamp=timestamps, due_date=duedate, start_date=None,
+        name=name
         )
     notif.notify()
 
@@ -4089,7 +4092,8 @@ def eventpost():
             type=msg_type, user_type=group, channels = channels,
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=enddate, 
-            start_date=begindate, section=None    
+            start_date=begindate, section=None,
+            name=name  
         )
     notif.notify()
 
@@ -6086,7 +6090,7 @@ def forwardtline():
                 user_type=group, channels=channels, section=None,
                 initiator_id=initiatorid, receiver_id=receivers,
                 tstamp=timestamps, 
-                due_date=None, start_date=None)
+                due_date=None, start_date=None, name=name)
     notif.notify()
 
     if 'Error' in res[0][0]:
@@ -6116,7 +6120,7 @@ def postcomment():
 
     if len(cleandat(comment, ' ', '')) == 0:
         return jsonify({'status': 'error', 'message': 'Empty Comment'})
-    result = spcall('post_comments',
+    result = spcall('post_comments2',
                (
                    username, token,
                    group, initiatorid,
@@ -6126,16 +6130,19 @@ def postcomment():
                group,
                True)[0][0]
     
+    ts = result['ts']
+
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     commentor = f'{person[1]} {person[0]} has commented on a post!'
-
+    name =f'{person[1]} {person[0]}'
     channels = vroomid
     notif = pub.notifications(username=username,
                 poster=commentor, msg_payload=messageTextOnly, 
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiverid,
-                due_date=None, start_date=None, section=None)
+                tstamp=ts,due_date=None, start_date=None, section=None,
+                name=name)
     notif.notify()
     
     #print result
@@ -6207,7 +6214,7 @@ def postreaction():
 
     msg_type = 'reaction'
     res = spcall(
-            "post_reaction",
+            "post_reaction2",
             (
                 username,
                 token,
@@ -6221,16 +6228,19 @@ def postreaction():
             True
         )[0][0]
 
+    ts = res['ts']
     person = spcall("getpersonname", (initiatorid,),)[0][0]
     person = person.split("*")
     poster = f'{person[1]} {person[0]} reacted on a post!'
+    name = f'{person[1]} {person[0]}'
     msg = f'{poster} reacted has reacted with {messageTextOnly} on a post'
     channels = vroomid
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=msg, 
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiverid,
-                due_date=None, start_date=None, section=None)
+                tstamp=ts, due_date=None, start_date=None, section=None,
+                name=name)
     notif.notify()
 
     if 'Error' in res:

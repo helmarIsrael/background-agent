@@ -47,7 +47,7 @@ class notifications(object):
                 username=None, poster=None, type=None,
                 due_date=None, section=None, start_date=None,
                 receiver_id=None, channels=None, initiator_id = None,
-                tstamp = None):
+                tstamp = None, name=None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -58,6 +58,7 @@ class notifications(object):
         self.start_date = start_date
         self.receiver_id = receiver_id
         self.initiator_id = initiator_id
+        self.name = name
 
         self.channels = channels
         self.tstamp = tstamp
@@ -85,6 +86,7 @@ class notifications(object):
         duedate = self.due_date
         startdate = self.start_date
         section = self.section
+        name = self.name
         
         if isinstance(channels, str) == False and len(channels) > 1:
             for item in channels:
@@ -94,13 +96,15 @@ class notifications(object):
                                 'user_type': user_type, 'channel':item,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate,
-                                'startdate': startdate, 'section':section})\
+                                'startdate': startdate, 'section':section,
+                                'name': name})\
                     .pn_async(my_publish_callback)
                 notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':item,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate,
-                                'startdate': startdate, 'section':section}
+                                'startdate': startdate, 'section':section,
+                                'name': name}
                 self.savetodb(notif_dict)
 
         elif isinstance(channels, str):
@@ -110,13 +114,15 @@ class notifications(object):
                                 'user_type': user_type, 'channel':channels,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
-                                'startdate': startdate, 'section':section})\
+                                'startdate': startdate, 'section':section,
+                                'name': name})\
                     .pn_async(my_publish_callback)
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':channels,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
-                                'startdate': startdate, 'section':section}
+                                'startdate': startdate, 'section':section,
+                                'name': name}
             
             self.savetodb(notif_dict)
         else:
@@ -126,14 +132,16 @@ class notifications(object):
                                 'user_type': user_type, 'channel':channels[0],
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
-                                'startdate': startdate, 'section':section})\
+                                'startdate': startdate, 'section':section,
+                                'name': name})\
                     .pn_async(my_publish_callback)
 
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':channels[0],
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
-                                'startdate': startdate, 'section':section}
+                                'startdate': startdate, 'section':section,
+                                'name': name}
             
             self.savetodb(notif_dict)
     
