@@ -3599,7 +3599,29 @@ def bcastvirtualclassroom():
     return jsonify({'status': 'OK', 'virtualroomid': virtualroomid})
 
 
+################################################
+################################################
+# def savenotiftodb(data):
+#         data = data['datas']
+#         notif = data['poster']
+#         notif_type = data['type']
+#         username = data['username']
+#         user_type = data['user_type']
+#         channel = data['channel']
+#         initiatorid = data['initiatorid']
+#         receiverid = data['receiverid']
+#         ts = data['timestamp']
+#         duedate = data['duedate']
+#         startdate = data['startdate']
+#         poster = data['name']
 
+#         print(channel)
+#         if len(receiverid) > 1:
+#             for item in receiverid:
+#                 print(f"\n{data['text']}\n{item}\n{channel}\n")
+       
+########################################################3
+#########################################################
 
 @app.route("/bulletin", methods=['POST'])
 @auth.login_required
@@ -3648,6 +3670,8 @@ def bulletinpost():
                 receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
                 name=name)
     notif.notify()
+
+    # savenotiftodb(data)
 
 
     if 'Error' in res[0][0]:
@@ -4028,7 +4052,9 @@ def assignmentpost():
         tstamp=timestamps, due_date=duedate, start_date=None,
         name=name
         )
+
     notif.notify()
+    # savenotiftodb(data)
 
 
     if 'Error' in res[0][0]:

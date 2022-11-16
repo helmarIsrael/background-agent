@@ -4,6 +4,7 @@ from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from pprint import pprint
 from datetime import datetime, timedelta
+from __init__ import spcall
 
 # class MySubscribeCallback(SubscribeCallback):
 #     def status(self, pubnub, status):
@@ -161,6 +162,38 @@ class notifications(object):
         startdate = data['startdate']
         poster = data['name']
 
-        if len(receiverid) > 1:
-            for item in receiverid:
-                print(f"\n{data['text']}\n{item}\n{channel}\n")
+        if startdate == None:
+            startdate = 'No Value'
+        if duedate == None:
+            duedate = 'No Value'
+
+        for item in receiverid:
+            print(f"""\n
+notif: {notif} {type(notif)}
+notif_type: {notif_type} {type(notif_type)}
+username: {username} {type(username)}
+user_type: {user_type} {type(user_type)}
+channel: {channel} {type(channel)}
+initiator_id: {initiatorid} {type(initiatorid)}
+receiver_id: {item} {type(item)}
+timeline_ts: {ts} {type(ts)}
+due_date: {duedate} {type(duedate)}
+start_date: {startdate} {type(startdate)}
+poster: {poster} {type(poster)}\n""") 
+            ## SIMULATES ADDING TO DB
+            res = spcall("insert2notification",
+                 (notif, 
+                 notif_type, 
+                 username,
+                 user_type,
+                 channel,
+                 initiatorid,
+                 receiverid,
+                 ts,
+                 duedate,
+                 startdate,
+                 poster
+                  ), user_type, True)
+            print(res)
+        # res =  spcall("getvirtualroomidbysection",('AERO',),)[0][0]
+        # print(res)
