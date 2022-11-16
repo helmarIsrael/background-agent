@@ -149,15 +149,18 @@ class notifications(object):
         
         
     def savetodb(self, data):
-        notif_id = 'notifid'
-        notif = 'notif'
-        notif_type = 'type'
-        username = 'username'
-        user_type = 'usertype'
-        channel = 'channel'
-        initiatorid = 'initiatorid'
-        receiverid = 'receiverid'
-        duedate = 'duedate'
-        startdate = 'startdate'
+        notif = data['poster']
+        notif_type = data['type']
+        username = data['username']
+        user_type = data['user_type']
+        channel = data['channel']
+        initiatorid = data['initiatorid']
+        receiverid = data['receiverid']
+        ts = data['timestamp']
+        duedate = data['duedate']
+        startdate = data['startdate']
+        poster = data['name']
 
-        pprint(data)
+        if len(receiverid) > 1:
+            for item in receiverid:
+                print(f"\n{data['text']}\n{item}\n{channel}\n")

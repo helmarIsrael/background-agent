@@ -3641,7 +3641,7 @@ def bulletinpost():
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
         
-    print(f'\n\n{channels}\n\n')
+    # print(f'\n\n{channels}\n\n')
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
                 channels=channels, initiator_id=initiatorid, section=None,
@@ -4018,8 +4018,8 @@ def assignmentpost():
 
     vroom = spcall("getvirtualroomidbysection",(getSection[-1],),)[0][0]
 
-    channels = vroom
-
+    # channels = vroom
+    channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group,
