@@ -2149,6 +2149,7 @@
                             $("#name-rightbadge").data("personnumid", resp.personnumid)
                             
                             model.pubnub_sub($("#name-rightbadge").data("virtualroomid"))
+        
                             if (resp.usertype == "students")
                             { $("#name-rightbadge").data("lrn", resp.lrn); }
                             $("#name-rightbadge").data("religions", resp.religions);
@@ -2812,7 +2813,6 @@
 
             model.pubnub_sub = function (user_channels)
             {   
-                console.log(user_channels)
                 var pubnub = new PubNub({
                     subscribe_key : 'sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0',
                     publish_key:'pub-c-120bfc98-ed9d-48c0-8bcb-48ba129e6056',
@@ -2825,11 +2825,11 @@
           pubnub.addListener(
               {
                   message: function(m){
-                    
-                      console.log(m.message)
                       msg = m.message
                     //   $("#main").html(view.showNotif(m.message))
-                    if (msg.initiatorid !=   $("#name-rightbadge").data("personnumid")){
+                    if (msg.initiatorid != $("#name-rightbadge").data("personnumid")){
+                        console.log(m.message.initiatorid)
+                        console.log( $("#name-rightbadge").data("personnumid"))
                         apputils.popsuccess(msg.poster)
                     }
                      
@@ -2841,6 +2841,28 @@
           pubnub.subscribe({
                 channels: user_channels,
             });
+            model.countNewNotif()
+            }
+
+            model.countNewNotif = function(){
+                $.ajax({
+                    url: apputils.rest + '/newnotifcount',
+                    type:"GET",
+                    data:{
+                        // channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        channels: ["asd", "asdasd"].join(", ")
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        console.log(resp)
+                    }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
             }
 
             model.classlist = function (eventerid)
@@ -4349,6 +4371,7 @@
 
             model.gettimeline = function(par_getchild)
             {
+                
                 //apputils.ifundefined(var_, defvalue, nullvalue)
 
                 if ($("#name-rightbadge").data("usertype") === "students" /*||

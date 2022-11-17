@@ -47,7 +47,8 @@ AS $BODY$
 								  timeline_ts, 
 								  duedate, 
 								  startdate, 
-								  poster
+								  poster,
+								  notif_ts
 			)values(
 				loc_notifid,
 				par_notif,
@@ -60,7 +61,8 @@ AS $BODY$
 				par_timelineTS,
 				par_duedate,
 				par_startdate,
-				par_poster
+				par_poster,
+				loc_nowts::text
 			);
 
 			return (select json_build_object('status', 'OK'));

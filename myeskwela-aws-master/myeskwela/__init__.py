@@ -6752,6 +6752,22 @@ def insertoffering():
 
     return jsonify({'status':'OK', 'message': result})
 
+@app.route("/newnotifcount", methods=["GET"])
+@auth.login_required
+def getnewnotif_count():
+    params = request.args
+    chan = params["channels"]
+
+    channels = chan.split()
+    # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
+    res = spcall("getnewnotifcount",(channels),)[0][0]
+
+    print(res)
+    
+    return jsonify({'status':'OK', 'count': res})
+
+
+
 
 #last
 
