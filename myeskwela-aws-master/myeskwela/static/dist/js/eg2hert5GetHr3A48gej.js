@@ -328,6 +328,7 @@
                 username = $("#username").val();
                 password = $("#password").val();
                 model.verify(username,$.sha1(password));
+                
             }
 
             apputils.rest = window.location.origin;
@@ -2145,7 +2146,9 @@
 
                             $("#name-rightbadge").data("virtualroomid", resp.virtualroomid);
                             $("#name-rightbadge").data("personname", resp.userdetails["name"])
+                            $("#name-rightbadge").data("personnumid", resp.personnumid)
                             
+                            model.pubnub_sub($("#name-rightbadge").data("virtualroomid"))
                             if (resp.usertype == "students")
                             { $("#name-rightbadge").data("lrn", resp.lrn); }
                             $("#name-rightbadge").data("religions", resp.religions);
@@ -2807,8 +2810,9 @@
                 });
             }
 
-            model.notiflist = function ()
-            {
+            model.pubnub_sub = function (user_channels)
+            {   
+                console.log(user_channels)
                 var pubnub = new PubNub({
                     subscribe_key : 'sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0',
                     publish_key:'pub-c-120bfc98-ed9d-48c0-8bcb-48ba129e6056',
@@ -2823,14 +2827,19 @@
                   message: function(m){
                     
                       console.log(m.message)
-                      $("#main").html(view.showNotif(m.message))
+                      msg = m.message
+                    //   $("#main").html(view.showNotif(m.message))
+                    if (msg.initiatorid !=   $("#name-rightbadge").data("personnumid")){
+                        apputils.popsuccess(msg.poster)
+                    }
+                     
 
                 },
               }
           );
       
           pubnub.subscribe({
-                channels: $("#name-rightbadge").data("virtualroomid"),
+                channels: user_channels,
             });
             }
 
@@ -8773,7 +8782,9 @@
                                     receiverid: par_receiver,
                                     timelinets: par_timeline_ts,
                                     reaction: par_reactionid,
-                                    vroomid: $("#name-rightbadge").data("virtualroomid")
+                                    vroomid: $("#name-rightbadge").data("virtualroomid"),
+                                    personname: $("#name-rightbadge").data("personname")
+                                   
                             }),
                         buttonid: loc_btnid,
                         buttonlabel: par_btnlabel,
@@ -12061,7 +12072,6 @@
                 addmenuitem(apputils.mnunotif,
                     function () {
                         view.initnotif();
-                        model.notiflist()
                     }
                     );
                 switch(persontype)

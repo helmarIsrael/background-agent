@@ -1,15 +1,23 @@
-CREATE TABLE public.notifications
+-- Table: public.notifications
+
+-- DROP TABLE IF EXISTS public.notifications;
+
+CREATE TABLE IF NOT EXISTS public.notifications
 (
     notif_id "char" NOT NULL,
-    action_id "char" NOT NULL,
-    action_type "char" NOT NULL,
-    "timestamp" "char" NOT NULL,
-    channel "char"[] NOT NULL,
-    notif_content "char" NOT NULL,
-    initiator_id "char",
-    receiver_id "char",
-    PRIMARY KEY (notif_id, action_id)
-);
+    notif "char",
+    notif_type "char",
+    username "char",
+    user_type "char",
+    channel "char",
+    initiatorid "char",
+    receiverid "char",
+    "timestamp" "char",
+    duedate "char",
+    startdate "char"
+)
+
+TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.notifications
     OWNER to postgres;

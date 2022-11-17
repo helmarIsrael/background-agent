@@ -1785,6 +1785,7 @@ def syslogcred():
         channels.clear()
         if channel != None:
             channels.append(channel)
+        personnumid = credentials[u"personnumid"]
         clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
                 "userschool": {"id": schoolassin[0],
@@ -1827,7 +1828,8 @@ def syslogcred():
                 "quarter": credentials[u"quarter"],
                 "lrn": credentials[u"lrn"],
                 "mystu": mystu,
-                "virtualroomid": channels
+                "virtualroomid": channels,
+                "personnumid": personnumid
                 }
     except:
         return {
@@ -3589,39 +3591,17 @@ def bcastvirtualclassroom():
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=None, start_date=None, section=None,
             name=name)
-    notif.notify()
+    
 
     
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
-
+    else:
+        notif.notify()
     return jsonify({'status': 'OK', 'virtualroomid': virtualroomid})
 
 
-################################################
-################################################
-# def savenotiftodb(data):
-#         data = data['datas']
-#         notif = data['poster']
-#         notif_type = data['type']
-#         username = data['username']
-#         user_type = data['user_type']
-#         channel = data['channel']
-#         initiatorid = data['initiatorid']
-#         receiverid = data['receiverid']
-#         ts = data['timestamp']
-#         duedate = data['duedate']
-#         startdate = data['startdate']
-#         poster = data['name']
-
-#         print(channel)
-#         if len(receiverid) > 1:
-#             for item in receiverid:
-#                 print(f"\n{data['text']}\n{item}\n{channel}\n")
-       
-########################################################3
-#########################################################
 
 @app.route("/bulletin", methods=['POST'])
 @auth.login_required
@@ -3669,15 +3649,15 @@ def bulletinpost():
                 channels=channels, initiator_id=initiatorid, section=None,
                 receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
                 name=name)
-    notif.notify()
+    
 
-    # savenotiftodb(data)
+   
 
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
-
-
+    else:
+        notif.notify()
     return jsonify(res[0][0])
 
 
@@ -4053,8 +4033,8 @@ def assignmentpost():
         name=name
         )
 
-    notif.notify()
-    # savenotiftodb(data)
+    
+
 
 
     if 'Error' in res[0][0]:
@@ -4063,7 +4043,8 @@ def assignmentpost():
                 "status": "error",
                 "message": res[0][0]
             })
-
+    else:
+        notif.notify()
     return jsonify({"status": "ok", "results": res[0]})
 
 
@@ -4121,11 +4102,12 @@ def eventpost():
             start_date=begindate, section=None,
             name=name  
         )
-    notif.notify()
+    
 
     if 'Error' in res[0][0]:
         return jsonify({'status': 'error', 'message': res[0][0]})
-
+    else:
+        notif.notify()
     return jsonify(res[0][0])
 
     # return jsonify(savetimeline
@@ -6109,7 +6091,7 @@ def forwardtline():
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
    
-    poster = f'{name} has posted!'
+    poster = f'{name} forwarded a post!'
     channels = vroomid
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, 
@@ -6117,11 +6099,12 @@ def forwardtline():
                 initiator_id=initiatorid, receiver_id=receivers,
                 tstamp=timestamps, 
                 due_date=None, start_date=None, name=name)
-    notif.notify()
+    
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
-
+    else:
+        notif.notify()
 
     return jsonify(res[0][0])
 
@@ -6163,19 +6146,22 @@ def postcomment():
     commentor = f'{person[1]} {person[0]} has commented on a post!'
     name =f'{person[1]} {person[0]}'
     channels = vroomid
+    receiver_id = []
+    receiver_id.append(receiverid)
     notif = pub.notifications(username=username,
                 poster=commentor, msg_payload=messageTextOnly, 
                 type=msg_type, user_type=group, channels=channels,
-                initiator_id=initiatorid, receiver_id=receiverid,
+                initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts,due_date=None, start_date=None, section=None,
                 name=name)
-    notif.notify()
+    
     
     #print result
 
     if 'Error' in result:
         return jsonify({"status": "error", "message": result})
-
+    else:
+        notif.notify()
     return jsonify(
         result
     )
@@ -6224,6 +6210,7 @@ def postreaction():
     timelinets = params["timelinets"]
     reaction = params["reaction"]
     vroomid = params["vroomid"]
+    personname = params["personname"]
 
 
     
@@ -6255,23 +6242,26 @@ def postreaction():
         )[0][0]
 
     ts = res['ts']
-    person = spcall("getpersonname", (initiatorid,),)[0][0]
-    person = person.split("*")
-    poster = f'{person[1]} {person[0]} reacted on a post!'
-    name = f'{person[1]} {person[0]}'
-    msg = f'{poster} reacted has reacted with {messageTextOnly} on a post'
+    # person = spcall("getpersonname", (initiatorid,),)[0][0]
+    # person = person.split("*")
+    poster = f'{personname} reacted on a post!'
+    name = personname
+    msg = f'{personname} reacted has reacted with {messageTextOnly} on a post'
     channels = vroomid
+    receiver_id = []
+    receiver_id.append(receiverid)
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=msg, 
                 type=msg_type, user_type=group, channels=channels,
-                initiator_id=initiatorid, receiver_id=receiverid,
+                initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts, due_date=None, start_date=None, section=None,
                 name=name)
-    notif.notify()
+    
 
     if 'Error' in res:
         return jsonify({"status": "error", "message": res})
-
+    else:
+        notif.notify()
     return jsonify(
         res
     )

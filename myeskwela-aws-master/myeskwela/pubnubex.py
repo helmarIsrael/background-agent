@@ -161,11 +161,7 @@ class notifications(object):
         duedate = data['duedate']
         startdate = data['startdate']
         poster = data['name']
-
-        if startdate == None:
-            startdate = 'No Value'
-        if duedate == None:
-            duedate = 'No Value'
+        
 
         for item in receiverid:
             print(f"""\n
@@ -188,7 +184,7 @@ poster: {poster} {type(poster)}\n""")
                  user_type,
                  channel,
                  initiatorid,
-                 receiverid,
+                 item,
                  ts,
                  duedate,
                  startdate,
