@@ -18,7 +18,7 @@ AS $BODY$
    			
       
       UPDATE notifications SET is_new = False
-	  where channel = ANY(par_channels) and initiatorid != par_initiatorid;
+	  where channel = ANY(par_channels) and receiverid == par_initiatorid;
 
       return 'OK';
 	  

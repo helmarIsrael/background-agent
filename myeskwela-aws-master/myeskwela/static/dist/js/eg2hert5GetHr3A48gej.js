@@ -2811,6 +2811,40 @@
                 });
             }
 
+            model.getnotif = function (){
+                $("#notifholder").show()
+                  $.ajax({
+                    url: apputils.rest + '/getnotif',
+                    type:"GET",
+                    data:{
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        data = resp.notifs
+                        console.log(resp.notifs[0])
+                        for (var i = 0; i < data.length; i++){
+                            $("#notifholder").append(`
+                                <li>
+                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].ts}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                        <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
+                                    </a>
+                                </li>`
+                            )
+                        }
+                        
+                       
+                    }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+            }
+
             model.pubnub_sub = function (user_channels)
             {   
                 var pubnub = new PubNub({
@@ -2844,6 +2878,7 @@
             });
             $("#notifbell").show()
             model.countNewNotif()
+            model.getnotif()
             }
 
             model.countNewNotif = function(){
@@ -2858,6 +2893,7 @@
                     dataType: "json",
                     success: function(resp){
                         if (resp.count > 0){
+                            $("#notif-count").show()
                             $("#notif-count").html(resp.count)
                             $("#headnotif-count").html(`You have ${resp.count} new notifications`)
                         } else {
@@ -2876,19 +2912,18 @@
             }
 
             model.readnewnotif = function(){
-                console.log("asdasd")
                 $.ajax({
                     url: apputils.rest + '/readnewnotif',
                     type:"POST",
                     data:JSON.stringify({
                         personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                        group: $("#name-rightbadge").data("usertype"),
                         // channels: ["asd", "asdasd"].join(", ")
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(resp){
-                        console.log(resp)
                         if (resp.status == 'OK'){
                             model.countNewNotif()
                         }
@@ -2924,7 +2959,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Enrollment Status",
-                                    body:"<h1>NO ENROLLED STUDENTS!<h1>",
+                                    body:"<h3>NO ENROLLED STUDENTS!<h3>",
                                     footer:""
                                 })));
                             view.stopspin(eventerid, view
@@ -3320,7 +3355,7 @@
                                             .simplebox({
                                                 boxtype:"ERROR",
                                                 title:"Subject Loading",
-                                                body:"<h1>" + resp.message + "<h1>",
+                                                body:"<h3>" + resp.message + "<h3>",
                                                 footer:"Please consult proper authority."
                                             })
                                         )
@@ -3353,7 +3388,7 @@
                                         .simplebox({
                                             boxtype:"info",
                                             title:"Subject Loading",
-                                            body:"<h1>NO ASSIGNED SUBJECTS!<h1>",
+                                            body:"<h3>NO ASSIGNED SUBJECTS!<h3>",
                                             footer:"Please consult proper authority."
                                             })
                                      )
@@ -4574,7 +4609,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Timeline",
-                                    body:"<h1>No Internet Connection!<h1>",
+                                    body:"<h3>No Internet Connection!<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                         //$(par_this).html(prevtext);
@@ -7155,7 +7190,7 @@
                                 .simplebox({
                                     boxtype:"ERROR",
                                     title:"Subject Coordinator Load",
-                                    body:"<h1>" + resp.message + "<h1>",
+                                    body:"<h3>" + resp.message + "<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                             return;
@@ -7170,7 +7205,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Subject Coordinator Load",
-                                    body:"<h1>NO ASSIGNED SUBJECTS!<h1>",
+                                    body:"<h3>NO ASSIGNED SUBJECTS!<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                             return;
@@ -7963,7 +7998,7 @@
                                 .simplebox({
                                     boxtype:"ERROR",
                                     title:"Subject Coordinator Load",
-                                    body:"<h1>" + resp.message + "<h1>",
+                                    body:"<h3>" + resp.message + "<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                             return;
@@ -7975,7 +8010,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Available Exams",
-                                    body:"<h1>NO CREATED EXAMS!<h1>",
+                                    body:"<h3>NO CREATED EXAMS!<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                             return;
@@ -8520,7 +8555,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Instructional Supervisory Tool for School Heads",
-                                    body:"<h1>Cannot connect to Server!<h1>",
+                                    body:"<h3>Cannot connect to Server!<h3>",
                                     footer:"Please please check internet connection."
                                 })))
                     },
@@ -8532,7 +8567,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"Instructional Supervisory Tool for School Heads",
-                                    body:"<h1>" + resp.message + "<h1>",
+                                    body:"<h3>" + resp.message + "<h3>",
                                     footer:"Please consult proper authority."
                                 })));
                             return;
@@ -11028,7 +11063,7 @@
                                 .simplebox({
                                     boxtype:"info",
                                     title:"",
-                                    body:"<h1>NO ONLINE CLASSES!<h1>",
+                                    body:"<h3>NO ONLINE CLASSES!<h3>",
                                     footer:""
                                 }))
 
@@ -11861,12 +11896,15 @@
                 view.calendarset();
 
             }
-            view.initnotif = function ()
+            view.initnotif = function (notif, ts)
             {
                 $("#main").html(column(12, view.simplebox({
                     boxtype:"primary",
                     title:"Notifications",
-                    body:'<div id="messages"></div>',
+                    body:`<div id="messages">
+                        <h3>${notif}</h3>
+                        <small>${ts}</small>
+                    </div>`,
                     footer:''
                 })));
             }
@@ -16024,11 +16062,11 @@
                         boxtype:"default",
                         title:"School Year",
                         body:view.centerize(
-                            "<h1>" +
+                            "<h3>" +
                             $("#name-rightbadge").data("semid").slice(0, $("#name-rightbadge").data("semid").length / 2) +
                             "-" +
                             $("#name-rightbadge").data("semid").slice($("#name-rightbadge").data("semid").length / 2, $("#name-rightbadge").data("semid").length) +
-                            "</h1>" + "<br />" +
+                            "</h3>" + "<br />" +
                             view.buttonact("success", "Change", "view.changeschoolyear()")
                         ),
                         footer:""

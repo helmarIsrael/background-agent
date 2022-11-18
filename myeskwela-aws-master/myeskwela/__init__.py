@@ -6774,15 +6774,33 @@ def readnewnotif():
     params = request.get_json()
     chan = params["channels"]
     personid = params["personid"]
+    group = params["group"]
 
     channels = chan.split()
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("readnewnotification",(channels, personid),)[0][0]
+    res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
 
 
     return jsonify({'status':res})
+
+
+
+@app.route("/getnotif", methods=["GET"])
+@auth.login_required
+def getnotif():
+    params = request.args
+    chan = params["channels"]
+    personid = params["personid"]
+
+    channels = chan.split()
+
+    # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
+    res = spcall("getnotification",(channels, personid),)[0][0]
+
+    return jsonify({'status':'OK', 'notifs': res["notifs"]})
 
 
 
