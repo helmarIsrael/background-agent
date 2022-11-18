@@ -100,13 +100,13 @@
           </a>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-              <li class="dropdown notifications-menu">
+              <li class="dropdown notifications-menu" onclick="model.readnewnotif();" id="notifbell" style="display:none">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell-o"></i>
-                <span class="label label-warning" id="count">10</span>
+                <span class="label label-danger" id="notif-count">0</span>
                 </a>
                 <ul class="dropdown-menu">
-                <li class="header">You have 10 notifications</li>
+                <li class="header" id="headnotif-count"></li>
                 <li>
                 
                 <ul class="menu">

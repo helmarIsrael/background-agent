@@ -6757,14 +6757,32 @@ def insertoffering():
 def getnewnotif_count():
     params = request.args
     chan = params["channels"]
+    personid = params["personid"]
 
     channels = chan.split()
-    # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("getnewnotifcount",(channels),)[0][0]
 
-    print(res)
-    
+    # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
+    res = spcall("getnewnotifcount",(True, channels, personid),)[0][0]
+
+
     return jsonify({'status':'OK', 'count': res})
+
+@app.route("/readnewnotif", methods=["POST"])
+@auth.login_required
+def readnewnotif():
+    params = request.get_json()
+    chan = params["channels"]
+    personid = params["personid"]
+
+    channels = chan.split()
+
+    # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
+    res = spcall("readnewnotification",(channels, personid),)[0][0]
+
+
+    return jsonify({'status':res})
 
 
 

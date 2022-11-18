@@ -1,4 +1,6 @@
+-- FUNCTION: public.getnewnotifcount(boolean, text[], text)
 
+-- DROP FUNCTION IF EXISTS public.getnewnotifcount(boolean, text[], text);
 
 CREATE OR REPLACE FUNCTION public.getnewnotifcount(
 	par_status boolean,
@@ -14,10 +16,6 @@ AS $BODY$
 	 loc_channels text[];
 	 
    begin
-   		
--- 		for item in par_channels loop
--- 			loc_channels := array_append(loc_channels, item);
--- 		end loop;
 			
       select into loc_count count(*) from
       notifications where is_new = par_status and channel = ANY(par_channels) and initiatorid != par_initiatorid;

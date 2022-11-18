@@ -2149,7 +2149,7 @@
                             $("#name-rightbadge").data("personnumid", resp.personnumid)
                             
                             model.pubnub_sub($("#name-rightbadge").data("virtualroomid"))
-        
+                            
                             if (resp.usertype == "students")
                             { $("#name-rightbadge").data("lrn", resp.lrn); }
                             $("#name-rightbadge").data("religions", resp.religions);
@@ -2831,6 +2831,7 @@
                         console.log(m.message.initiatorid)
                         console.log( $("#name-rightbadge").data("personnumid"))
                         apputils.popsuccess(msg.poster)
+                        model.countNewNotif()
                     }
                      
 
@@ -2841,6 +2842,7 @@
           pubnub.subscribe({
                 channels: user_channels,
             });
+            $("#notifbell").show()
             model.countNewNotif()
             }
 
@@ -2849,13 +2851,50 @@
                     url: apputils.rest + '/newnotifcount',
                     type:"GET",
                     data:{
-                        // channels: $("#name-rightbadge").data("virtualroomid").join(", ")
-                        channels: ["asd", "asdasd"].join(", ")
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        // channels: ["asd", "asdasd"].join(", ")
                     },
                     dataType: "json",
                     success: function(resp){
-                        console.log(resp)
+                        if (resp.count > 0){
+                            $("#notif-count").html(resp.count)
+                            $("#headnotif-count").html(`You have ${resp.count} new notifications`)
+                        } else {
+                            $("#notif-count").hide()
+                            $("#headnotif-count").html(`All caught up!`)
+                        }
+                       
                     }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+            }
+
+            model.readnewnotif = function(){
+                console.log("asdasd")
+                $.ajax({
+                    url: apputils.rest + '/readnewnotif',
+                    type:"POST",
+                    data:JSON.stringify({
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        // channels: ["asd", "asdasd"].join(", ")
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(resp){
+                        console.log(resp)
+                        if (resp.status == 'OK'){
+                            model.countNewNotif()
+                        }
+                       
+                    },
+                    beforeSend: function (xhrObj){
                         //$(par_this).html(view.spin() + " Pls Wait..")
                         $("#nexttimes").removeClass('fa-sort-amount-asc');
                         $("#nexttimes").addClass('fa-refresh fa-spin');
@@ -12805,7 +12844,8 @@
 
 
             view.resetall = function ()
-            {
+            {   
+                $("#notifbell").hide()
                 $("#name-rightbadge").html("");
                 $("#name-downbadge").html("");
                 $("#name-leftbadge").html("");
