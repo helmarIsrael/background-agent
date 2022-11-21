@@ -3217,6 +3217,7 @@ def gettimelines():
         timelineitem["comments"] = spcall("get_comments_relaxed", (timeline[u"initiatorid"], timeline[u"receiverid"], timeline["tlts"], 0, auth.username()), "super", True)[0][0]
         timelinelists.append(timelineitem)
 
+    
     return jsonify(
         {
             "status": "ok",
@@ -6800,7 +6801,7 @@ def getnotif():
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     res = spcall("getnotification",(channels, personid),)[0][0]
 
-    return jsonify({'status':'OK', 'notifs': res["notifs"]})
+    return jsonify({'status':'OK', 'notifs': res["notifs"] })
 
 
 

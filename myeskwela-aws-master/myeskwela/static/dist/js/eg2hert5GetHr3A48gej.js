@@ -2827,7 +2827,7 @@
                         for (var i = 0; i < data.length; i++){
                             $("#notifholder").append(`
                                 <li>
-                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].ts}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                         <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                     </a>
                                 </li>`
@@ -11904,9 +11904,36 @@
                     body:`<div id="messages">
                         <h3>${notif}</h3>
                         <small>${ts}</small>
+                        <ul id="notif_postbox" class="p-5"></ul>
                     </div>`,
                     footer:''
                 })));
+                // var pbox = view.postbox(
+                //     {
+                //         btnicolor: 'faculty',
+                //         theader: 'OSWNG YEA',
+                //         imgsrc:'../dist/img/user7-128x128.jpg'
+                //     },
+                //     'Timeline: Thursday , November  17, 2022',
+                //     //resp.timelines[i].feelings,
+                //     //resp.timelines[i].recentfeeling,
+                //     'TLType: faculty',
+                //     'body: This is the post bofy'
+                //     //resp.timelines[i].recordentryid
+                //     );
+                $("#notif_postbox").append(
+                    "<li>" +
+                    '<i class="faculty"></i>' +
+                    '<div class="timeline-item">' +
+                    '<span class="time"><i class="fa fa-clock-o"></i>Thursday , November  17, 2022</span>' +
+                    '<h3 class="timeline-header">' +
+                    '<img style="margin-top: -6px;" class="img-rounded img-sm pull-left" ' +
+                    ' src="../dist/img/user7-128x128.jpg" alt="user image">  &nbsp; ' +
+                    '  <a href="#">OSWNG YEA</a></h3>' +
+                    '<div class="timeline-body"> This is the post body</div> </li>'
+                );
+
+                
             }
 
             view.initchangepass = function ()
