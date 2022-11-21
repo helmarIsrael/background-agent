@@ -2823,11 +2823,12 @@
                     dataType: "json",
                     success: function(resp){
                         data = resp.notifs
-                        console.log(resp.notifs[0])
+                        console.log(resp)
+                        $("#notifholder").empty()
                         for (var i = 0; i < data.length; i++){
                             $("#notifholder").append(`
                                 <li>
-                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                    <a onclick="model.notif_getpost('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                         <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                     </a>
                                 </li>`
@@ -2835,6 +2836,29 @@
                         }
                         
                        
+                    }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+            }
+
+            model.notif_getpost = function (notif, ts, initid, receiveid, tlts){
+                $("#notifholder").show()
+                  $.ajax({
+                    url: apputils.rest + '/getpost',
+                    type:"GET",
+                    data:{
+                        initiatorid: initid,
+                        receiverid: receiveid,
+                        ts: tlts
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        console.log(resp)           
                     }, beforeSend: function (xhrObj){
                         //$(par_this).html(view.spin() + " Pls Wait..")
                         $("#nexttimes").removeClass('fa-sort-amount-asc');
@@ -11896,8 +11920,14 @@
                 view.calendarset();
 
             }
-            view.initnotif = function (notif, ts)
-            {
+            view.initnotif = function (notif, ts, initid, receiveid, tlts)
+            {   
+                data = {
+                    initiatorid:initid,
+                    receiverid: receiveid,
+                    tlts: tlts
+                }
+                console.log(data)
                 $("#main").html(column(12, view.simplebox({
                     boxtype:"primary",
                     title:"Notifications",

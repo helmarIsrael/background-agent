@@ -6803,6 +6803,78 @@ def getnotif():
 
     return jsonify({'status':'OK', 'notifs': res["notifs"] })
 
+@app.route("/getpost", methods=["GET"])
+@auth.login_required
+def getpost():
+    params = request.args
+    intiatorid = params["initiatorid"]
+    receiverid = params["receiverid"]
+    ts = params["ts"]
+
+    timelines = spcall("notif_poppost",(auth.username(), intiatorid, receiverid, ts))[0][0]
+
+    # print(timelines)
+    if timelines["status"] == "Error":
+        return jsonify({"status": "error", "message": timelines["item"][0]})
+
+    tsize = timelines["size"]
+
+    if tsize == 0:
+        return jsonify({"status": "ok",
+                        "size": 0})
+
+    timelines = timelines["post"]
+    pic = fileServer()
+    timelinelists = []
+    for timeline in timelines:
+        ##this is for showing the feelings with its count
+        # recordentryid = ""
+        # recentfeeling = ""
+        # if timeline[2] == 'grade' and group == 'students':
+        # owner = timeline[0].split('$')[2]
+        # ts = str(timeline[1])
+        # feelings = spcall("showfeelings", (), group)
+        # user = spcall("getpersonidbyusername", (auth.username(),), group)[0][0]
+
+        # recordentryid = spcall("getrecordentryidbyts", (str(timeline[3]),))[0][0]
+        # recordentryid = getrecordentryid(timeline[0].split('$')[0].split('msg:')[1], timeline[0].split('$')[1].split(':')[1], user, auth.username(), str(timeline[3]))
+        # return jsonify({"FF":timeline[0].split('$')[0].split('msg:')[1]})
+        # entryid = spcall("getentryidbyrecordentryid", (recordentryid,), group)[0]
+        # recentfeeling = spcall("recentfeeling", (user, entryid,), group)
+        # return jsonify({"FF":recentfeeling})
+
+        timelineitem = dict()
+        timelineitem["body"] = timeline[u"body"].split('$')[0].split('msg:')[1]
+        timelineitem["pic"] = pic.getImgSrcUrl(timeline[u"pic"])
+        # timelineitem["pic"] = timeline[u"pic"]
+        timelineitem["tstamp"] = str(timeline[u'tstamp'])
+        timelineitem["tltype"] = timeline[u'tltype']
+        timelineitem["owner"] = timeline[u"body"].split('$')[2]
+        # timelineitem["feelings"] = feelings
+        # timelineitem["recentfeeling"] = recentfeeling
+        # timelineitem["recordentryid"] = recordentryid
+        timelineitem["initiatorid"] = timeline[u"initiatorid"]
+        timelineitem["receiverid"] = timeline[u"receiverid"]
+        timelineitem["tlts"] = timeline["tlts"]
+        timelineitem["reactions"] = dict({
+            'okc':timeline["okc"],
+            'happyc': timeline['happyc'],
+            'sadc': timeline["sadc"],
+            'angryc': timeline["angryc"],
+            'surprisedc': timeline["surprisedc"]
+        })                           #timeline[u"comments"]
+        timelineitem["comments"] = spcall("get_comments_relaxed", (timeline[u"initiatorid"], timeline[u"receiverid"], timeline["tlts"], 0, auth.username()), "super", True)[0][0]
+        timelinelists.append(timelineitem)
+
+    
+    return jsonify(
+        {
+            "status": "ok",
+            "size": tsize,
+            "timelines": timelinelists 
+        }
+    )
+
 
 
 
