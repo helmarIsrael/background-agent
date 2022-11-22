@@ -48,7 +48,7 @@ class notifications(object):
                 username=None, poster=None, type=None,
                 due_date=None, section=None, start_date=None,
                 receiver_id=None, channels=None, initiator_id = None,
-                tstamp = None, name=None):
+                tstamp = None, name=None, action_initiator = None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -60,6 +60,7 @@ class notifications(object):
         self.receiver_id = receiver_id
         self.initiator_id = initiator_id
         self.name = name
+        self.action_initiator = action_initiator
 
         self.channels = channels
         self.tstamp = tstamp
@@ -88,6 +89,7 @@ class notifications(object):
         startdate = self.start_date
         section = self.section
         name = self.name
+        action_initiator = self.action_initiator
         
         if isinstance(channels, str) == False and len(channels) > 1:
             for item in channels:
@@ -98,14 +100,14 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate,
                                 'startdate': startdate, 'section':section,
-                                'name': name})\
+                                'name': name, 'action_initiator': action_initiator})\
                     .pn_async(my_publish_callback)
                 notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':item,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate,
                                 'startdate': startdate, 'section':section,
-                                'name': name}
+                                'name': name, 'action_initiator': action_initiator}
                 self.savetodb(notif_dict)
 
         elif isinstance(channels, str):
@@ -116,14 +118,14 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name})\
+                                'name': name, 'action_initiator': action_initiator})\
                     .pn_async(my_publish_callback)
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':channels,
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name}
+                                'name': name, 'action_initiator': action_initiator}
             
             self.savetodb(notif_dict)
         else:
@@ -134,7 +136,7 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name})\
+                                'name': name, 'action_initiator': action_initiator})\
                     .pn_async(my_publish_callback)
 
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
@@ -142,7 +144,7 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name}
+                                'name': name, 'action_initiator': action_initiator}
             
             self.savetodb(notif_dict)
     
@@ -161,6 +163,7 @@ class notifications(object):
         duedate = data['duedate']
         startdate = data['startdate']
         poster = data['name']
+        action_initiator = data['action_initiator']
         
 
         for item in receiverid:
@@ -175,7 +178,9 @@ receiver_id: {item} {type(item)}
 timeline_ts: {ts} {type(ts)}
 due_date: {duedate} {type(duedate)}
 start_date: {startdate} {type(startdate)}
-poster: {poster} {type(poster)}\n""") 
+poster: {poster} {type(poster)}
+action_initiator: {action_initiator} {type(action_initiator)}
+\n""") 
             ## SIMULATES ADDING TO DB
             res = spcall("insert2notification",
                  (notif, 
@@ -188,7 +193,8 @@ poster: {poster} {type(poster)}\n""")
                  ts,
                  duedate,
                  startdate,
-                 poster
+                 poster,
+                 action_initiator
                   ), user_type, True)
             print(res)
         # res =  spcall("getvirtualroomidbysection",('AERO',),)[0][0]

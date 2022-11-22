@@ -3585,13 +3585,13 @@ def bcastvirtualclassroom():
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
 
-    
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, type=msg_type, 
             user_type=group, channels=virtualroomid, 
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=None, start_date=None, section=None,
-            name=name)
+            name=name, action_initiator=usernum)
     
 
     
@@ -3645,11 +3645,12 @@ def bulletinpost():
         receivers.append(res[0][0]['responses'][0]['receiverid'])
         
     # print(f'\n\n{channels}\n\n')
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
                 channels=channels, initiator_id=initiatorid, section=None,
                 receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
-                name=name)
+                name=name, action_initiator=usernum)
     
 
    
@@ -4023,15 +4024,16 @@ def assignmentpost():
 
     vroom = spcall("getvirtualroomidbysection",(getSection[-1],),)[0][0]
 
-    # channels = vroom
-    channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    channels = vroom
+    # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
         poster=poster, msg_payload=messageTextOnly, 
         type=msg_type, user_type=group,
         section=assignment_section,
         channels=channels, initiator_id=initiatorid, receiver_id=receivers, 
         tstamp=timestamps, due_date=duedate, start_date=None,
-        name=name
+        name=name, action_initiator=usernum
         )
 
     
@@ -4092,7 +4094,8 @@ def eventpost():
             receivers.append(item['receiverid'])
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-   
+    
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     poster = f'{name} has posted an event'
     channels = vroomid
     notif = pub.notifications(username=username,
@@ -4101,7 +4104,7 @@ def eventpost():
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=enddate, 
             start_date=begindate, section=None,
-            name=name  
+            name=name, action_initiator=usernum
         )
     
 
@@ -6094,12 +6097,14 @@ def forwardtline():
    
     poster = f'{name} forwarded a post!'
     channels = vroomid
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, 
                 user_type=group, channels=channels, section=None,
                 initiator_id=initiatorid, receiver_id=receivers,
                 tstamp=timestamps, 
-                due_date=None, start_date=None, name=name)
+                due_date=None, start_date=None, name=name, 
+                action_initiator=usernum)
     
 
     if 'Error' in res[0][0]:
@@ -6130,6 +6135,9 @@ def postcomment():
 
     if len(cleandat(comment, ' ', '')) == 0:
         return jsonify({'status': 'error', 'message': 'Empty Comment'})
+   
+ 
+
     result = spcall('post_comments2',
                (
                    username, token,
@@ -6140,9 +6148,10 @@ def postcomment():
                group,
                True)[0][0]
     
+    print(result)
     ts = result['ts']
-
-    person = spcall("getpersonname", (initiatorid,),)[0][0]
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
+    person = spcall("getpersonname", (usernum,),)[0][0]
     person = person.split("*")
     commentor = f'{person[1]} {person[0]} has commented on a post!'
     name =f'{person[1]} {person[0]}'
@@ -6154,10 +6163,10 @@ def postcomment():
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts,due_date=None, start_date=None, section=None,
-                name=name)
+                name=name, action_initiator=usernum)
     
     
-    #print result
+    # print result
 
     if 'Error' in result:
         return jsonify({"status": "error", "message": result})
@@ -6166,6 +6175,8 @@ def postcomment():
     return jsonify(
         result
     )
+
+    # return jsonify({"status": "error", "message": initiatorid})
 
 @app.route("/comment", methods=["GET"])
 @auth.login_required
@@ -6243,8 +6254,7 @@ def postreaction():
         )[0][0]
 
     ts = res['ts']
-    # person = spcall("getpersonname", (initiatorid,),)[0][0]
-    # person = person.split("*")
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     poster = f'{personname} reacted on a post!'
     name = personname
     msg = f'{personname} reacted has reacted with {messageTextOnly} on a post'
@@ -6256,7 +6266,7 @@ def postreaction():
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts, due_date=None, start_date=None, section=None,
-                name=name)
+                name=name, action_initiator=usernum)
     
 
     if 'Error' in res:

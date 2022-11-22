@@ -27,7 +27,7 @@ AS $BODY$
 	 notif_count = 0;
      for notif in select * from
       		notifications where channel = ANY(par_channels) 
-	  		and initiatorid != par_initiatorid order by notif_ts DESC
+	  		and action_initiator != par_initiatorid order by notif_ts DESC
 		loop
 			notif_content = notif.notif;
 			notif_initiatorid = notif.initiatorid;
