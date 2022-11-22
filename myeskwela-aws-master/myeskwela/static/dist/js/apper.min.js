@@ -2823,12 +2823,11 @@
                     dataType: "json",
                     success: function(resp){
                         data = resp.notifs
-                        console.log(resp)
                         $("#notifholder").empty()
                         for (var i = 0; i < data.length; i++){
                             $("#notifholder").append(`
                                 <li>
-                                    <a onclick="model.notif_getpost('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                         <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                     </a>
                                 </li>`
@@ -2858,7 +2857,22 @@
                     },
                     dataType: "json",
                     success: function(resp){
-                        console.log(resp)           
+                        $("#notif_postbox li").remove()
+                        $("#notif_postbox").append(
+                            view.postbox(
+                                {
+                                    btnicolor: apputils.getbutton(resp.timelines[0].tltype),
+                                    theader: resp.timelines[0].owner,
+                                    imgsrc: $(resp.timelines[0].pic).attr('src')
+                                },
+                                resp.timelines[0].tstamp,
+                                resp.timelines[0].body,
+                                resp.timelines[0].tltype,
+                                resp.timelines[0]
+                                )
+                        );
+                       
+                  
                     }, beforeSend: function (xhrObj){
                         //$(par_this).html(view.spin() + " Pls Wait..")
                         $("#nexttimes").removeClass('fa-sort-amount-asc');
@@ -11922,47 +11936,21 @@
             }
             view.initnotif = function (notif, ts, initid, receiveid, tlts)
             {   
-                data = {
-                    initiatorid:initid,
-                    receiverid: receiveid,
-                    tlts: tlts
-                }
-                console.log(data)
                 $("#main").html(column(12, view.simplebox({
                     boxtype:"primary",
                     title:"Notifications",
                     body:`<div id="messages">
                         <h3>${notif}</h3>
                         <small>${ts}</small>
-                        <ul id="notif_postbox" class="p-5"></ul>
+                       
+                        <ul style="margin-top:1em !important" id="notif_postbox" class="p-5 timeline">
+                            <li>${view.boxloading()}</li>
+                        </ul>
                     </div>`,
                     footer:''
                 })));
-                // var pbox = view.postbox(
-                //     {
-                //         btnicolor: 'faculty',
-                //         theader: 'OSWNG YEA',
-                //         imgsrc:'../dist/img/user7-128x128.jpg'
-                //     },
-                //     'Timeline: Thursday , November  17, 2022',
-                //     //resp.timelines[i].feelings,
-                //     //resp.timelines[i].recentfeeling,
-                //     'TLType: faculty',
-                //     'body: This is the post bofy'
-                //     //resp.timelines[i].recordentryid
-                //     );
-                $("#notif_postbox").append(
-                    "<li>" +
-                    '<i class="faculty"></i>' +
-                    '<div class="timeline-item">' +
-                    '<span class="time"><i class="fa fa-clock-o"></i>Thursday , November  17, 2022</span>' +
-                    '<h3 class="timeline-header">' +
-                    '<img style="margin-top: -6px;" class="img-rounded img-sm pull-left" ' +
-                    ' src="../dist/img/user7-128x128.jpg" alt="user image">  &nbsp; ' +
-                    '  <a href="#">OSWNG YEA</a></h3>' +
-                    '<div class="timeline-body"> This is the post body</div> </li>'
-                );
-
+                model.notif_getpost(notif, ts, initid, receiveid, tlts)
+                
                 
             }
 
