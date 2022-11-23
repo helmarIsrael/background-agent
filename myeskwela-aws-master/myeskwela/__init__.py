@@ -6769,7 +6769,6 @@ def getnewnotif_count():
     params = request.args
     chan = params["channels"]
     personid = params["personid"]
-
     channels = chan.split()
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']

@@ -12,19 +12,35 @@ CREATE OR REPLACE FUNCTION public.getnewnotifcount(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
    declare
+   	notif record;
      loc_count text;
 	 loc_channels text[];
-	 
+	 notif_count int;
    begin
+		notif_count = 0;
+--       select into loc_count count(*) from
+--       notifications where is_new = par_status and channel = ANY(par_channels) and action_initiator != par_initiatorid;
+
+
+	for notif in select * from notifications where is_new = par_status 
+			and channel = ANY(par_channels) 
+			and action_initiator != par_initiatorid
+		loop
+			if notif.notif_type != 'assignment' then
+				notif_count = notif_count + 1;
+			end if;
 			
-      select into loc_count count(*) from
-      notifications where is_new = par_status and channel = ANY(par_channels) and action_initiator != par_initiatorid;
+			if notif.notif_type = 'assignment' then
+				if notif.receiverid = par_initiatorid then
+					notif_count = notif_count + 1;
+				end if;
+			end if;
+		end loop;
+--       if loc_count isnull then
+--           return 'NONE';
+--       end if;
 
-      if loc_count isnull then
-          return 'NONE';
-      end if;
-
-      return loc_count::text;
+      return notif_count::text;
    end;
 $BODY$;
 

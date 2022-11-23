@@ -22,6 +22,7 @@ AS $BODY$
 	 notif_read boolean;
 	 notif_isnew boolean;
 	 notif_count int;
+	 notif_type text;
 	 
    begin
 	 notif_count = 0;
@@ -37,6 +38,7 @@ AS $BODY$
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
 			notif_read = notif.is_read;
 			notif_isnew = notif.is_new;
+			notif_type = notif.notif_type;
 			
 			notif_array = 
 				notif_array || 
@@ -48,7 +50,8 @@ AS $BODY$
 					'is_read', notif_read,
 					'is_new', notif_isnew,
 					'ts', notif_ts,
-					'notif_readablets', notif_readablets
+					'notif_readablets', notif_readablets,
+					'notif_type', notif_type
 				);
 			notif_count = notif_count + 1;
 		end loop;
