@@ -2828,6 +2828,7 @@
                         for (var i = 0; i < data.length; i++){
                             if (usertype == "students") {
                                 if (data[i].notif_type != "assignment") {
+
                                     $("#notifholder").append(`
                                     <li>
                                         <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
@@ -2835,6 +2836,8 @@
                                         </a>
                                     </li>`
                                     )
+
+               
                                 }
 
                                 if (data[i].notif_type == 'assignment') {
@@ -2906,6 +2909,126 @@
                         );
                        
                   
+                    }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+            }
+
+
+
+            model.notifsect_getnotif = function (){
+                $("#notifholder").show()
+                  $.ajax({
+                    url: apputils.rest + '/getnotif',
+                    type:"GET",
+                    data:{
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        $("#notif_sect_holder li").remove()
+                        data = resp.notifs
+                        usertype = $("#name-rightbadge").data("usertype")
+                        $("#notif_sect_holder").empty()
+                        for (var i = 0; i < data.length; i++){
+                            if (usertype == "students") {
+                                if (data[i].notif_type != "assignment") {
+
+                                    $("#notif_sect_holder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                    <div class="box-body">
+                                                        <blockquote>
+                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                            <small>${data[i].notif_readablets}</small>
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
+                                            </a>  
+                                        </li>
+                                    `)
+
+               
+                                }
+
+                                if (data[i].notif_type == 'assignment') {
+                                    if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                        $("#notif_sect_holder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                    <div class="box-body">
+                                                        <blockquote>
+                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                            <small>${data[i].notif_readablets}</small>
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
+                                            </a>  
+                                        </li>
+                                    `)
+
+                                    }
+                                }
+
+
+                            } else {
+                                $("#notif_sect_holder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                    <div class="box-body">
+                                                        <blockquote>
+                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                            <small>${data[i].notif_readablets}</small>
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
+                                            </a>  
+                                        </li>
+                                    `)
+                            }
+                            
+                        }
+                        
+                       
+                    }, beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+            }
+
+
+            model.notifsect_count = function(){
+                $.ajax({
+                    url: apputils.rest + '/newnotifcount',
+                    type:"GET",
+                    data:{
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        // channels: ["asd", "asdasd"].join(", ")
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        if (resp.count == 1){
+                            $("#notifsect_count").html(`You have ${resp.count} unread notification`)
+                        } else if (resp.count > 1){
+                            $("#notifsect_count").html(`You have ${resp.count} unread notifications`)
+                        } else {
+                            $("#notifsect_count").html(`All caught up!`)
+                        }
+                       
                     }, beforeSend: function (xhrObj){
                         //$(par_this).html(view.spin() + " Pls Wait..")
                         $("#nexttimes").removeClass('fa-sort-amount-asc');
@@ -11990,6 +12113,26 @@
                 
             }
 
+            view.notif_sect = function ()
+            {   
+                $("#main").html(column(12, view.simplebox({
+                    boxtype:"primary",
+                    title:"Notifications",
+                    body:`  <h3 id="notifsect_count"></h3>
+                            <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
+                                <li>${view.boxloading()}</li>
+                            </ul>
+                        
+
+                    `,
+                    footer:''
+                })));
+                
+                model.notifsect_getnotif()
+                model.notifsect_count()
+                
+            }
+
             view.initchangepass = function ()
             {
                 $("#main").html(
@@ -12252,7 +12395,7 @@
 
                 addmenuitem(apputils.mnunotif,
                     function () {
-                        view.initnotif();
+                        view.notif_sect();
                     }
                     );
                 switch(persontype)

@@ -22,23 +22,22 @@ AS $BODY$
 --       notifications where is_new = par_status and channel = ANY(par_channels) and action_initiator != par_initiatorid;
 
 
-	for notif in select * from notifications where is_new = par_status 
-			and channel = ANY(par_channels) 
+	for notif in select * from notifications where channel = ANY(par_channels) 
 			and action_initiator != par_initiatorid
 		loop
-			if notif.notif_type != 'assignment' then
-				notif_count = notif_count + 1;
-			end if;
-			
-			if notif.notif_type = 'assignment' then
-				if notif.receiverid = par_initiatorid then
+			if notif.notif_id != checknewnotif(notif.notif_id, par_initiatorid) then
+				if notif.notif_type != 'assignment' then
 					notif_count = notif_count + 1;
+				end if;
+			
+				if notif.notif_type = 'assignment' then
+					if notif.receiverid = par_initiatorid then
+						notif_count = notif_count + 1;
+					end if;
 				end if;
 			end if;
 		end loop;
---       if loc_count isnull then
---           return 'NONE';
---       end if;
+
 
       return notif_count::text;
    end;
