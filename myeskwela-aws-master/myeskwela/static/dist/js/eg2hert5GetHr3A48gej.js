@@ -3108,31 +3108,36 @@
             }
 
             model.readnewnotif = function(){
-                $.ajax({
-                    url: apputils.rest + '/readnewnotif',
-                    type:"POST",
-                    data:JSON.stringify({
-                        personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
-                        group: $("#name-rightbadge").data("usertype"),
-                        // channels: ["asd", "asdasd"].join(", ")
-                    }),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function(resp){
-                        if (resp.status == 'OK'){
-                            model.countNewNotif()
+                var isExpanded = $("#notif_dropdown").attr("aria-expanded");
+                if (isExpanded == 'false'){
+                     $.ajax({
+                        url: apputils.rest + '/readnewnotif',
+                        type:"POST",
+                        data:JSON.stringify({
+                            personid: $("#name-rightbadge").data("personnumid"),
+                            channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                            group: $("#name-rightbadge").data("usertype"),
+                            // channels: ["asd", "asdasd"].join(", ")
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function(resp){
+                            if (resp.status == 'OK'){
+                                model.countNewNotif()
+                            }
+                            
+                        },
+                        beforeSend: function (xhrObj){
+                            //$(par_this).html(view.spin() + " Pls Wait..")
+                            $("#nexttimes").removeClass('fa-sort-amount-asc');
+                            $("#nexttimes").addClass('fa-refresh fa-spin');
+                            xhrObj.setRequestHeader("Authorization",
+                                "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
                         }
-                       
-                    },
-                    beforeSend: function (xhrObj){
-                        //$(par_this).html(view.spin() + " Pls Wait..")
-                        $("#nexttimes").removeClass('fa-sort-amount-asc');
-                        $("#nexttimes").addClass('fa-refresh fa-spin');
-                        xhrObj.setRequestHeader("Authorization",
-                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
-                    }
-                })
+                    })
+
+                }
+               
             }
 
             model.classlist = function (eventerid)

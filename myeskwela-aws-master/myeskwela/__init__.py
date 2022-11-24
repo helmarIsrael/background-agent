@@ -6790,10 +6790,14 @@ def readnewnotif():
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
-
-
-    return jsonify({'status':res})
+    # res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
+    res = spcall("getnotification",(channels, personid),)[0][0]
+    notifs = res["notifs"]
+    for item in notifs:
+        print(f'\nnotif id: {item["notif_id"]}\ninitiatorid:{item["initiatorid"]}\n\n')
+        seen_result = spcall("see_newnotif", (item["notif_id"], personid), group, True)[0][0]
+    print(seen_result)
+    return jsonify({'status':seen_result})
 
 
 

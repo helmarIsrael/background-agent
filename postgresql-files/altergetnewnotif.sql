@@ -23,7 +23,7 @@ AS $BODY$
 	 notif_isnew boolean;
 	 notif_count int;
 	 notif_type text;
-	 
+	 notif_id text;
    begin
 	 notif_count = 0;
      for notif in select * from
@@ -39,6 +39,7 @@ AS $BODY$
 			notif_read = notif.is_read;
 			notif_isnew = notif.is_new;
 			notif_type = notif.notif_type;
+			notif_id = notif.notif_id;
 			
 			notif_array = 
 				notif_array || 
@@ -51,7 +52,8 @@ AS $BODY$
 					'is_new', notif_isnew,
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
-					'notif_type', notif_type
+					'notif_type', notif_type,
+					'notif_id', notif_id
 				);
 			notif_count = notif_count + 1;
 		end loop;
