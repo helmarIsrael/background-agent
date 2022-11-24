@@ -20,7 +20,6 @@ AS $BODY$
 	 notif_initiatorid text;
 	 notif_receiverid text;
 	 notif_read boolean;
-	 notif_isnew boolean;
 	 notif_count int;
 	 notif_type text;
 	 notif_id text;
@@ -36,10 +35,15 @@ AS $BODY$
 			notif_tlts = notif.timeline_ts;
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
-			notif_read = notif.is_read;
-			notif_isnew = notif.is_new;
+			
 			notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
+			
+			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
+				notif_read = false ;
+			else
+				notif_read = true ;
+			end if;
 			
 			notif_array = 
 				notif_array || 
@@ -49,7 +53,6 @@ AS $BODY$
 					'receiverid', notif_receiverid,
 					'timeline_timestamp', notif_tlts,
 					'is_read', notif_read,
-					'is_new', notif_isnew,
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', notif_type,

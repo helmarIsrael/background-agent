@@ -2831,7 +2831,7 @@
 
                                     $("#notifholder").append(`
                                     <li>
-                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                             <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                         </a>
                                     </li>`
@@ -2844,7 +2844,7 @@
                                     if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
                                         $("#notifholder").append(`
                                             <li>
-                                                <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                                     <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                                 </a>
                                             </li>`
@@ -2857,7 +2857,7 @@
                             } else {
                                 $("#notifholder").append(`
                                     <li>
-                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                             <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
                                         </a>
                                     </li>`
@@ -2890,7 +2890,7 @@
                     dataType: "json",
                     success: function(resp){
                         // resp.timelines[0].initiatorid = $("#name-rightbadge").data("personnumid")
-                        console.log(resp.timelines[0])
+                      
                         $("#notif_postbox li").remove()
                         $("#notif_postbox").append(
                             view.postbox(
@@ -2942,7 +2942,7 @@
 
                                     $("#notif_sect_holder").append(`
                                         <li>
-                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                 <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                                     <div class="box-body">
                                                         <blockquote>
@@ -2962,7 +2962,7 @@
                                     if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
                                         $("#notif_sect_holder").append(`
                                         <li>
-                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                 <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                                     <div class="box-body">
                                                         <blockquote>
@@ -2982,7 +2982,7 @@
                             } else {
                                 $("#notif_sect_holder").append(`
                                         <li>
-                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}')" style="cursor:pointer; color:black;">
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                 <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
                                                     <div class="box-body">
                                                         <blockquote>
@@ -3060,7 +3060,9 @@
                         console.log( $("#name-rightbadge").data("personnumid"))
                         apputils.popsuccess(msg.poster)
                         model.countNewNotif()
+                        model.notifsect_count()
                         model.getnotif()
+                        model.notifsect_getnotif()
                     }
                      
 
@@ -3087,7 +3089,6 @@
                     },
                     dataType: "json",
                     success: function(resp){
-                        console.log(resp.count)
                         if (resp.count > 0){
                             $("#notif-count").show()
                             $("#notif-count").html(resp.count)
@@ -3105,6 +3106,34 @@
                             "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
                     }
                 })
+            }
+            
+            model.readnotif = function (notif_id) {
+                $.ajax({
+                    url: apputils.rest + '/readnotif',
+                    type:"POST",
+                    data:JSON.stringify({
+                        personid: $("#name-rightbadge").data("personnumid"),
+                        group: $("#name-rightbadge").data("usertype"),
+                        notifid: notif_id
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(resp){
+                        if (resp.status == 'OK'){
+                            model.getnotif()
+                        }
+                       
+                    },
+                    beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+
             }
 
             model.readnewnotif = function(){
@@ -12098,8 +12127,10 @@
                 view.calendarset();
 
             }
-            view.initnotif = function (notif, ts, initid, receiveid, tlts)
+            view.initnotif = function (notif, ts, initid, receiveid, tlts, notif_id)
             {   
+
+                model.readnewnotif()
                 $("#main").html(column(12, view.simplebox({
                     boxtype:"primary",
                     title:"Notifications",
@@ -12107,12 +12138,13 @@
                         <h3>${notif}</h3>
                         <small>${ts}</small>
                        
-                        <ul style="margin-top:1em !important" id="notif_postbox" class="p-5 timeline">
+                        <ul style="margin-top:0.3em !important" id="notif_postbox" class="timeline">
                             <li>${view.boxloading()}</li>
                         </ul>
                     </div>`,
                     footer:''
                 })));
+                model.readnotif(notif_id)
                 model.notif_getpost(notif, ts, initid, receiveid, tlts)
                 
                 
@@ -12124,9 +12156,11 @@
                     boxtype:"primary",
                     title:"Notifications",
                     body:`  <h3 id="notifsect_count"></h3>
-                            <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
+                            <div style="overflow-y:scroll; height:10% !important;">
+                                <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
                                 <li>${view.boxloading()}</li>
-                            </ul>
+                                </ul>
+                            </div>
                         
 
                     `,

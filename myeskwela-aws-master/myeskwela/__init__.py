@@ -6794,12 +6794,24 @@ def readnewnotif():
     res = spcall("getnotification",(channels, personid),)[0][0]
     notifs = res["notifs"]
     for item in notifs:
-        print(f'\nnotif id: {item["notif_id"]}\ninitiatorid:{item["initiatorid"]}\n\n')
+        # print(f'\nnotif id: {item["notif_id"]}\ninitiatorid:{item["initiatorid"]}\n\n')
         seen_result = spcall("see_newnotif", (item["notif_id"], personid), group, True)[0][0]
-    print(seen_result)
+    # print(seen_result)
     return jsonify({'status':seen_result})
 
+@app.route("/readnotif", methods=["POST"])
+@auth.login_required
+def readnotif():
+    params = request.get_json()
+    personid = params["personid"]
+    group = params["group"]
+    notif_id = params["notifid"]
 
+    
+    
+    res = spcall("read_notif", (notif_id, personid), group, True)[0][0]
+    
+    return jsonify({'status':res})
 
 @app.route("/getnotif", methods=["GET"])
 @auth.login_required
