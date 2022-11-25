@@ -2812,6 +2812,7 @@
             }
 
             model.getnotif = function (){
+                var count = 0;
                 $("#notifholder").show()
                   $.ajax({
                     url: apputils.rest + '/getnotif',
@@ -2837,6 +2838,10 @@
                                     </li>`
                                     )
 
+                                    if (data[i].is_read == false){
+                                        count = count + 1
+                                    }
+
                
                                 }
 
@@ -2850,6 +2855,10 @@
                                             </li>`
                                             )
 
+                                            if (data[i].is_read == false){
+                                                count = count + 1
+                                            }
+
                                     }
                                 }
 
@@ -2862,6 +2871,19 @@
                                         </a>
                                     </li>`
                                 )
+
+                                if (data[i].is_read == false){
+                                    count = count + 1
+                                }
+                            }
+
+
+                            if (count == 1){
+                                $("#headnotif-count").html(`You have ${count} unread notification`)
+                            } else if (count > 1){
+                                $("#headnotif-count").html(`You have ${count} unread notifications`)
+                            } else {
+                                $("#headnotif-count").html(`All caught up!`)
                             }
                             
                         }
@@ -2922,6 +2944,7 @@
 
 
             model.notifsect_getnotif = function (){
+                var count = 0;
                 $("#notifholder").show()
                   $.ajax({
                     url: apputils.rest + '/getnotif',
@@ -2955,6 +2978,10 @@
                                         </li>
                                     `)
 
+                                    if (data[i].is_read == false){
+                                        count = count + 1
+                                    }
+
                
                                 }
 
@@ -2975,6 +3002,10 @@
                                         </li>
                                     `)
 
+                                    if (data[i].is_read == false){
+                                        count = count + 1
+                                    }
+
                                     }
                                 }
 
@@ -2994,37 +3025,19 @@
                                             </a>  
                                         </li>
                                     `)
+
+                                    if (data[i].is_read == false){
+                                        count = count + 1
+                                    }
                             }
+
+                            
                             
                         }
-                        
-                       
-                    }, beforeSend: function (xhrObj){
-                        //$(par_this).html(view.spin() + " Pls Wait..")
-                        $("#nexttimes").removeClass('fa-sort-amount-asc');
-                        $("#nexttimes").addClass('fa-refresh fa-spin');
-                        xhrObj.setRequestHeader("Authorization",
-                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
-                    }
-                })
-            }
-
-
-            model.notifsect_count = function(){
-                $.ajax({
-                    url: apputils.rest + '/newnotifcount',
-                    type:"GET",
-                    data:{
-                        personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
-                        // channels: ["asd", "asdasd"].join(", ")
-                    },
-                    dataType: "json",
-                    success: function(resp){
-                        if (resp.count == 1){
-                            $("#notifsect_count").html(`You have ${resp.count} unread notification`)
-                        } else if (resp.count > 1){
-                            $("#notifsect_count").html(`You have ${resp.count} unread notifications`)
+                        if (count == 1){
+                            $("#notifsect_count").html(`You have ${count} unread notification`)
+                        } else if (count > 1){
+                            $("#notifsect_count").html(`You have ${count} unread notifications`)
                         } else {
                             $("#notifsect_count").html(`All caught up!`)
                         }
@@ -3038,6 +3051,36 @@
                     }
                 })
             }
+
+
+            // model.notifsect_count = function(){
+            //     $.ajax({
+            //         url: apputils.rest + '/newnotifcount',
+            //         type:"GET",
+            //         data:{
+            //             personid: $("#name-rightbadge").data("personnumid"),
+            //             channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+            //             // channels: ["asd", "asdasd"].join(", ")
+            //         },
+            //         dataType: "json",
+            //         success: function(resp){
+            //             if (resp.count == 1){
+            //                 $("#notifsect_count").html(`You have ${resp.count} unread notification`)
+            //             } else if (resp.count > 1){
+            //                 $("#notifsect_count").html(`You have ${resp.count} unread notifications`)
+            //             } else {
+            //                 $("#notifsect_count").html(`All caught up!`)
+            //             }
+                       
+            //         }, beforeSend: function (xhrObj){
+            //             //$(par_this).html(view.spin() + " Pls Wait..")
+            //             $("#nexttimes").removeClass('fa-sort-amount-asc');
+            //             $("#nexttimes").addClass('fa-refresh fa-spin');
+            //             xhrObj.setRequestHeader("Authorization",
+            //                 "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+            //         }
+            //     })
+            // }
 
             model.pubnub_sub = function (user_channels)
             {   
@@ -3060,7 +3103,7 @@
                         console.log( $("#name-rightbadge").data("personnumid"))
                         apputils.popsuccess(msg.poster)
                         model.countNewNotif()
-                        model.notifsect_count()
+                        // model.notifsect_count()
                         model.getnotif()
                         model.notifsect_getnotif()
                     }
@@ -3092,10 +3135,10 @@
                         if (resp.count > 0){
                             $("#notif-count").show()
                             $("#notif-count").html(resp.count)
-                            $("#headnotif-count").html(`You have ${resp.count} new notifications`)
+                            // $("#headnotif-count").html(`You have ${resp.count} new notifications`)
                         } else {
                             $("#notif-count").hide()
-                            $("#headnotif-count").html(`All caught up!`)
+                            // $("#headnotif-count").html(`All caught up!`)
                         }
                        
                     }, beforeSend: function (xhrObj){
@@ -12156,7 +12199,7 @@
                     boxtype:"primary",
                     title:"Notifications",
                     body:`  <h3 id="notifsect_count"></h3>
-                            <div style="overflow-y:scroll; height:10% !important;">
+                            <div style="overflow-y:scroll; height:46em !important;">
                                 <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
                                 <li>${view.boxloading()}</li>
                                 </ul>
@@ -12168,7 +12211,7 @@
                 })));
                 
                 model.notifsect_getnotif()
-                model.notifsect_count()
+                // model.notifsect_count()
                 
             }
 
