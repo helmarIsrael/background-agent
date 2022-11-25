@@ -6769,11 +6769,12 @@ def getnewnotif_count():
     params = request.args
     chan = params["channels"]
     personid = params["personid"]
+    group = params["group"]
     channels = chan.split()
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("getnewnotifcount",(True, channels, personid),)[0][0]
+    res = spcall("getnewnotifcount",(True, channels, personid, group),)[0][0]
 
 
     return jsonify({'status':'OK', 'count': res})
@@ -6791,7 +6792,7 @@ def readnewnotif():
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     # res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
-    res = spcall("getnotification",(channels, personid),)[0][0]
+    res = spcall("getnotification",(channels, personid, group),)[0][0]
     notifs = res["notifs"]
     for item in notifs:
         # print(f'\nnotif id: {item["notif_id"]}\ninitiatorid:{item["initiatorid"]}\n\n')
@@ -6819,12 +6820,12 @@ def getnotif():
     params = request.args
     chan = params["channels"]
     personid = params["personid"]
-
+    group = params["group"]
     channels = chan.split()
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("getnotification",(channels, personid),)[0][0]
+    res = spcall("getnotification",(channels, personid, group),)[0][0]
 
     return jsonify({'status':'OK', 'notifs': res["notifs"] })
 

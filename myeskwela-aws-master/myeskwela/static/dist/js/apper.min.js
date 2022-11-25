@@ -2819,7 +2819,8 @@
                     type:"GET",
                     data:{
                         personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                        group: $("#name-rightbadge").data("usertype")
                     },
                     dataType: "json",
                     success: function(resp){
@@ -2951,7 +2952,8 @@
                     type:"GET",
                     data:{
                         personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                        group: $("#name-rightbadge").data("usertype")
                     },
                     dataType: "json",
                     success: function(resp){
@@ -3093,25 +3095,54 @@
                 }
           );
           
-          pubnub.addListener(
-              {
-                  message: function(m){
-                      msg = m.message
-                    //   $("#main").html(view.showNotif(m.message))
+          pubnub.addListener({
+            message: function(m){
+                msg = m.message
+                console.log(msg)
+              //   $("#main").html(view.showNotif(m.message))
+              if ($("#name-rightbadge").data("usertype") == 'faculty') {
+                if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
                     if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                        console.log(m.message.action_initiator)
-                        console.log( $("#name-rightbadge").data("personnumid"))
-                        apputils.popsuccess(msg.poster)
-                        model.countNewNotif()
-                        // model.notifsect_count()
-                        model.getnotif()
-                        model.notifsect_getnotif()
-                    }
-                     
+                        if (msg.type == 'comment' || msg.type == 'reaction') {
+                            if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
+                                console.log(m.message.action_initiator)
+                                console.log( $("#name-rightbadge").data("personnumid"))
+                                apputils.popsuccess(msg.poster)
+                                model.countNewNotif()
+                                // model.notifsect_count()
+                                model.getnotif()
+                                model.notifsect_getnotif()
+                            }
+                        } else {
+                            console.log(m.message.action_initiator)
+                            console.log( $("#name-rightbadge").data("personnumid"))
+                            apputils.popsuccess(msg.poster)
+                            model.countNewNotif()
+                            // model.notifsect_count()
+                            model.getnotif()
+                            model.notifsect_getnotif()
+                        
+                        }
 
-                },
+                        
+                    }
+                }
+              } else {
+                  if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                      console.log(m.message.action_initiator)
+                      console.log( $("#name-rightbadge").data("personnumid"))
+                      apputils.popsuccess(msg.poster)
+                      model.countNewNotif()
+                      // model.notifsect_count()
+                      model.getnotif()
+                      model.notifsect_getnotif()
+                  }
               }
-          );
+
+            }
+
+
+          });
       
           pubnub.subscribe({
                 channels: user_channels,
@@ -3127,7 +3158,9 @@
                     type:"GET",
                     data:{
                         personid: $("#name-rightbadge").data("personnumid"),
-                        channels: $("#name-rightbadge").data("virtualroomid").join(", ")
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                        group: $("#name-rightbadge").data("usertype")
+
                         // channels: ["asd", "asdasd"].join(", ")
                     },
                     dataType: "json",
@@ -3188,7 +3221,7 @@
                         data:JSON.stringify({
                             personid: $("#name-rightbadge").data("personnumid"),
                             channels: $("#name-rightbadge").data("virtualroomid").join(", "),
-                            group: $("#name-rightbadge").data("usertype"),
+                            group: $("#name-rightbadge").data("usertype")
                             // channels: ["asd", "asdasd"].join(", ")
                         }),
                         contentType: "application/json; charset=utf-8",
