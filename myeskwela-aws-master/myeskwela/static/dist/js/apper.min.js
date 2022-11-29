@@ -3101,32 +3101,33 @@
                 console.log(msg)
               //   $("#main").html(view.showNotif(m.message))
               if ($("#name-rightbadge").data("usertype") == 'faculty') {
-                if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
-                    if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                        if (msg.type == 'comment' || msg.type == 'reaction') {
-                            if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
-                                console.log(m.message.action_initiator)
-                                console.log( $("#name-rightbadge").data("personnumid"))
-                                apputils.popsuccess(msg.poster)
-                                model.countNewNotif()
-                                // model.notifsect_count()
-                                model.getnotif()
-                                model.notifsect_getnotif()
-                            }
-                        } else {
-                            console.log(m.message.action_initiator)
-                            console.log( $("#name-rightbadge").data("personnumid"))
-                            apputils.popsuccess(msg.poster)
-                            model.countNewNotif()
-                            // model.notifsect_count()
-                            model.getnotif()
-                            model.notifsect_getnotif()
+                console.log(msg)
+                // if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
+                //     if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                //         if (msg.type == 'comment' || msg.type == 'reaction') {
+                //             if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
+                //                 console.log(m.message.action_initiator)
+                //                 console.log( $("#name-rightbadge").data("personnumid"))
+                //                 apputils.popsuccess(msg.poster)
+                //                 model.countNewNotif()
+                //                 // model.notifsect_count()
+                //                 model.getnotif()
+                //                 model.notifsect_getnotif()
+                //             }
+                //         } else {
+                //             console.log(m.message.action_initiator)
+                //             console.log( $("#name-rightbadge").data("personnumid"))
+                //             apputils.popsuccess(msg.poster)
+                //             model.countNewNotif()
+                //             // model.notifsect_count()
+                //             model.getnotif()
+                //             model.notifsect_getnotif()
                         
-                        }
+                //         }
 
                         
-                    }
-                }
+                //     }
+                // }
               } else {
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                       console.log(m.message.action_initiator)
