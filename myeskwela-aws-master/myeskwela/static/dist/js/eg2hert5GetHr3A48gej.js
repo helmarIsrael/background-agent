@@ -3102,32 +3102,32 @@
               //   $("#main").html(view.showNotif(m.message))
               if ($("#name-rightbadge").data("usertype") == 'faculty') {
                 console.log(msg)
-                // if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
-                //     if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                //         if (msg.type == 'comment' || msg.type == 'reaction') {
-                //             if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
-                //                 console.log(m.message.action_initiator)
-                //                 console.log( $("#name-rightbadge").data("personnumid"))
-                //                 apputils.popsuccess(msg.poster)
-                //                 model.countNewNotif()
-                //                 // model.notifsect_count()
-                //                 model.getnotif()
-                //                 model.notifsect_getnotif()
-                //             }
-                //         } else {
-                //             console.log(m.message.action_initiator)
-                //             console.log( $("#name-rightbadge").data("personnumid"))
-                //             apputils.popsuccess(msg.poster)
-                //             model.countNewNotif()
-                //             // model.notifsect_count()
-                //             model.getnotif()
-                //             model.notifsect_getnotif()
+                if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
+                    if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                        if (msg.type == 'comment' || msg.type == 'reaction') {
+                            if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
+                                console.log(m.message.action_initiator)
+                                console.log( $("#name-rightbadge").data("personnumid"))
+                                apputils.popsuccess(msg.poster)
+                                model.countNewNotif()
+                                // model.notifsect_count()
+                                model.getnotif()
+                                model.notifsect_getnotif()
+                            }
+                        } else {
+                            console.log(m.message.action_initiator)
+                            console.log( $("#name-rightbadge").data("personnumid"))
+                            apputils.popsuccess(msg.poster)
+                            model.countNewNotif()
+                            // model.notifsect_count()
+                            model.getnotif()
+                            model.notifsect_getnotif()
                         
-                //         }
+                        }
 
                         
-                //     }
-                // }
+                    }
+                }
               } else {
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                       console.log(m.message.action_initiator)
@@ -12232,7 +12232,8 @@
                 $("#main").html(column(12, view.simplebox({
                     boxtype:"primary",
                     title:"Notifications",
-                    body:`  <h3 id="notifsect_count"></h3>
+                    body:`  <p><div style=" height: 50px; width: 100px; background-color: #555;"></div> <h3>Unread Notif</h3></p>
+                            <h3 id="notifsect_count"></h3>
                             <div style="overflow-y:scroll; height:46em !important;">
                                 <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
                                 <li>${view.boxloading()}</li>
