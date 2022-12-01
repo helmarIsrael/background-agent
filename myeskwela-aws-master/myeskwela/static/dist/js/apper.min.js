@@ -10834,7 +10834,7 @@
                          apputils.echo(par_label);
                          apputils.echo(par_label);
                          model.ajaxCall(
-                                         {
+                                         {  
                                              resource: 'assignment/faculty',
                                              data: {
                                                     token: $("#name-rightbadge").data("token"),

@@ -3622,7 +3622,7 @@ def bulletinpost():
     messageTextOnly = notif_msg
     msg_type = 'Bulletin Board'
     
-
+    print(semid)
     if len(message) == 0:
         return jsonify({"status": "error", "message": "empty message"})
 
@@ -3632,25 +3632,25 @@ def bulletinpost():
                   group, 'Bulletin Board',
                   True, 3, semid, schoolid
                   ), group, True)
-            
-    poster = f'{name} has posted!'
-    channels = vroomid
-    receivers = []
-    timestamps = res[0][0]['responses'][0]['ts']
-    initiatorid = res[0][0]['initiatorid']
-    if len(res[0][0]['responses']) > 1:
-        for item in res[0][0]['responses']:
-            receivers.append(item['receiverid'])
-    else:
-        receivers.append(res[0][0]['responses'][0]['receiverid'])
+    print(res)
+    # poster = f'{name} has posted!'
+    # channels = vroomid
+    # receivers = []
+    # timestamps = res[0][0]['responses'][0]['ts']
+    # initiatorid = res[0][0]['initiatorid']
+    # if len(res[0][0]['responses']) > 1:
+    #     for item in res[0][0]['responses']:
+    #         receivers.append(item['receiverid'])
+    # else:
+    #     receivers.append(res[0][0]['responses'][0]['receiverid'])
         
-    # print(f'\n\n{channels}\n\n')
-    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-    notif = pub.notifications(username=username,
-                poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
-                channels=channels, initiator_id=initiatorid, section=None,
-                receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
-                name=name, action_initiator=usernum)
+    # # print(f'\n\n{channels}\n\n')
+    # usernum = spcall("getpersonidbyusername", (username,),)[0][0]
+    # notif = pub.notifications(username=username,
+    #             poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
+    #             channels=channels, initiator_id=initiatorid, section=None,
+    #             receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
+    #             name=name, action_initiator=usernum)
     
 
    
@@ -3658,8 +3658,8 @@ def bulletinpost():
 
     if 'Error' in res[0][0]:
         return jsonify({"status": "error", "message": res[0][0]})
-    else:
-        notif.notify()
+    # else:
+    #     notif.notify()
     return jsonify(res[0][0])
 
 
