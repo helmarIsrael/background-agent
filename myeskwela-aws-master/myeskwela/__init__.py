@@ -1716,7 +1716,15 @@ def syslogcred():
         schoolassin = credentials[u"userschool"].split("*")
         # print(f'\n\nSchool Assign: {schoolassin}\n\n')
         #print credentials[u"designated"]
+
+        channel = credentials[u"vroomid"]
+        channels = []
+        channels.clear()
+        if channel != 'NONE':
+            channels.append(channel)
+
         designated = []
+        
         if credentials[u"designated"] != 'none':
             for c in credentials[u"designated"].split(",")[:-1]:
                 #print c
@@ -1766,7 +1774,10 @@ def syslogcred():
             kids = credentials[u"mystu"].split("$")[:-1]
             for kid in kids:
                 kid = kid.split("*")
+                print(kid)
 
+                
+                channels.append(kid[5])
                 mystu.append({
                     "id": kid[0],
                     "name": kid[2],
@@ -1780,11 +1791,8 @@ def syslogcred():
                            "}"
                 })
         todayis = date.today().strftime("%d %B %Y")
-        channel = credentials[u"vroomid"]
-        channels = []
-        channels.clear()
-        if channel != None:
-            channels.append(channel)
+       
+        
         personnumid = credentials[u"personnumid"]
         clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
