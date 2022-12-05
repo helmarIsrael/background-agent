@@ -1,10 +1,10 @@
-SELECT updatepassword('paeng.faker', '1');
+SELECT updatepassword('mamaeng.faker', '1');
 
--- SELECT getpersonidbyusername('markpapi.faker');
+-- SELECT getpersonidbyusername('papaeng.faker');
 
--- select * from getmykids('P2022CARDOMAGTANGGOL-27', 'students');
+select personid from getmykids('P2022CARDOMAGTANGGOL-29', 'students');
 
--- select * from personlevel WHERE studentid ='S2022CARDOMAGTANGGOL-13' and semid = '20222023';
+-- select section from personlevel WHERE studentid ='S2022CARDOMAGTANGGOL-13' and semid = '20222023';
 
 
 -- select * from person where personid IN

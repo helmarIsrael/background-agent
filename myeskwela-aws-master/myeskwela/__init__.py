@@ -6779,10 +6779,14 @@ def getnewnotif_count():
     personid = params["personid"]
     group = params["group"]
     channels = chan.split()
+    kid_id = params["kid_id"]
+    kids = kid_id.split()
+
+    
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("getnewnotifcount",(True, channels, personid, group),)[0][0]
+    res = spcall("getnewnotifcount",(True, channels, personid, group, kids),)[0][0]
 
 
     return jsonify({'status':'OK', 'count': res})
