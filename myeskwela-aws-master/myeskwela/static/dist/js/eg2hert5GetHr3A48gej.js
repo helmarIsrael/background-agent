@@ -2837,6 +2837,11 @@
                         $("#notifholder").empty()
                         for (var i = 0; i < data.length; i++){
                             if (usertype == "students") {
+                                if (data[i].notif_type == 'grade' && data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                    text = data[i].body
+                                    data[i].body = text.replace("someone", "you")
+                                }
+
                                 if (data[i].notif_type != "assignment") {
 
                                     $("#notifholder").append(`
@@ -2854,7 +2859,7 @@
                
                                 }
 
-                                if (data[i].notif_type == 'assignment') {
+                                if (data[i].notif_type == 'assignment' && data[i].notif_type == 'grade') {
                                     if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
                                         $("#notifholder").append(`
                                             <li>
@@ -2979,6 +2984,10 @@
                         $("#notif_sect_holder").empty()
                         for (var i = 0; i < data.length; i++){
                             if (usertype == "students") {
+                                if (data[i].notif_type == 'grade' && data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                    text = data[i].body
+                                    data[i].body = text.replace("someone", "you")
+                                }
                                 if (data[i].notif_type != "assignment") {
 
                                     $("#notif_sect_holder").append(`
@@ -3168,6 +3177,14 @@
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                     //   console.log(m.message.action_initiator)
                     //   console.log( $("#name-rightbadge").data("personnumid"))
+                    if (msg.type == 'grade') {
+                        if (msg.receiverid == $("#name-rightbadge").data("personnumid") ) {
+                            text = msg.poster
+                            msg.poster = text.replace("someone", "you")
+                        }
+
+                    }
+                    
                     console.log("else")
                     apputils.popsuccess(msg.poster)
                     model.countNewNotif()
@@ -6005,7 +6022,8 @@
                     data:JSON.stringify({
                             token:$("#name-rightbadge").data("token"),
                             group:$("#name-rightbadge").data("usertype"),
-                            quarter: $("#name-rightbadge").data("quarter")
+                            quarter: $("#name-rightbadge").data("quarter"),
+                            name: $("#name-rightbadge").data("personname")
                         }),
                      contentType: 'application/json; charset=utf-8',
                     type: "PUT",
