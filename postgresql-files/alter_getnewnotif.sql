@@ -41,19 +41,17 @@ AS $BODY$
 			end loop;
 		elsif par_usertype = 'parents' then
 			for notif in select * from notifications where channel = ANY(par_channels) 
-			and action_initiator != par_initiatorid
+				and action_initiator != par_initiatorid 
+				and (user_type = 'faculty' OR (action_initiator = ANY(par_kidid) or receiverid = ANY(par_kidid)))  
 			loop
 				if notif.notif_id != checknewnotif(notif.notif_id, par_initiatorid) then
-					if notif.action_initiator = ANY(par_kidid) then
+					if notif.notif_type != 'assignment' then
 						notif_count = notif_count + 1;
 				
 					elsif notif.notif_type = 'assignment' then						
 						if notif.receiverid = ANY(par_kidid) then
 							notif_count = notif_count + 1;
 						end if;
-					elsif notif.user_type = 'faculty' then
-							notif_count = notif_count + 1;
-					
 					end if;
 					
 				end if;

@@ -1774,9 +1774,7 @@ def syslogcred():
             kids = credentials[u"mystu"].split("$")[:-1]
             for kid in kids:
                 kid = kid.split("*")
-                print(kid)
-
-                
+   
                 channels.append(kid[5])
                 mystu.append({
                     "id": kid[0],
@@ -6800,16 +6798,19 @@ def readnewnotif():
     group = params["group"]
 
     channels = chan.split()
+    kid_id = params["kid_id"]
+    kids = kid_id.split()
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     # res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
-    res = spcall("getnotification",(channels, personid, group),)[0][0]
+    res = spcall("getnotification",(channels, personid, group, kids),)[0][0]
     notifs = res["notifs"]
+    # print(notifs)
     for item in notifs:
         # print(f'\nnotif id: {item["notif_id"]}\ninitiatorid:{item["initiatorid"]}\n\n')
         seen_result = spcall("see_newnotif", (item["notif_id"], personid), group, True)[0][0]
-    # print(seen_result)
+    print(seen_result)
     return jsonify({'status':seen_result})
 
 @app.route("/readnotif", methods=["POST"])
@@ -6834,10 +6835,11 @@ def getnotif():
     personid = params["personid"]
     group = params["group"]
     channels = chan.split()
-
+    kid_id = params["kid_id"]
+    kids = kid_id.split()
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
-    res = spcall("getnotification",(channels, personid, group),)[0][0]
+    res = spcall("getnotification",(channels, personid, group, kids),)[0][0]
 
     return jsonify({'status':'OK', 'notifs': res["notifs"] })
 

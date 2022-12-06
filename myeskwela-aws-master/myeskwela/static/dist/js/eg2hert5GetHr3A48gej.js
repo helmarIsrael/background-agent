@@ -2814,13 +2814,21 @@
             model.getnotif = function (){
                 var count = 0;
                 $("#notifholder").show()
+                kids = $("#name-rightbadge").data("mystu")
+                kid_ids = []
+                if ($("#name-rightbadge").data("usertype") == 'parents') {
+                    for (var i = 0; i < kids.length; i++) {
+                      kid_ids.push(kids[i].id)
+                    }
+                } 
                   $.ajax({
                     url: apputils.rest + '/getnotif',
                     type:"GET",
                     data:{
                         personid: $("#name-rightbadge").data("personnumid"),
                         channels: $("#name-rightbadge").data("virtualroomid").join(", "),
-                        group: $("#name-rightbadge").data("usertype")
+                        group: $("#name-rightbadge").data("usertype"),
+                        kid_id: kid_ids.join(", ")
                     },
                     dataType: "json",
                     success: function(resp){
@@ -2947,13 +2955,21 @@
             model.notifsect_getnotif = function (){
                 var count = 0;
                 $("#notifholder").show()
+                kids = $("#name-rightbadge").data("mystu")
+                kid_ids = []
+                if ($("#name-rightbadge").data("usertype") == 'parents') {
+                    for (var i = 0; i < kids.length; i++) {
+                      kid_ids.push(kids[i].id)
+                    }
+                } 
                   $.ajax({
                     url: apputils.rest + '/getnotif',
                     type:"GET",
                     data:{
                         personid: $("#name-rightbadge").data("personnumid"),
                         channels: $("#name-rightbadge").data("virtualroomid").join(", "),
-                        group: $("#name-rightbadge").data("usertype")
+                        group: $("#name-rightbadge").data("usertype"),
+                        kid_id: kid_ids.join(", ")
                     },
                     dataType: "json",
                     success: function(resp){
@@ -3129,13 +3145,23 @@
                     }
                 }
               } else if ($("#name-rightbadge").data("usertype") == 'parents') {
+                kids = $("#name-rightbadge").data("mystu")
+                kid_ids = []
+                if ($("#name-rightbadge").data("usertype") == 'parents') {
+                    for (var i = 0; i < kids.length; i++) {
+                      kid_ids.push(kids[i].id)
+                    }
+                } 
                 if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                    console.log("parents")
-                    apputils.popsuccess(msg.poster)
-                    model.countNewNotif()
-                    // model.notifsect_count()
-                    model.getnotif()
-                    model.notifsect_getnotif()
+                    if (msg.user_type == 'faculty' || kid_ids.includes(msg.action_initiator) || kid_ids.includes(msg.receiveid)) {
+                        console.log("parents")
+                        apputils.popsuccess(msg.poster)
+                        model.countNewNotif()
+                        // model.notifsect_count()
+                        model.getnotif()
+                        model.notifsect_getnotif()
+                    }
+                   
                 }
 
               } else {
@@ -3235,13 +3261,21 @@
             model.readnewnotif = function(){
                 var isExpanded = $("#notif_dropdown").attr("aria-expanded");
                 if (isExpanded == 'false'){
+                    kids = $("#name-rightbadge").data("mystu")
+                    kid_ids = []
+                    if ($("#name-rightbadge").data("usertype") == 'parents') {
+                        for (var i = 0; i < kids.length; i++) {
+                          kid_ids.push(kids[i].id)
+                        }
+                    } 
                      $.ajax({
                         url: apputils.rest + '/readnewnotif',
                         type:"POST",
                         data:JSON.stringify({
                             personid: $("#name-rightbadge").data("personnumid"),
                             channels: $("#name-rightbadge").data("virtualroomid").join(", "),
-                            group: $("#name-rightbadge").data("usertype")
+                            group: $("#name-rightbadge").data("usertype"),
+                            kid_id: kid_ids.join(", ")
                             // channels: ["asd", "asdasd"].join(", ")
                         }),
                         contentType: "application/json; charset=utf-8",
