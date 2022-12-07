@@ -88,8 +88,7 @@ declare
       semid = loc_sectiondetails.semid loop
 	  
 	  loc_studentsect = getvirtualroomidbysection(loc_sectiondetails.section);
-	  loc_initiatorid = getpersonidbyusername(par_username);
-	  loc_studentid = getpersonidbyidnum(loc_studentnames.studentid);
+	 
 	  loc_subdetails = loc_studentnames.subject;
 	  
       loc_stamping =  stampevent(par_username, loc_studentnames.studentid,
@@ -97,6 +96,7 @@ declare
                                  ' for subject ' || loc_studentnames.subject, 'grade',
                                   2, loc_studentnames.semid, loc_studentnames.schoolid
                       );
+	 loc_studentid = loc_stamping;
   end loop;
 
     update summativequartergrade set
@@ -140,11 +140,10 @@ declare
                 json_build_object(
                                         'status', 'ok',
                                         'message', 'Publish operation successful! Students and Parents can now see the grades.',
-										'initiatorid', loc_initiatorid,
-										'studentid', loc_studentid,
 										'subdetails', loc_subdetails,
 										'studentvroomid', loc_studentsect,
-										'ts', loc_nowts
+										'studentid', loc_studentid
+										
                   )
          );
   END;

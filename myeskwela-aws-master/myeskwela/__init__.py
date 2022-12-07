@@ -2642,24 +2642,26 @@ def publishclassrecord(par_offeringid):
                 "message": lockres[0][0]
             })
     else:
-        print(lockres[0][0])
-        if lockres[0][0]['message'] != 'This is already published!':
-            messageTextOnly = f"{name} publish grade action: {lockres[0][0]['message']}"
-            poster = f"{name} has graded someone for {lockres[0][0]['subdetails']}"
-            msg_type = 'grade'
-            usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-            channels = lockres[0][0]['studentvroomid']
-            initiatorid = lockres[0][0]['initiatorid']
-            receivers = [lockres[0][0]['studentid']]
-            timestamps = lockres[0][0]['ts']
+        print(lockres[0][0]['studentid'])
+        # if lockres[0][0]['message'] != 'This is already published!':
+        #     messageTextOnly = f"{name} publish grade action: {lockres[0][0]['message']}"
+        #     poster = f"{name} has graded someone for {lockres[0][0]['subdetails']}"
+        #     msg_type = 'grade'
+        #     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
+        #     channels = lockres[0][0]['studentvroomid']
+        #     initiatorid = lockres[0][0]['initiatorid']
+        #     receivers = [lockres[0][0]['studentid']]
+        #     timestamps = lockres[0][0]['ts']
 
-            notif = pub.notifications(username=username,
-            poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
-            channels=channels, initiator_id=initiatorid, section=None,
-            receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
-            name=name, action_initiator=usernum)
+        #     print(receivers)
 
-            notif.notify()
+        #     notif = pub.notifications(username=username,
+        #     poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
+        #     channels=channels, initiator_id=initiatorid, section=None,
+        #     receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
+        #     name=name, action_initiator=usernum)
+
+        #     notif.notify()
 
     return jsonify(lockres[0][0])
     # return jsonify({'status': 'Ok', 'message': 'Goods'})

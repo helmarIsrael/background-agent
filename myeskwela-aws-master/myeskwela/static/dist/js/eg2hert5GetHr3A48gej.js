@@ -2878,13 +2878,39 @@
 
 
                             } else {
-                                $("#notifholder").append(`
-                                    <li>
-                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
-                                            <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
-                                        </a>
-                                    </li>`
-                                )
+                                if (usertype == "parents") {
+                                        if (data[i].notif_type == 'grade' && kid_ids.includes(data[i].receiverid)) {
+                                            text = data[i].body
+                                            data[i].body = text.replace("someone", "One of your child")
+
+                                            $("#notifholder").append(`
+                                                <li>
+                                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                        <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
+                                                    </a>
+                                                </li>`
+                                            )   
+                                        } else if (data[i].notif_type != 'grade') {
+                                            $("#notifholder").append(`
+                                                <li>
+                                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                        <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
+                                                    </a>
+                                                </li>`
+                                            )
+                                        }
+                                        
+                                } else {
+                                    $("#notifholder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                <i class="fa fa-circle-o text-aqua"></i> ${data[i].is_read ? `${data[i].body}` : `<strong>${data[i].body}</strong>`}
+                                            </a>
+                                        </li>`
+                                    )
+                                }
+
+                                
 
                                 if (data[i].is_read == false){
                                     count = count + 1
@@ -3038,7 +3064,12 @@
 
 
                             } else {
-                                $("#notif_sect_holder").append(`
+                                if (usertype == "parents") {
+                                    if (data[i].notif_type == 'grade' && kid_ids.includes(data[i].receiverid)) {
+                                        text = data[i].body
+                                        data[i].body = text.replace("someone", "One of your child")
+                                        
+                                        $("#notif_sect_holder").append(`
                                         <li>
                                             <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                 <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
@@ -3052,6 +3083,40 @@
                                             </a>  
                                         </li>
                                     `)
+                                    
+                                    } else if (data[i].notif_type != 'grade') {
+                                        $("#notif_sect_holder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                    <div class="box-body">
+                                                        <blockquote>
+                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                            <small>${data[i].notif_readablets}</small>
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
+                                            </a>  
+                                        </li>
+                                    `)
+                                    }
+
+                                } else {
+                                    $("#notif_sect_holder").append(`
+                                            <li>
+                                                <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                    <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                        <div class="box-body">
+                                                            <blockquote>
+                                                                ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                <small>${data[i].notif_readablets}</small>
+                                                            </blockquote>
+                                                        </div>
+                                                    </div>
+                                                </a>  
+                                            </li>
+                                        `)
+                                }
 
                                     if (data[i].is_read == false){
                                         count = count + 1
@@ -3163,12 +3228,24 @@
                 } 
                 if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                     if (msg.user_type == 'faculty' || kid_ids.includes(msg.action_initiator) || kid_ids.includes(msg.receiveid)) {
-                        console.log("parents")
-                        apputils.popsuccess(msg.poster)
-                        model.countNewNotif()
-                        // model.notifsect_count()
-                        model.getnotif()
-                        model.notifsect_getnotif()
+                        if (msg.type == 'grade' && kid_ids.includes(msg.receiveid) ) {
+                            text = msg.poster
+                            msg.poster = text.replace("someone", "Your Child")
+                            console.log("parents GRADE")
+                            apputils.popsuccess(msg.poster)
+                            model.countNewNotif()
+                            // model.notifsect_count()
+                            model.getnotif()
+                            model.notifsect_getnotif()
+                        } else {
+                            console.log("parents")
+                            apputils.popsuccess(msg.poster)
+                            model.countNewNotif()
+                            // model.notifsect_count()
+                            model.getnotif()
+                            model.notifsect_getnotif()
+                        }
+                        
                     }
                    
                 }
@@ -3186,6 +3263,7 @@
                     }
                     
                     console.log("else")
+                    console.log(msg.receiverid)
                     apputils.popsuccess(msg.poster)
                     model.countNewNotif()
                       // model.notifsect_count()
