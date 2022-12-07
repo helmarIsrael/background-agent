@@ -24,7 +24,6 @@ declare
     loc_facultyid text;
 	
 	loc_initiatorid text;
-	loc_studentid text;
 	loc_subdetails text;
 	loc_studentsect text;
 	loc_nowts timestamp without time zone default now();
@@ -88,15 +87,14 @@ declare
       semid = loc_sectiondetails.semid loop
 	  
 	  loc_studentsect = getvirtualroomidbysection(loc_sectiondetails.section);
-	 
 	  loc_subdetails = loc_studentnames.subject;
+	  loc_initiatorid = getpersonidbyusername(par_username);
 	  
       loc_stamping =  stampevent(par_username, loc_studentnames.studentid,
                                  'Recorded Grade Entry ' || loc_studentnames.grade::text ||
                                  ' for subject ' || loc_studentnames.subject, 'grade',
                                   2, loc_studentnames.semid, loc_studentnames.schoolid
                       );
-	 loc_studentid = loc_stamping;
   end loop;
 
     update summativequartergrade set
@@ -140,9 +138,11 @@ declare
                 json_build_object(
                                         'status', 'ok',
                                         'message', 'Publish operation successful! Students and Parents can now see the grades.',
+										'initiatorid', loc_initiatorid,
 										'subdetails', loc_subdetails,
 										'studentvroomid', loc_studentsect,
-										'studentid', loc_studentid
+										'ts', loc_nowts
+										
 										
                   )
          );

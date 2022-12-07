@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION public.stampevent(
 	par_publicity integer,
 	par_semid text,
 	par_schoolid text)
-    RETURNS json
+    RETURNS text
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -20,20 +20,15 @@ AS $BODY$
       --this is a special case of timeline stamping
       --where the initiator is the teacher with username
       --and student is the receiver with lrn
-	return (select
-                json_build_object(
-                                        'status', insert2timeline(
-									   getpersonidbyusername(par_initiatorid),
-									   getpersonidbyidnum(par_receiverid),
-									   par_tlmessage,
-									   par_tltype,
-									   par_publicity,
-									   now()::timestamp without time zone, par_semid, par_schoolid),
-										'initiatorid', getpersonidbyusername(par_initiatorid),
-										'studentid', getpersonidbyidnum(par_receiverid),
-										'ts', now()::timestamp without time zone
-                  )
-         );
+	return insert2timeline(getpersonidbyusername(par_initiatorid),
+						   getpersonidbyidnum(par_receiverid),
+						   par_tlmessage,
+						   par_tltype,
+						   par_publicity,
+						   now()::timestamp without time zone, par_semid, par_schoolid
+			);
+										
+       
     END;
   
 $BODY$;
