@@ -2820,7 +2820,7 @@
                     for (var i = 0; i < kids.length; i++) {
                       kid_ids.push(kids[i].id)
                     }
-                } 
+                }
                   $.ajax({
                     url: apputils.rest + '/getnotif',
                     type:"GET",
@@ -3261,6 +3261,20 @@
                         
                     }
                    
+                }
+                
+
+              } else if ($("#name-rightbadge").data("usertype") == 'admin') {
+                if (msg.type != 'assignment') {
+                    if (msg.action_initiator != $("#name-rightbadge").data("personnumid")) {
+                        console.log("admin")
+                        console.log(msg.receiverid)
+                        apputils.popsuccess(msg.poster)
+                        model.countNewNotif()
+                        // model.notifsect_count()
+                        model.getnotif()
+                        model.notifsect_getnotif()
+                    }
                 }
 
               } else {

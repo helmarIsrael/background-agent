@@ -1725,6 +1725,8 @@ def syslogcred():
             channels.append(channel)
 
         designated = []
+
+        
         
         if credentials[u"designated"] != 'none':
             for c in credentials[u"designated"].split(",")[:-1]:
@@ -1813,7 +1815,12 @@ def syslogcred():
                 "lrn": credentials[u"lrn"],
                 "mystu": mystu
                 }
+        if credentials[u"usertype"] == 'admin' or credentials[u"usertype"] == 'faculty':
+            channels.append(schoolassin[0])
+            if credentials[u"usertype"] == 'faculty':
+                channels.append(personnumid)
 
+       
         # print(f'\n\nCredentials: {clean_cred}\n\n')
 
         return {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
@@ -6810,7 +6817,7 @@ def getnewnotif_count():
     kid_id = params["kid_id"]
     kids = kid_id.split()
 
-    
+    channels = [(''.join(i.split(','))) for i in channels ]
 
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
@@ -6830,7 +6837,7 @@ def readnewnotif():
     channels = chan.split()
     kid_id = params["kid_id"]
     kids = kid_id.split()
-
+    channels = [(''.join(i.split(','))) for i in channels ]
     # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     # res = spcall("readnewnotification",(channels, personid), group, True)[0][0]
@@ -6867,9 +6874,11 @@ def getnotif():
     channels = chan.split()
     kid_id = params["kid_id"]
     kids = kid_id.split()
-    # channels = ['a934fae687b6d918841b', 'myeskwela-testchan']
+    # channels = ['a934fae687b6d918841b', 'XXX', 'F2018CARDOMAGTANGGOL-1']
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
+    channels = [(''.join(i.split(','))) for i in channels ]
     res = spcall("getnotification",(channels, personid, group, kids),)[0][0]
+    # print(channels)
 
     return jsonify({'status':'OK', 'notifs': res["notifs"] })
 
