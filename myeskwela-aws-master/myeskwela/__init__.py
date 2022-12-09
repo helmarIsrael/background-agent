@@ -2648,7 +2648,7 @@ def publishclassrecord(par_offeringid):
        
         if lockres[0][0]['message'] != 'This is already published!': 
             messageTextOnly = f"{name} publish grade action: {lockres[0][0]['message']}"
-            poster = f"{name} has graded the class {lockres[0][0]['subdetails']}"
+            poster = f"{name} has graded the class {lockres[0][0]['subdetails']}. You can check it Now."
             msg_type = 'grade'
             usernum = spcall("getpersonidbyusername", (username,),)[0][0]
             channels = lockres[0][0]['studentvroomid']
