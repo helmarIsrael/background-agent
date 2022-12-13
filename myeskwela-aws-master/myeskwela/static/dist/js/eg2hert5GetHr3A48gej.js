@@ -3353,6 +3353,19 @@
                     //         }
                     //     }
                     // } else {
+                    if (msg.type == 'comment' || msg.type == 'reaction') {
+                        if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                            if (first_char[0].charAt(0) != 'S'){
+                                console.log("admin")
+                                // console.log(msg.receiverid)
+                                apputils.popsuccess(msg.poster)
+                                model.countNewNotif()
+                                model.notifsect_count()
+                                model.getnotif()
+                                model.notifsect_getnotif()
+                            }
+                        }
+                    } else {
                         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                             console.log("admin")
                             // console.log(msg.receiverid)
