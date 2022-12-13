@@ -3202,6 +3202,21 @@
 
                                 } 
                                 
+                            } else {
+                                $("#notif_sect_holder").append(`
+                                        <li>
+                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                    <div class="box-body">
+                                                        <blockquote>
+                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                            <small>${data[i].notif_readablets}</small>
+                                                        </blockquote>
+                                                    </div>
+                                                </div>
+                                            </a>  
+                                        </li>
+                                    `)
                             }
 
                             
@@ -3274,7 +3289,8 @@
                 if (msg.user_type != 'students' || (msg.type == 'comment' || msg.type == 'reaction')) {
                     if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                         if (msg.type == 'comment' || msg.type == 'reaction') {
-                            if (msg.initiatorid == $("#name-rightbadge").data("personnumid") ) {
+                            init_id = msg.initiatorid
+                            if (init_id[0].charAt(0) != 'S') {
                                 // console.log(m.message.action_initiator)
                                 // console.log( $("#name-rightbadge").data("personnumid"))
                                 console.log("teacher")
@@ -3321,34 +3337,36 @@
                    
                 }
                 
-
-              } else if ($("#name-rightbadge").data("usertype") == 'admin') {
+            } else if ($("#name-rightbadge").data("usertype") == 'admin') {
+                first_char = msg.receiverid
                 if (msg.type != 'assignment') {
                     if (msg.type == 'comment' || msg.type == 'reaction') {
-                        if (msg.initiatorid == $("#name-rightbadge").data("personnumid") && msg.receiverid.charAt(0) != 'S') {
-                            if (msg.action_initiator == $("#name-rightbadge").data("personnumid")) {
+                        if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                            if (first_char[0].charAt(0) != 'S'){
                                 console.log("admin")
                                 // console.log(msg.receiverid)
                                 apputils.popsuccess(msg.poster)
                                 model.countNewNotif()
-                                // model.notifsect_count()
+                                model.notifsect_count()
                                 model.getnotif()
-                                model.notifsect_getnotif() 
+                                model.notifsect_getnotif()
                             }
                         }
                     } else {
-                        console.log("admin")
-                        // console.log(msg.receiverid)
-                        apputils.popsuccess(msg.poster)
-                        model.countNewNotif()
-                        // model.notifsect_count()
-                        model.getnotif()
-                        model.notifsect_getnotif()
+                        if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                            console.log("admin")
+                            // console.log(msg.receiverid)
+                            apputils.popsuccess(msg.poster)
+                            model.countNewNotif()
+                            model.notifsect_count()
+                            model.getnotif()
+                            model.notifsect_getnotif()
+                        }
                     }
-                   
-                }
+                
+                } 
 
-              } else {
+            } else {
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                     //   console.log(m.message.action_initiator)
                     //   console.log( $("#name-rightbadge").data("personnumid"))
