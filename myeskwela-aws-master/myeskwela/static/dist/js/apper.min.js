@@ -2980,6 +2980,43 @@
                 })
             }
 
+            model.notif_setdeadline = function(data, initiatorid, date){
+                var receivers = []
+                
+
+                for (var i = 0; i < data.length; i++) {
+                    receivers.push(data[i].receiverid)
+                    ts = data[i].ts
+                }
+
+                $.ajax({
+                    url: apputils.rest + '/notifsetdeadline',
+                    type:"POST",
+                    data:JSON.stringify({
+                        channels: $("#name-rightbadge").data("virtualroomid").join(", "),
+                        group: $("#name-rightbadge").data("usertype"),
+                        initiatorid: initiatorid,
+                        receivers: receivers.join(", "),
+                        ts: ts,
+                        date: date,
+                        name: $("#name-rightbadge").data("personname")
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(resp){
+                    },
+                    beforeSend: function (xhrObj){
+                        //$(par_this).html(view.spin() + " Pls Wait..")
+                        $("#nexttimes").removeClass('fa-sort-amount-asc');
+                        $("#nexttimes").addClass('fa-refresh fa-spin');
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                })
+
+
+            }
+
             model.notif_getpost = function (notif, ts, initid, receiveid, tlts){
                 $("#notifholder").show()
                   $.ajax({
@@ -6882,11 +6919,11 @@
                     error: function (e) {
                     },
                     success: function (resp) {
-                    //    apputils.echo(resp.tl_details);
+                       apputils.echo(resp);
                     tl_details = JSON.parse(resp.tl_details)
-                    console.log(tl_details.responses);
                        if (resp.status.toUpperCase() == 'OK')
                        {
+                          model.notif_setdeadline(tl_details.responses, tl_details.initiatorid, $("#txtdlndate").val())
                           apputils.popsuccess("Deadline Successfully Set.\n" +
                           "To check issued deadlines, please check Calendar.");
                        }
@@ -6898,6 +6935,8 @@
                 });
 
             }
+
+            
 
             model.remindfaculty = function(par_facultyid,
                                            par_btnid,
