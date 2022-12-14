@@ -3339,20 +3339,7 @@
                 
             } else if ($("#name-rightbadge").data("usertype") == 'admin') {
                 first_char = msg.receiverid
-                if (msg.type != 'assignment') {
-                    // if (msg.type == 'comment' || msg.type == 'reaction') {
-                    //     if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                    //         if (first_char[0].charAt(0) != 'S'){
-                    //             console.log("admin")
-                    //             // console.log(msg.receiverid)
-                    //             apputils.popsuccess(msg.poster)
-                    //             model.countNewNotif()
-                    //             model.notifsect_count()
-                    //             model.getnotif()
-                    //             model.notifsect_getnotif()
-                    //         }
-                    //     }
-                    // } else {
+                if (msg.type != 'assignment') { 
                     if (msg.type == 'comment' || msg.type == 'reaction') {
                         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                             if (first_char[0].charAt(0) != 'S'){
@@ -6895,7 +6882,9 @@
                     error: function (e) {
                     },
                     success: function (resp) {
-                       apputils.echo(resp);
+                    //    apputils.echo(resp.tl_details);
+                    tl_details = JSON.parse(resp.tl_details)
+                    console.log(tl_details.responses);
                        if (resp.status.toUpperCase() == 'OK')
                        {
                           apputils.popsuccess("Deadline Successfully Set.\n" +

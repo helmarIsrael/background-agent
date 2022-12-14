@@ -4736,7 +4736,7 @@ def setdeadline():
 
 
 
-    return restrequest("setdeadline",
+    return restrequest("setdeadline2",
                        (
                            username,
                            token,
@@ -4751,6 +4751,8 @@ def setdeadline():
                        group,
                        True,
                        jsonify)
+
+  
 
 
 @app.route("/report/submission/faculty/remind", methods=["PUT"])
