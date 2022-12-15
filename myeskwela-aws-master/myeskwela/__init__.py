@@ -3675,15 +3675,19 @@ def bulletinpost():
                   group, 'Bulletin Board',
                   True, 3, semid, schoolid
                   ), group, True)
-    print(res)
+
     poster = f'{name} has posted!'
     channels = vroomid
     receivers = []
     timestamps = res[0][0]['responses'][0]['ts']
     initiatorid = res[0][0]['initiatorid']
-    if len(res[0][0]['responses']) > 1:
+
+    if group == 'admin':
+        receivers = ['']
+    elif len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
+   
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
         
@@ -4132,9 +4136,13 @@ def eventpost():
     initiatorid = res[0][0]['initiatorid']
     timestamps = res[0][0]['responses'][0]['ts']
 
-    if len(res[0][0]['responses']) > 1:
+    
+    if group == 'admin':
+        receivers = ['']
+    elif len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
+   
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
     
