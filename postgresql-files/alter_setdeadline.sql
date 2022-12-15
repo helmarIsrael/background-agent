@@ -64,7 +64,7 @@ begin
     update deadlines set ddate = par_ddate
     where deadlineid = loc_pk;
     loc_v = inpm(getpersonnumidbyuser(sha1(par_username)),'update deadline');
-    loc_v = post_timeline2(par_username,
+    loc_v = post_timeline(par_username,
                           par_token,
                           '',
                           par_ddate,
@@ -106,7 +106,7 @@ begin
   return (select
             json_build_object(
                 'status', 'OK',
-				'tl_details', loc_v
+				'ts', now()::timestamp without time zone
                 )
          );
 end;

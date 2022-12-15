@@ -3020,14 +3020,7 @@
                 })
             }
 
-            model.notif_setdeadline = function(initiatorid, date){
-                var receivers = []
-                
-
-                for (var i = 0; i < data.length; i++) {
-                    receivers.push(data[i].receiverid)
-                    ts = data[i].ts
-                }
+            model.notif_setdeadline = function(initiatorid, date, ts){
 
                 $.ajax({
                     url: apputils.rest + '/notifsetdeadline',
@@ -3036,7 +3029,6 @@
                         channels: $("#name-rightbadge").data("virtualroomid").join(", "),
                         group: $("#name-rightbadge").data("usertype"),
                         initiatorid: initiatorid,
-                        receivers: receivers.join(", "),
                         ts: ts,
                         date: date,
                         name: $("#name-rightbadge").data("personname")
@@ -7015,10 +7007,9 @@
                     },
                     success: function (resp) {
                        apputils.echo(resp);
-                    tl_details = JSON.parse(resp.tl_details)
                        if (resp.status.toUpperCase() == 'OK')
                        {
-                          model.notif_setdeadline(tl_details.responses, tl_details.initiatorid, $("#txtdlndate").val())
+                          model.notif_setdeadline($("#name-rightbadge").data("personnumid"), $("#txtdlndate").val(), resp.ts)
                           apputils.popsuccess("Deadline Successfully Set.\n" +
                           "To check issued deadlines, please check Calendar.");
                        }

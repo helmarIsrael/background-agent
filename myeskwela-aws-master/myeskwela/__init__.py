@@ -6820,28 +6820,33 @@ def insertoffering():
 @app.route("/notifsetdeadline", methods=["POST"])
 @auth.login_required
 def notif_setdeadline():
-    print("Adsas")
     params = request.get_json()
     username = auth.username()
     chan = params["channels"]
     group = params["group"]
     initiatorid = params["initiatorid"]
-    receivers = params["receivers"]
+    
     timestamps = params["ts"]
     name = params["name"]
     date = params["date"]
     channels = chan.split()
     messageTextOnly = f'{name} posted a deadline'
 
-    msg_type = 'event'
+    msg_type = 'deadline'
 
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     poster = f'{name} has posted a deadline'
-    
 
     channels = [(''.join(i.split(','))) for i in channels ]
-    receivers = receivers.split()
-    receivers = [(''.join(i.split(','))) for i in receivers ]
+    
+    if group == 'admin':
+        receivers = ['']
+
+    else:
+        receivers = receivers.split()
+        receivers = [(''.join(i.split(','))) for i in receivers ]
+
+    
 
 
     notif = pub.notifications(username=username,
@@ -6854,6 +6859,8 @@ def notif_setdeadline():
         )
         
     notif.notify()
+
+    return jsonify({"status": "OK"})
     
 
 
