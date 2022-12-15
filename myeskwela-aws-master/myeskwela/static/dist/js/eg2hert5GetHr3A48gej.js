@@ -3464,32 +3464,58 @@
                 
             } else if ($("#name-rightbadge").data("usertype") == 'admin') {
                 first_char = msg.receiverid
-                if (msg.type != 'assignment') { 
-                    if (msg.type == 'comment' || msg.type == 'reaction') {
-                        if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                            if (first_char[0].charAt(0) != 'S'){
-                                console.log("admin")
-                                // console.log(msg.receiverid)
+                
+                if (msg.action_initiator != $("#name-rightbadge").data("personnumid") ) {
+                    if (msg.type != 'assignment'){
+                        if(msg.type == 'comment' || msg.type == 'reaction'){
+                            if (first_char[0].charAt(0) != 'S') {
                                 apputils.popsuccess(msg.poster)
                                 model.countNewNotif()
-                                model.notifsect_count()
+                                // model.notifsect_count()
                                 model.getnotif()
                                 model.notifsect_getnotif()
                             }
-                        }
-                    } else {
-                        if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                            console.log("admin")
-                            // console.log(msg.receiverid)
+                            
+                        } else {
                             apputils.popsuccess(msg.poster)
                             model.countNewNotif()
-                            model.notifsect_count()
+                            // model.notifsect_count()
                             model.getnotif()
                             model.notifsect_getnotif()
                         }
+                        
                     }
+                }
                 
-                } 
+               
+                // if (msg.type != 'assignment') { 
+                //     if (msg.type == 'comment' || msg.type == 'reaction') {
+                //         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                //             if (first_char[0].charAt(0) != 'S'){
+                //                 console.log("admin")
+                //                 // console.log(msg.receiverid)
+                //                 apputils.popsuccess(msg.poster)
+                //                 model.countNewNotif()
+                //                 model.notifsect_count()
+                //                 model.getnotif()
+                //                 model.notifsect_getnotif()
+                //             }
+                //         }
+                //     }
+                // } 
+                    // else {
+                //         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
+                //             console.log("admin")
+                //             // console.log(msg.receiverid)
+                //             apputils.popsuccess(msg.poster)
+                //             model.countNewNotif()
+                //             model.notifsect_count()
+                //             model.getnotif()
+                //             model.notifsect_getnotif()
+                //         }
+                //     }
+                
+                // } 
 
             } else {
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){

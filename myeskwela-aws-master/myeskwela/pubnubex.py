@@ -167,20 +167,20 @@ class notifications(object):
         
 
         for item in receiverid:
-#             print(f"""\n
-# notif: {notif} {type(notif)}
-# notif_type: {notif_type} {type(notif_type)}
-# username: {username} {type(username)}
-# user_type: {user_type} {type(user_type)}
-# channel: {channel} {type(channel)}
-# initiator_id: {initiatorid} {type(initiatorid)}
-# receiver_id: {item} {type(item)}
-# timeline_ts: {ts} {type(ts)}
-# due_date: {duedate} {type(duedate)}
-# start_date: {startdate} {type(startdate)}
-# poster: {poster} {type(poster)}
-# action_initiator: {action_initiator} {type(action_initiator)}
-# \n""") 
+            print(f"""\n
+notif: {notif} {type(notif)}
+notif_type: {notif_type} {type(notif_type)}
+username: {username} {type(username)}
+user_type: {user_type} {type(user_type)}
+channel: {channel} {type(channel)}
+initiator_id: {initiatorid} {type(initiatorid)}
+receiver_id: {item} {type(item)}
+timeline_ts: {ts} {type(ts)}
+due_date: {duedate} {type(duedate)}
+start_date: {startdate} {type(startdate)}
+poster: {poster} {type(poster)}
+action_initiator: {action_initiator} {type(action_initiator)}
+\n""") 
             ## SIMULATES ADDING TO DB
             res = spcall("insert2notification",
                  (notif, 

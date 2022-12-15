@@ -6201,7 +6201,7 @@ def postcomment():
                group,
                True)[0][0]
     
-    print(result)
+    
     ts = result['ts']
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     person = spcall("getpersonname", (usernum,),)[0][0]
