@@ -4823,7 +4823,7 @@ def remindfacultyall():
     schoolid = params["schoolid"]
     quarter = params["quarter"]
 
-    return restrequest("sendreminderall",
+    return restrequest("sendreminderall2",
                        (
                            username,
                            token,
@@ -7034,7 +7034,12 @@ def notif_reminders():
     msg_type = 'reminder'
 
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-    poster = f'{name} posted a Gentle "{reminder_type}" Reminder for You'
+
+    if reminder_type == 'ALL':
+        poster = f'{name} posted a Gentle Reminder for You'
+    else: 
+        poster = f'{name} posted a Gentle {reminder_type.upper()} Reminder for You'
+
 
     receivers = [receiver]
     

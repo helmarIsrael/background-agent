@@ -3313,9 +3313,7 @@
                                                     </a>  
                                                 </li>
                                             `)
-                                            if (data[i].is_read == false){
-                                                count = count + 1
-                                            }
+                                            
                                         }
                                     
                                 } else {
@@ -3333,9 +3331,6 @@
                                         </a>  
                                     </li>
                                 `)
-                                if (data[i].is_read == false){
-                                    count = count + 1
-                                }
                                 }
                                
                             }
@@ -3377,6 +3372,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function(resp){
+                        apputis.echo(resp)
                     },
                     beforeSend: function (xhrObj){
                         //$(par_this).html(view.spin() + " Pls Wait..")
@@ -7203,7 +7199,7 @@
                     },
                     success: function (resp) {
                         apputils.echo(resp);
-
+                        model.notif_reminders('ALL',  $("#name-rightbadge").data("monitorsendallfacultyid"), resp.ts)
                         if (resp.status !== 'OK')
                         {
                             apputils.poperror(resp.message);
