@@ -4789,7 +4789,7 @@ def remindfaculty():
     title = params['title']
     ptype = params["type"]
 
-    return restrequest("sendreminder",
+    return restrequest("sendreminder2",
                        (
                            username,
                            token,
@@ -7034,7 +7034,7 @@ def notif_reminders():
     msg_type = 'reminder'
 
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-    poster = f'{name} posted a Gentle {reminder_type} Reminder for You'
+    poster = f'{name} posted a Gentle "{reminder_type}" Reminder for You'
 
     receivers = [receiver]
     

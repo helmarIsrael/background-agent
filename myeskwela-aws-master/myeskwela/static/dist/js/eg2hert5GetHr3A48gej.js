@@ -3293,6 +3293,9 @@
                                                     </a>  
                                                 </li>
                                             `)
+                                            if (data[i].is_read == false){
+                                                count = count + 1
+                                            }
                                             }
 
                                         } else {
@@ -3310,6 +3313,9 @@
                                                     </a>  
                                                 </li>
                                             `)
+                                            if (data[i].is_read == false){
+                                                count = count + 1
+                                            }
                                         }
                                     
                                 } else {
@@ -3327,6 +3333,9 @@
                                         </a>  
                                     </li>
                                 `)
+                                if (data[i].is_read == false){
+                                    count = count + 1
+                                }
                                 }
                                
                             }
@@ -7113,7 +7122,7 @@
                        apputils.echo(resp);
                        if (resp.status.toUpperCase() == 'OK')
                        {
-                          model.notif_reminders('Grade', par_facultyid, resp.ts)
+                          model.notif_reminders(par_type, par_facultyid, resp.ts)
                           apputils.popsuccess("A Gentle Reminder Successfully Sent.");
                        }
                        else
