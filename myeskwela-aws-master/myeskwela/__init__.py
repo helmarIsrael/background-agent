@@ -6350,7 +6350,7 @@ def remindfacultyenrollment():
     schoolid = params["schoolid"]
     facultyid = params["facultyid"]
 
-    return restrequest("sendreminderenrollment",
+    return restrequest("sendreminderenrollment2",
                        (
                            username,
                            token,
@@ -7013,6 +7013,45 @@ def getpost():
     )
 
 
+
+@app.route("/notifreminders", methods=["POST"])
+@auth.login_required
+def notif_reminders():
+    params = request.get_json()
+    username = auth.username()
+
+    channels = params["channels"]
+    group = params["group"]
+    initiatorid = params["initiatorid"]
+    receiver = params["receiver"]
+
+    reminder_type = params["reminder_type"]
+    
+    timestamps = params["ts"]
+    name = params["name"]
+    messageTextOnly = f'{name} posted a Gentle Reminder'
+
+    msg_type = 'reminder'
+
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
+    poster = f'{name} posted a Gentle {reminder_type} Reminder for You'
+
+    receivers = [receiver]
+    
+
+
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, 
+            type=msg_type, user_type=group, channels = channels,
+            initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
+            due_date=None, 
+            start_date=None, section=None,
+            name=name, action_initiator=usernum
+        )
+        
+    notif.notify()
+
+    return jsonify({"status": "OK"})
 
 
 #last
