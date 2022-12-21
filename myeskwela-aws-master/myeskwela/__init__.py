@@ -4055,7 +4055,7 @@ def assignmentpost():
     ), group, True)
     
     
-    receivers = ['']
+    receivers = []
     initiatorid = res[0][0]['initiatorid']
 
     if res[0][0]['responses'][0]['ts'] != None:
