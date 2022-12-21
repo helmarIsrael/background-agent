@@ -2855,7 +2855,8 @@
                                 }
 
                                 if (data[i].notif_type == 'assignment') {
-                                    if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                    if (data[i].receiverid == '') {
+                                        data[i].receiverid == $("#name-rightbadge").data("personnumid")
                                         $("#notifholder").append(`
                                             <li>
                                                 <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor: pointer; ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
@@ -3146,7 +3147,8 @@
                                 }
 
                                 if (data[i].notif_type == 'assignment') {
-                                    if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                    if (data[i].receiverid == '') {
+                                        data[i].receiverid == $("#name-rightbadge").data("personnumid")
                                         $("#notif_sect_holder").append(`
                                         <li>
                                             <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
@@ -3556,6 +3558,7 @@
                     //   console.log( $("#name-rightbadge").data("personnumid"))
                     
                     console.log("else")
+                    console.log(msg)
                     apputils.popsuccess(msg.poster)
                     model.countNewNotif()
                       // model.notifsect_count()

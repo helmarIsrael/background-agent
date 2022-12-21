@@ -4057,7 +4057,9 @@ def assignmentpost():
     
     receivers = []
     initiatorid = res[0][0]['initiatorid']
-    timestamps = res[0][0]['responses'][0]['ts']
+
+    if res[0][0]['responses'][0]['ts'] != None:
+        timestamps = res[0][0]['responses'][0]['ts']
     if len(res[0][0]['responses']) > 1:
         for item in res[0][0]['responses']:
             receivers.append(item['receiverid'])
@@ -6881,6 +6883,7 @@ def getnewnotif_count():
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     res = spcall("getnewnotifcount",(True, channels, personid, group, kids),)[0][0]
 
+    print(res)
 
     return jsonify({'status':'OK', 'count': res})
 
