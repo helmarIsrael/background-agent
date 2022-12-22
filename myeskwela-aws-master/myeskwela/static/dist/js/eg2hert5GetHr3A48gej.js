@@ -3123,8 +3123,12 @@
                         data = resp.notifs
                         usertype = $("#name-rightbadge").data("usertype")
                         $("#notif_sect_holder").empty()
+                        $("#today_notif_sect_holder").empty()
+                        var date = new Date();
+                        datenow = date.toJSON().slice(0, 10);
                         if (data != null) {
                             for (var i = 0; i < data.length; i++){
+                                
                                 if (usertype == "students") {
                                     
                                     if (data[i].notif_type != "assignment") {
@@ -3228,31 +3232,14 @@
     
                                  
                                 } else if (usertype == "admin") {
+                                    ts = data[i].ts
+                                    ts = ts.slice(0, 10)
+                                   
                                     if (data[i].notif_type != 'assignment') {
                                         if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
                                             if (data[i].initiatorid == $("#name-rightbadge").data("personnumid") && data[i].receiverid.charAt(0) != 'S') {
-                                                $("#notif_sect_holder").append(`
-                                                <li>
-                                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
-                                                        <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
-                                                            <div class="box-body">
-                                                                <blockquote>
-                                                                    ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
-                                                                    <small>${data[i].notif_readablets}</small>
-                                                                </blockquote>
-                                                            </div>
-                                                        </div>
-                                                    </a>  
-                                                </li>
-                                            `)
-    
-                                            if (data[i].is_read == false){
-                                                count = count + 1
-                                            }
-                                            }
-    
-                                        } else {
-                                            $("#notif_sect_holder").append(`
+                                                if (ts == datenow) {
+                                                    $("#today_notif_sect_holder").append(`
                                                     <li>
                                                         <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                             <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
@@ -3266,25 +3253,7 @@
                                                         </a>  
                                                     </li>
                                                 `)
-        
-                                                if (data[i].is_read == false){
-                                                    count = count + 1
-                                                }
-                                        
-        
-                                           
-                                    }
-    
-                                    } 
-                                    
-                                } else {
-                                    if (data[i].receiverid == '') {
-                                        data[i].receiverid = $("#name-rightbadge").data("personnumid")
-                                    }
-    
-                                    if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
-                                            if (data[i].initiatorid.charAt(0) == 'A') {
-                                                if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                                } else {
                                                     $("#notif_sect_holder").append(`
                                                     <li>
                                                         <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
@@ -3298,14 +3267,107 @@
                                                             </div>
                                                         </a>  
                                                     </li>
+                                                    `)
+                                                }
+                                               
+    
+                                            if (data[i].is_read == false){
+                                                count = count + 1
+                                            }
+                                            }
+    
+                                        } else {
+                                            if (ts == datenow) {
+                                                $("#today_notif_sect_holder").append(`
+                                                <li>
+                                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                        <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                            <div class="box-body">
+                                                                <blockquote>
+                                                                    ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                    <small>${data[i].notif_readablets}</small>
+                                                                </blockquote>
+                                                            </div>
+                                                        </div>
+                                                    </a>  
+                                                </li>
+                                            `)
+                                            } else {
+                                                $("#notif_sect_holder").append(`
+                                                <li>
+                                                    <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                        <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                            <div class="box-body">
+                                                                <blockquote>
+                                                                    ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                    <small>${data[i].notif_readablets}</small>
+                                                                </blockquote>
+                                                            </div>
+                                                        </div>
+                                                    </a>  
+                                                </li>
                                                 `)
+                                            }
+        
+                                                if (data[i].is_read == false){
+                                                    count = count + 1
+                                                }
+                                        
+        
+                                           
+                                    }
+    
+                                    } 
+                                    
+                                } else {
+                                    ts = data[i].ts
+                                    ts = ts.slice(0, 10)
+                                    if (data[i].receiverid == '') {
+                                        data[i].receiverid = $("#name-rightbadge").data("personnumid")
+                                    }
+    
+                                    if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
+                                            if (data[i].initiatorid.charAt(0) == 'A') {
+                                                if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
+                                                    if (ts == datenow) {
+                                                        $("#today_notif_sect_holder").append(`
+                                                        <li>
+                                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                                    <div class="box-body">
+                                                                        <blockquote>
+                                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                            <small>${data[i].notif_readablets}</small>
+                                                                        </blockquote>
+                                                                    </div>
+                                                                </div>
+                                                            </a>  
+                                                        </li>
+                                                    `)
+                                                    } else {
+                                                        $("#notif_sect_holder").append(`
+                                                        <li>
+                                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                                    <div class="box-body">
+                                                                        <blockquote>
+                                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                            <small>${data[i].notif_readablets}</small>
+                                                                        </blockquote>
+                                                                    </div>
+                                                                </div>
+                                                            </a>  
+                                                        </li>
+                                                        `)
+                                                    }
                                                 if (data[i].is_read == false){
                                                     count = count + 1
                                                 }
                                                 }
     
                                             } else {
-                                                $("#notif_sect_holder").append(`
+                                                if (ts == datenow) {
+                                                    $("#today_notif_sect_holder").append(`
                                                     <li>
                                                         <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
                                                             <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
@@ -3319,6 +3381,22 @@
                                                         </a>  
                                                     </li>
                                                 `)
+                                                } else {
+                                                    $("#notif_sect_holder").append(`
+                                                    <li>
+                                                        <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                            <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                                <div class="box-body">
+                                                                    <blockquote>
+                                                                        ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                        <small>${data[i].notif_readablets}</small>
+                                                                    </blockquote>
+                                                                </div>
+                                                            </div>
+                                                        </a>  
+                                                    </li>
+                                                    `)
+                                                }
                                                 
                                                 if (data[i].is_read == false){
                                                     count = count + 1
@@ -3326,21 +3404,37 @@
                                             }
                                         
                                     } else {
-                                        $("#notif_sect_holder").append(`
-                                        <li>
-                                            <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
-                                                <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
-                                                    <div class="box-body">
-                                                        <blockquote>
-                                                            ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
-                                                            <small>${data[i].notif_readablets}</small>
-                                                        </blockquote>
+                                        if (ts == datenow) {
+                                            $("#today_notif_sect_holder").append(`
+                                            <li>
+                                                <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                    <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                        <div class="box-body">
+                                                            <blockquote>
+                                                                ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                <small>${data[i].notif_readablets}</small>
+                                                            </blockquote>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </a>  
-                                        </li>
-                                    `)
-                                    
+                                                </a>  
+                                            </li>
+                                        `)
+                                        } else {
+                                            $("#notif_sect_holder").append(`
+                                            <li>
+                                                <a onclick="view.initnotif('${data[i].body}', '${data[i].notif_readablets}', '${data[i].initiatorid}', '${data[i].receiverid}', '${data[i].timeline_timestamp}', '${data[i].notif_id}')" style="cursor:pointer; color:black;">
+                                                    <div class="box box-solid" style="box-shadow: 0 0 5px rgb(0 0 0 / 0.2); ${data[i].is_read ? '' : 'background-color:#fffaeb !important'}">
+                                                        <div class="box-body">
+                                                            <blockquote>
+                                                                ${data[i].is_read ? `<p>${data[i].body}</p>` : `<strong>${data[i].body}</strong>`}
+                                                                <small>${data[i].notif_readablets}</small>
+                                                            </blockquote>
+                                                        </div>
+                                                    </div>
+                                                </a>  
+                                            </li>
+                                            `)
+                                        }
                                     if (data[i].is_read == false){
                                         count = count + 1
                                     }
@@ -12696,9 +12790,13 @@
                     body:`  <div style=" height: 1.5em; width: 8em; border:1px solid black; border-radius:.5em; background-color: #fffaeb;"></div> <p>&nbspUnread Notif</p>
                             <h3 id="notifsect_count"></h3>
                             <div style="overflow-y:scroll; height:46em !important;">
-                                <div style="border-bottom: 2px solid black;">
+                                <div style="border-bottom: 2px solid black; margin-bottom:5px;">
                                     <h1>Today</h1>
+                                    <ul id="today_notif_sect_holder" style="padding:0.3em; list-style-type:none;">
+                                    
+                                    </ul>
                                 </div>
+                                <h1>Older</h1>
 
                                 <ul id="notif_sect_holder" style="padding:0.3em; list-style-type:none;">
                                 <li>${view.boxloading()}</li>
