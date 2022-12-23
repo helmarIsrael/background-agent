@@ -24,7 +24,7 @@ AS $BODY$
 --       notifications where is_new = par_status and channel = ANY(par_channels) and action_initiator != par_initiatorid;
 		if par_usertype = 'faculty' then
 			for notif in select * from notifications where channel = ANY(par_channels) 
-			and action_initiator != par_initiatorid
+			and action_initiator != par_initiatorid and user_type != 'faculty'
 			and (user_type != 'students' or ((notif_type = 'comment' or  notif_type = 'reaction') and initiatorid = par_initiatorid))
 			loop
 				if notif.notif_id != checknewnotif(notif.notif_id, par_initiatorid) then
