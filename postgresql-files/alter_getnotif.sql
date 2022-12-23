@@ -25,6 +25,7 @@ AS $BODY$
 	 notif_count int;
 	 loc_notif_type text;
 	 notif_id text;
+	 notif_actionid text;
    begin
 	 notif_count = 0;
      if par_usertype = 'faculty' then
@@ -40,6 +41,7 @@ AS $BODY$
 			notif_tlts = notif.timeline_ts;
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
@@ -61,7 +63,8 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -82,6 +85,7 @@ AS $BODY$
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
+			notif_actionid = notif.action_initiator;
 			
 			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
 				notif_read = false ;
@@ -100,7 +104,8 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -116,6 +121,7 @@ AS $BODY$
 			notif_tlts = notif.timeline_ts;
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
@@ -138,6 +144,7 @@ AS $BODY$
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
 					'notif_id', notif_id
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;

@@ -6939,7 +6939,7 @@ def getnotif():
     # print(f'\n\nchannels: {channels}\ntype: {type(channels)}\n\n')
     channels = [(''.join(i.split(','))) for i in channels ]
     res = spcall("getnotification",(channels, personid, group, kids),)[0][0]
-    # print(channels)
+    # print(res)
 
     return jsonify({'status':'OK', 'notifs': res["notifs"] })
 

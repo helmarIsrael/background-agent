@@ -2942,8 +2942,7 @@
                                         if (data[i].receiverid == '') {
                                             data[i].receiverid = $("#name-rightbadge").data("personnumid")
                                         }
-                                        if (data[i].initiatorid.charAt(0) != 'F' || data[i].receiverid.charAt(0) == 'S') {
-                                            console.log(data[i])
+                                        if (data[i].action_init.charAt(0) != 'F') {
                                             if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
                                                 if (data[i].initiatorid.charAt(0) == 'A') {
                                                     if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
@@ -3400,7 +3399,7 @@
                                         data[i].receiverid = $("#name-rightbadge").data("personnumid")
                                     }
   
-                                    if (data[i].initiatorid.charAt(0) != 'F' || data[i].receiverid.charAt(0) == 'S') {
+                                    if (data[i].action_init.charAt(0) != 'F') {
                                             if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
                                                     if (data[i].initiatorid.charAt(0) == 'A') {
                                                         if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
