@@ -3658,14 +3658,17 @@
                                
                             }
                         } else {
-                            console.log("teacher not comment and react")
-                            // console.log(m.message.action_initiator)
-                            // console.log( $("#name-rightbadge").data("personnumid"))
-                            apputils.popsuccess(msg.poster)
-                            model.countNewNotif()
-                            // model.notifsect_count()
-                            model.getnotif()
-                            model.notifsect_getnotif()
+                            if (msg.user_type != 'faculty') {
+                                console.log("teacher not comment and react")
+                                // console.log(m.message.action_initiator)
+                                // console.log( $("#name-rightbadge").data("personnumid"))
+                                apputils.popsuccess(msg.poster)
+                                model.countNewNotif()
+                                // model.notifsect_count()
+                                model.getnotif()
+                                model.notifsect_getnotif()
+                            }
+                            
                         
                         }
 
@@ -3678,6 +3681,7 @@
                 if ($("#name-rightbadge").data("usertype") == 'parents') {
                     for (var i = 0; i < kids.length; i++) {
                       kid_ids.push(kids[i].id)
+
                     }
                 } 
                 if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
@@ -3720,35 +3724,6 @@
                 }
                 
                
-                // if (msg.type != 'assignment') { 
-                //     if (msg.type == 'comment' || msg.type == 'reaction') {
-                //         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                //             if (first_char[0].charAt(0) != 'S'){
-                //                 console.log("admin")
-                //                 // console.log(msg.receiverid)
-                //                 apputils.popsuccess(msg.poster)
-                //                 model.countNewNotif()
-                //                 model.notifsect_count()
-                //                 model.getnotif()
-                //                 model.notifsect_getnotif()
-                //             }
-                //         }
-                //     }
-                // } 
-                    // else {
-                //         if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
-                //             console.log("admin")
-                //             // console.log(msg.receiverid)
-                //             apputils.popsuccess(msg.poster)
-                //             model.countNewNotif()
-                //             model.notifsect_count()
-                //             model.getnotif()
-                //             model.notifsect_getnotif()
-                //         }
-                //     }
-                
-                // } 
-
             } else {
                   if (msg.action_initiator != $("#name-rightbadge").data("personnumid")){
                     //   console.log(m.message.action_initiator)
