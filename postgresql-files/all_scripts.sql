@@ -24,7 +24,7 @@ AS $BODY$
 --       notifications where is_new = par_status and channel = ANY(par_channels) and action_initiator != par_initiatorid;
 		if par_usertype = 'faculty' then
 			for notif in select * from notifications where channel = ANY(par_channels) 
-			and action_initiator != par_initiatorid
+			and action_initiator != par_initiatorid and user_type != 'faculty'
 			and (user_type != 'students' or ((notif_type = 'comment' or  notif_type = 'reaction') and initiatorid = par_initiatorid))
 			loop
 				if notif.notif_id != checknewnotif(notif.notif_id, par_initiatorid) then
@@ -38,6 +38,23 @@ AS $BODY$
 						end if;
 					end if;
 				end if;
+			end loop;
+		elsif par_usertype = 'admin' then
+			for notif in select * from notifications where channel = ANY(par_channels) 
+				and action_initiator != par_initiatorid
+				and (user_type != 'faculty' or ((notif_type = 'comment' or  notif_type = 'reaction') and initiatorid = par_initiatorid))
+				loop
+					if notif.notif_id != checknewnotif(notif.notif_id, par_initiatorid) then
+						if notif.notif_type != 'assignment' then
+							notif_count = notif_count + 1;
+						end if;
+
+						if notif.notif_type = 'assignment' then
+							if notif.receiverid = par_initiatorid then
+								notif_count = notif_count + 1;
+							end if;
+						end if;
+					end if;
 			end loop;
 		elsif par_usertype = 'parents' then
 			for notif in select * from notifications where channel = ANY(par_channels) 
@@ -81,6 +98,7 @@ $BODY$;
 
 ALTER FUNCTION public.getnewnotifcount(boolean, text[], text, text, text[])
     OWNER TO admin;
+
 
 --------------------------############################--------------------------------
 
@@ -140,6 +158,7 @@ AS $BODY$
 	 notif_count int;
 	 loc_notif_type text;
 	 notif_id text;
+	 notif_actionid text;
    begin
 	 notif_count = 0;
      if par_usertype = 'faculty' then
@@ -155,6 +174,7 @@ AS $BODY$
 			notif_tlts = notif.timeline_ts;
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
@@ -176,7 +196,8 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -197,6 +218,7 @@ AS $BODY$
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
+			notif_actionid = notif.action_initiator;
 			
 			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
 				notif_read = false ;
@@ -215,15 +237,18 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;
-	 
-	 else
-	 		for notif in select * from
+		
+	elsif par_usertype = 'admin' then
+	for notif in select * from
       		notifications where channel = ANY(par_channels) 
-	  		and action_initiator != par_initiatorid order by notif_ts DESC
+	  		and action_initiator != par_initiatorid
+			and (user_type != 'faculty' or ((notif_type = 'comment' or  notif_type = 'reaction') and initiatorid = par_initiatorid))
+			order by notif_ts DESC
 		loop
 			notif_content = notif.notif;
 			notif_initiatorid = notif.initiatorid;
@@ -231,6 +256,7 @@ AS $BODY$
 			notif_tlts = notif.timeline_ts;
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
@@ -252,7 +278,47 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
+					'action_init', notif_actionid
+				);
+			notif_count = notif_count + 1;
+		end loop;
+	 
+	 else
+	 		for notif in select * from
+      		notifications where channel = ANY(par_channels) 
+	  		and action_initiator != par_initiatorid order by notif_ts DESC
+		loop
+			notif_content = notif.notif;
+			notif_initiatorid = notif.initiatorid;
+			notif_receiverid = notif.receiverid;
+			notif_tlts = notif.timeline_ts;
+			notif_ts = notif.notif_ts;
+			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
+			
+			loc_notif_type = notif.notif_type;
+			notif_id = notif.notif_id;
+			
+			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
+				notif_read = false ;
+			else
+				notif_read = true ;
+			end if;
+			
+			notif_array = 
+				notif_array || 
+				json_build_object (
+					'body', notif_content,
+					'initiatorid', notif_initiatorid,
+					'receiverid', notif_receiverid,
+					'timeline_timestamp', notif_tlts,
+					'is_read', notif_read,
+					'ts', notif_ts,
+					'notif_readablets', notif_readablets,
+					'notif_type', loc_notif_type,
+					'notif_id', notif_id,
+					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -277,6 +343,7 @@ $BODY$;
 
 ALTER FUNCTION public.getnotification(text[], text, text, text[])
     OWNER TO admin;
+
 -------------------------- ########################----------------------
 
 -- FUNCTION: public.insert2notification(text, text, text, text, text, text, text, text, text, text, text, text)

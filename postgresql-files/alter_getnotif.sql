@@ -109,6 +109,47 @@ AS $BODY$
 				);
 			notif_count = notif_count + 1;
 		end loop;
+		
+	elsif par_usertype = 'admin' then
+	for notif in select * from
+      		notifications where channel = ANY(par_channels) 
+	  		and action_initiator != par_initiatorid
+			and (user_type != 'faculty' or ((notif_type = 'comment' or  notif_type = 'reaction') and initiatorid = par_initiatorid))
+			order by notif_ts DESC
+		loop
+			notif_content = notif.notif;
+			notif_initiatorid = notif.initiatorid;
+			notif_receiverid = notif.receiverid;
+			notif_tlts = notif.timeline_ts;
+			notif_ts = notif.notif_ts;
+			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
+			notif_actionid = notif.action_initiator;
+			
+			loc_notif_type = notif.notif_type;
+			notif_id = notif.notif_id;
+			
+			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
+				notif_read = false ;
+			else
+				notif_read = true ;
+			end if;
+			
+			notif_array = 
+				notif_array || 
+				json_build_object (
+					'body', notif_content,
+					'initiatorid', notif_initiatorid,
+					'receiverid', notif_receiverid,
+					'timeline_timestamp', notif_tlts,
+					'is_read', notif_read,
+					'ts', notif_ts,
+					'notif_readablets', notif_readablets,
+					'notif_type', loc_notif_type,
+					'notif_id', notif_id,
+					'action_init', notif_actionid
+				);
+			notif_count = notif_count + 1;
+		end loop;
 	 
 	 else
 	 		for notif in select * from
@@ -143,7 +184,7 @@ AS $BODY$
 					'ts', notif_ts,
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
-					'notif_id', notif_id
+					'notif_id', notif_id,
 					'action_init', notif_actionid
 				);
 			notif_count = notif_count + 1;
