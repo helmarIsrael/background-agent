@@ -1,0 +1,5 @@
+REVERT BACK .js.min TO .min.js
+
+apper
+bootstrap-table
+jitsi
