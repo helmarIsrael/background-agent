@@ -70,11 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
@@ -110,18 +105,34 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'my.eskwela',
+                        Text('my.eskwela',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.normal,
+                            )),
+                        SizedBox(
+                          height: 5,
                         ),
-                        Text(
-                          'SMS App',
+                        Text('SMS App',
+                            style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.normal,
+                            )),
+                        SizedBox(
+                          height: 20,
                         ),
                         Align(
                           alignment: AlignmentDirectional(0, 0),
-                          child: Text(
-                            'Loading...',
-                            textAlign: TextAlign.center,
-                          ),
+                          child: Text('Loading...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 20,
+                              )),
                         ),
                       ],
                     ),
