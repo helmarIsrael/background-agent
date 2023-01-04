@@ -11,67 +11,159 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            width: 100,
-            height: MediaQuery.of(context).size.height * 1,
-            decoration: BoxDecoration(
-              color: Color(0xFFFFBF00),
-            ),
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFFBF00),
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Home',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            color: Colors.white,
+            fontSize: 22,
+          ),
+        ),
+        actions: [],
+        centerTitle: false,
+        elevation: 2,
+      ),
+      body: SafeArea(
+        child: GestureDetector(
+          child: Align(
+            alignment: AlignmentDirectional(-0.05, 0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: 100,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  decoration: BoxDecoration(
-                    color: Color(0x00FFFFFF),
-                  ),
+                Expanded(
                   child: Container(
                     width: 100,
-                    height: MediaQuery.of(context).size.height * 0.3,
                     decoration: BoxDecoration(
                       color: Color(0x00FFFFFF),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('my.eskwela',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 100,
+                            decoration: BoxDecoration(
                               color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.normal,
-                            )),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text('Home',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4,
+                                  color: Color(0x33000000),
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(-1, 0),
+                                    child: Text(
+                                      'Notifcation Coming From',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(-0.05, 0),
+                                    child: Text(
+                                      'AKO PRINCIPAL',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            decoration: BoxDecoration(
+                              color: Color(0x00FFFFFF),
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            decoration: BoxDecoration(
                               color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.normal,
-                            ))
-                      ],
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4,
+                                  color: Color(0x33000000),
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 10),
+                                    child: Text(
+                                      'Message PAYLOAD',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '\"AKO PRINCIPAL has sent you a gentle  GRADE reminder\"',
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                // Container(
+                //   width: 100,
+                //   height: MediaQuery.of(context).size.height * 0.5,
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //   ),
+                // ),
               ],
             ),
           ),
-        ],
-      )),
+        ),
+      ),
     );
   }
 }
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+        

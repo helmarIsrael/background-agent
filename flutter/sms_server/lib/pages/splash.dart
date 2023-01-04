@@ -10,7 +10,7 @@ class splash extends StatefulWidget {
 
 class _splashState extends State<splash> {
   void bootup() async {
-    await Future.delayed(Duration(seconds: 3), () {
+    await Future.delayed(Duration(seconds: 10), () {
       Navigator.pushReplacementNamed(context, '/home');
     });
   }

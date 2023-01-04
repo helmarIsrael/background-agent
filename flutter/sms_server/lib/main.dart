@@ -11,7 +11,7 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => const splash(),
-        // '/home': (context) => const home(),
+        '/home': (context) => const home(),
       },
     )),
   );
