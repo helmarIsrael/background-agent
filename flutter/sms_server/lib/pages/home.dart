@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class splash extends StatefulWidget {
-  const splash({Key? key}) : super(key: key);
+class home extends StatefulWidget {
+  const home({Key? key}) : super(key: key);
 
   @override
-  State<splash> createState() => _splashState();
+  State<home> createState() => _homeState();
 }
 
-class _splashState extends State<splash> {
-  void bootup() async {
-    await Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, '/home');
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    bootup();
-  }
-
+class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,29 +56,13 @@ class _splashState extends State<splash> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text('SMS App',
+                        Text('Home',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.white,
                               fontSize: 25,
                               fontWeight: FontWeight.normal,
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Align(
-                            alignment: AlignmentDirectional(0, 0),
-                            child: SpinKitRing(
-                              color: Colors.white,
-                              size: 50.0,
-                            )
-                            // child: Text('Loading...',
-                            //     textAlign: TextAlign.center,
-                            //     style: TextStyle(
-                            //       fontFamily: 'Poppins',
-                            //       fontSize: 20,
-                            //     )),
-                            ),
+                            ))
                       ],
                     ),
                   ),

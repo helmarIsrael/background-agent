@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rice_disease_detection/Pages/splash.dart';
+import 'package:sms_server/pages/home.dart';
+import 'package:sms_server/pages/splash.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +11,7 @@ void main() {
       initialRoute: '/',
       routes: {
         '/': (context) => const splash(),
+        // '/home': (context) => const home(),
       },
     )),
   );
