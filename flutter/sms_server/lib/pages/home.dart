@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pubnub/pubnub.dart';
 
 class home extends StatefulWidget {
   const home({Key? key}) : super(key: key);
@@ -8,6 +9,32 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  void main() async {
+    // Create PubNub instance with default keyset.
+    var pubnub = PubNub(
+        defaultKeyset: Keyset(
+            subscribeKey: 'sub-c-929f34e0-ac3c-4ac1-9203-662b20f90279',
+            publishKey: 'pub-c-b0c69ce9-13c4-4ee1-8995-c829d3f410c7',
+            userId: UserId('myUniqueUserId')));
+
+    // Subscribe to a channel
+    var channel = "test_chan";
+    var subscription = pubnub.subscribe(channels: {channel});
+
+    // Print every message
+    subscription.messages.listen((message) {
+      print(message.content['text']);
+    });
+
+    // // Unsubscribe and quit
+    // await subscription.dispose();
+  }
+
+  @override
+  void initState() {
+    main();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
