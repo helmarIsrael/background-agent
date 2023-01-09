@@ -85,14 +85,18 @@ class _homeState extends State<home> {
                                   ),
                                   Align(
                                     alignment: AlignmentDirectional(-0.05, 0),
-                                    child:Text(
-                                          'AKO SI PRINSIPAL',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                    child:Consumer<PubNubProvider>(
+                                      builder: (context, pub, _) {
+                                        return Text(
+                                              '${pub.getMessage['name']}',
+                                              style: TextStyle(
+                                                fontFamily: 'Montserrat',
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            );
+                                      }
+                                    )
                                       
                                   ),
                                 ],
@@ -138,35 +142,124 @@ class _homeState extends State<home> {
                                       ),
                                     ),
                                   ),
-                                  // Consumer<PubNubProvider>(
-                                  //   builder: (context, ambot, _) {
-                                  //     ambot.getDataFromPubNub();
-                                  //     if(ambot.getMessage == '') {
-                                  //       return Align(
-                                  //         alignment: AlignmentDirectional(0, 0),
-                                  //         child: SpinKitRing(
-                                  //           color: Colors.amber,
-                                  //           size: 50.0,
-                                  //         )
-                                  //         // child: Text('Loading...',
-                                  //         //     textAlign: TextAlign.center,
-                                  //         //     style: TextStyle(
-                                  //         //       fontFamily: 'Poppins',
-                                  //         //       fontSize: 20,
-                                  //         //     )),
-                                  //       );
-                                  //     } else {
-                                  //       return Text(
-                                  //         '\"${ambot.getMessage}\"',
-                                  //         style: TextStyle(
-                                  //           fontFamily: 'Montserrat',
-                                  //           fontSize: 15,
-                                  //           fontWeight: FontWeight.bold,
-                                  //         ),
-                                  //       );
-                                  //     }
-                                  //   }
-                                  // ),
+                                  Consumer<PubNubProvider>(
+                                    builder: (context, pub, _) {
+                                      pub.getDataFromPubNub();
+                                      if(pub.getMessage == '') {
+                                        return Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: SpinKitRing(
+                                            color: Colors.amber,
+                                            size: 50.0,
+                                          )
+                                          // child: Text('Loading...',
+                                          //     textAlign: TextAlign.center,
+                                          //     style: TextStyle(
+                                          //       fontFamily: 'Poppins',
+                                          //       fontSize: 20,
+                                          //     )),
+                                        );
+                                      } else {
+                                        return Text(
+                                          '\"${pub.getMessage['poster']}\"',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  ),
+                                  
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 10, 0, 0),
+                                    child: Text(
+                                      'Message Type',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Consumer<PubNubProvider>(
+                                    builder: (context, pub, _) {
+                                      pub.getDataFromPubNub();
+                                      if(pub.getMessage == '') {
+                                        return Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: SpinKitRing(
+                                            color: Colors.amber,
+                                            size: 50.0,
+                                          )
+                                          // child: Text('Loading...',
+                                          //     textAlign: TextAlign.center,
+                                          //     style: TextStyle(
+                                          //       fontFamily: 'Poppins',
+                                          //       fontSize: 20,
+                                          //     )),
+                                        );
+                                      } else {
+                                        return Text(
+                                          '\"${pub.getMessage['type']}\"',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  ),
+
+
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 10, 0, 0),
+                                    child: Text(
+                                      'Timestamp',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Consumer<PubNubProvider>(
+                                    builder: (context, pub, _) {
+                                      pub.getDataFromPubNub();
+                                      if(pub.getMessage == '') {
+                                        return Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: SpinKitRing(
+                                            color: Colors.amber,
+                                            size: 50.0,
+                                          )
+                                          // child: Text('Loading...',
+                                          //     textAlign: TextAlign.center,
+                                          //     style: TextStyle(
+                                          //       fontFamily: 'Poppins',
+                                          //       fontSize: 20,
+                                          //     )),
+                                        );
+                                      } else {
+                                        return Text(
+                                          '\"${pub.getMessage['ts']}\"',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  ),
+
+
                                   // Center(
                                   //   child: Consumer<PubNubProvider>(
                                   //     builder: (context, pubNubProv, _) {
