@@ -11,7 +11,7 @@ class SplashProvider extends ChangeNotifier {
   }
 
   void toLoadSplash() async {
-    await Future.delayed(Duration(seconds: 3), () {
+    await Future.delayed(Duration(seconds: 1), () {
       setSplashStatus = SplashStatus.splashIsLoaded;
     });
   }

@@ -30,7 +30,7 @@ class PubNubProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<dynamic> getDataFromPubNub() async {
+  Future<dynamic> getDataFromPubNub(String channel) async {
     // Create PubNub instance with default keyset.
     var pubnub = PubNub(
         defaultKeyset: Keyset(
@@ -43,7 +43,7 @@ class PubNubProvider extends ChangeNotifier {
             userId: UserId('myUniqueUserId')));
 
     // Subscribe to a channel
-    var channel = "XXX";
+    print('channel: ' + channel);
     // var channel = "test_chan";
     var subscription = pubnub.subscribe(channels: {channel});
 

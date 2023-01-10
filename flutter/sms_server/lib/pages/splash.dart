@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:sms_server/pages/wrapper.dart';
+import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 
 class splash extends StatefulWidget {
@@ -25,6 +27,9 @@ class _splashState extends State<splash> {
 
   @override
   Widget build(BuildContext context) {
+    var authProv = Provider.of<LoginProvider>(context, listen: false);
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: Center(
           // Center is a layout widget. It takes a single child and positions it
@@ -108,6 +113,7 @@ class _splashState extends State<splash> {
                                 child: Container(
                                   width: 300,
                                   child: TextFormField(
+                                    controller: usernameController,
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -172,6 +178,7 @@ class _splashState extends State<splash> {
                                 child: Container(
                                   width: 300,
                                   child: TextFormField(
+                                    controller: passwordController,
                                     autofocus: true,
                                     obscureText: true,
                                     decoration: InputDecoration(
@@ -238,8 +245,10 @@ class _splashState extends State<splash> {
                                 width: 200,
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    authProv.verify(usernameController.text,
+                                        passwordController.text);
                                     Navigator.pushReplacementNamed(
-                                        context, '/home');
+                                        context, '/wrapper');
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Color(0xFFF8D159),
