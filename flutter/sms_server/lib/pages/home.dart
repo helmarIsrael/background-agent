@@ -248,7 +248,7 @@ class _homeState extends State<home> {
                                         );
                                       } else {
                                         return Text(
-                                          '\"${pub.getMessage['ts']}\"',
+                                          '\"${pub.getMessage['ts']}\"',  
                                           style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontSize: 15,
