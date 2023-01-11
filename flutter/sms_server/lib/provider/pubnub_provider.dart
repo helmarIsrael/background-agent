@@ -1,8 +1,11 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:pubnub/pubnub.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class PubNubProvider extends ChangeNotifier {
   // bool isTrue = false;
@@ -30,6 +33,8 @@ class PubNubProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
+  Queue<Map<String, dynamic>> messages = Queue<Map<String, dynamic>>();
+
   Future<dynamic> getDataFromPubNub(String channel) async {
     // Create PubNub instance with default keyset.
     var pubnub = PubNub(
@@ -48,7 +53,7 @@ class PubNubProvider extends ChangeNotifier {
     var subscription = pubnub.subscribe(channels: {channel});
 
     // Print every message
-    subscription.messages.listen((message) {
+    subscription.messages.listen((message) async {
       // print(message.content['poster']);
       // print(message.content.runtimeType);
       Map<String, dynamic> payload = {
@@ -59,12 +64,51 @@ class PubNubProvider extends ChangeNotifier {
       };
       // var response = jsonDecode(message.content) as Map<String, dynamic>;
       // print(response['poster']);
-      payload['poster'] = message.content['poster'];
-      payload['name'] = message.content['name'];
-      payload['ts'] = message.content['timestamp'];
-      payload['type'] = message.content['type'];
-      print(payload);
-      setMessage = payload;
+      if (message.content['type'] == 'deadline' ||
+          message.content['type'] == 'reminder' &&
+              message.content['action_initiator'][0] == 'A') {
+        payload['poster'] = message.content['poster'];
+        payload['name'] = message.content['name'];
+        payload['ts'] = message.content['timestamp'];
+        payload['type'] = message.content['type'];
+        // print(payload);
+        setMessage = payload;
+
+        messages.addFirst(payload);
+      }
+      print(messages);
+      print(messages.length);
+
+      // _write(String text) async {
+      //   final Directory directory = await getApplicationDocumentsDirectory();
+      //   final File file = File('${directory.path}/my_file.txt');
+      //   await Future.delayed(Duration(seconds: 20), () {
+      //     file.writeAsString(text, mode: FileMode.append);
+      //     messages.removeFirst();
+      //     print(messages);
+      //     print('message length: ${messages.length}');
+      //   });
+      // }
+
+      // messages.forEach((element) async {
+      //   await Future.delayed(Duration(seconds: 5));
+      //   print(element);
+      // });'
+
+      // for (int i = 0; i < messages.length; i++) {
+      //     await Future.delayed(Duration(seconds: 10));
+      //     print(messages.first);
+      //   }
+
+      for (Map<String, dynamic> item in messages) {
+        await Future.delayed(Duration(seconds: 2)).then((_) => print(item));
+        // print(messages.first);
+      }
+
+      // while (messages.isEmpty == false) {
+      //   await Future.delayed(Duration(seconds: 10));
+      //   print(messages.first);
+      // }
     });
 
     // // Unsubscribe and quit
