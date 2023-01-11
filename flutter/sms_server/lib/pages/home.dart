@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sms_server/provider/login_provider.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -147,14 +149,18 @@ class _homeState extends State<home> {
                                             child: Align(
                                               alignment: AlignmentDirectional(
                                                   -0.05, 0),
-                                              child: Text(
-                                                'The Ideal School',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                              child: Consumer<LoginProvider>(
+                                                  builder:
+                                                      (context, authProv, _) {
+                                                return Text(
+                                                  '${authProv.getUserDetails['school']}',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    fontSize: 25,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                );
+                                              }),
                                             ),
                                           ),
                                         ],
@@ -201,14 +207,18 @@ class _homeState extends State<home> {
                                           child: Align(
                                             alignment:
                                                 AlignmentDirectional(-0.05, 0),
-                                            child: Text(
-                                              'Somewhere',
-                                              style: TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            child: Consumer<LoginProvider>(
+                                                builder:
+                                                    (context, authProv, _) {
+                                              return Text(
+                                                '${authProv.getUserDetails['district']}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            }),
                                           ),
                                         ),
                                         Align(
@@ -227,14 +237,18 @@ class _homeState extends State<home> {
                                           child: Align(
                                             alignment:
                                                 AlignmentDirectional(-0.05, 0),
-                                            child: Text(
-                                              'Someplace',
-                                              style: TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 25,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            child: Consumer<LoginProvider>(
+                                                builder:
+                                                    (context, authProv, _) {
+                                              return Text(
+                                                '${authProv.getUserDetails['division']}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              );
+                                            }),
                                           ),
                                         ),
                                       ],
@@ -272,13 +286,16 @@ class _homeState extends State<home> {
                               EdgeInsetsDirectional.fromSTEB(16, 16, 16, 52),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 height: 50,
-                                width: 100,
+                                width: 160,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/messages');
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
                                       onPrimary: Color(0xFFF8D159)),
@@ -290,10 +307,16 @@ class _homeState extends State<home> {
                                 ),
                               ),
                               SizedBox(
+                                width: 7,
+                              ),
+                              SizedBox(
                                 height: 50,
-                                width: 100,
+                                width: 160,
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/home');
+                                  },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
                                       onPrimary: Color(0xFFF8D159)),

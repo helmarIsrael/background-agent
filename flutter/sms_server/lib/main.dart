@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sms_server/pages/home.dart';
 import 'package:sms_server/pages/messages.dart';
+import 'package:sms_server/pages/viewMsg.dart';
 import 'package:sms_server/pages/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/pages/wrapper.dart';
@@ -22,10 +23,11 @@ void main() {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => const home(),
-          '/messages': (context) => const messages(),
+          '/': (context) => const splash(),
+          '/viewMsg': (context) => const viewMsg(),
           '/wrapper': (context) => const Wrapper(),
-          '/home': (context) => const splash()
+          '/home': (context) => const home(),
+          '/messages': (context) => const messages()
         },
       ),
     )),

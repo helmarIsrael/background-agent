@@ -4,7 +4,8 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:sms_server/pages/messages.dart';
+import 'package:sms_server/pages/home.dart';
+import 'package:sms_server/pages/viewMsg.dart';
 import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 
@@ -21,7 +22,7 @@ class Wrapper extends StatelessWidget {
         case LoginStatus.Authorized:
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
-          return messages();
+          return home();
         case LoginStatus.Unauthorized:
           return splash();
         case LoginStatus.Uninitialized:

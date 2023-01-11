@@ -16,7 +16,7 @@ class PubNubProvider extends ChangeNotifier {
   //     setIsTrue = !getisTrue;
   // }
 
-  var message;
+  var message = {};
   get getMessage => message;
   set setMessage(value) {
     message = value;
