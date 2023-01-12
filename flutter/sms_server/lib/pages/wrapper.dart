@@ -22,6 +22,7 @@ class Wrapper extends StatelessWidget {
         case LoginStatus.Authorized:
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
+          pubNubProv.message_handler();
           return home();
         case LoginStatus.Unauthorized:
           return splash();

@@ -26,6 +26,12 @@ class PubNubProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Map<String, dynamic>> incomingMsg = [];
+  List<Map<String, dynamic>> get getincomingMsg => incomingMsg;
+  set setincomingMsg(value) {
+    incomingMsg = value;
+    notifyListeners();
+  }
   // var message2;
   // get getMessage2 => message;
   // set setMessage2(value) {
@@ -33,8 +39,7 @@ class PubNubProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Queue<Map<String, dynamic>> messages = Queue<Map<String, dynamic>>();
-
+  final messages_queue = msg_queue<Map>();
   Future<dynamic> getDataFromPubNub(String channel) async {
     // Create PubNub instance with default keyset.
     var pubnub = PubNub(
@@ -62,6 +67,8 @@ class PubNubProvider extends ChangeNotifier {
         'ts': String,
         'type': String
       };
+
+      List<Map<String, dynamic>> list = [];
       // var response = jsonDecode(message.content) as Map<String, dynamic>;
       // print(response['poster']);
       if (message.content['type'] == 'deadline' ||
@@ -74,10 +81,26 @@ class PubNubProvider extends ChangeNotifier {
         // print(payload);
         setMessage = payload;
 
-        messages.addFirst(payload);
+        messages_queue.push(payload);
+        messages_queue.showQueue();
+        // message_handler();
+        // await Future.delayed(Duration(seconds: 3));
+
+        // messages_queue.sendItem();
       }
-      print(messages);
-      print(messages.length);
+      // try {
+      //   while (!messages_queue.queueStatus()) {
+      //     await Future.delayed(Duration(seconds: 20));
+      //     print('Item Send: ${messages_queue.pop()}');
+      //     print(messages_queue.queueSize());
+
+      //     if (messages_queue.queueStatus()) {
+      //       break;
+      //     }
+      //   }
+      // } catch (e) {
+      //   print(messages_queue.queueStatus());
+      // }
 
       // _write(String text) async {
       //   final Directory directory = await getApplicationDocumentsDirectory();
@@ -100,10 +123,10 @@ class PubNubProvider extends ChangeNotifier {
       //     print(messages.first);
       //   }
 
-      for (Map<String, dynamic> item in messages) {
-        await Future.delayed(Duration(seconds: 2)).then((_) => print(item));
-        // print(messages.first);
-      }
+      // for (Map<String, dynamic> item in messages) {
+      //   await Future.delayed(Duration(seconds: 2)).then((_) => print(item));
+      //   // print(messages.first);
+      // }
 
       // while (messages.isEmpty == false) {
       //   await Future.delayed(Duration(seconds: 10));
@@ -113,5 +136,50 @@ class PubNubProvider extends ChangeNotifier {
 
     // // Unsubscribe and quit
     // await subscription.dispose();
+  }
+
+  Future<void> message_handler() async {
+    print("message handler");
+    print(getincomingMsg);
+    while (getincomingMsg.isNotEmpty) {
+      print(messages_queue.queueSize());
+      messages_queue.sendItem();
+    }
+  }
+}
+
+class msg_queue<T> {
+  final queue = Queue<T>();
+
+  void push(T t) {
+    queue.addFirst(t);
+  }
+
+  T pop() {
+    final first = queue.first;
+    queue.removeFirst();
+    return first;
+  }
+
+  void showQueue() {
+    print(queue);
+  }
+
+  int queueSize() {
+    final size = queue.length;
+    return size;
+  }
+
+  bool queueStatus() {
+    final status = queue.isEmpty;
+    return status;
+  }
+
+  void sendItem() async {
+    while (!queueStatus()) {
+      await Future.delayed(Duration(seconds: 20));
+      print('Item Send: ${pop()}');
+      print(queueSize());
+    }
   }
 }
