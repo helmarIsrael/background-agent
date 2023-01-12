@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -23,6 +25,10 @@ class Wrapper extends StatelessWidget {
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
           pubNubProv.message_handler();
+          pubNubProv.send_messages();
+          // Timer.periodic(new Duration(seconds: 1), (timer) {
+          //   pubNubProv.send_messages();
+          // });
           return home();
         case LoginStatus.Unauthorized:
           return splash();
