@@ -6,7 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:pubnub/pubnub.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sms_server/model/message_model.dart';
 import 'dart:io';
+
+import 'package:sms_server/objectbox.g.dart';
+
+import '../model_helper/helper.dart';
+import '../utils/globals.dart' as globals;
 
 class PubNubProvider extends ChangeNotifier {
   StreamController<Map> streamController = StreamController<Map>();
@@ -44,18 +50,6 @@ class PubNubProvider extends ChangeNotifier {
     // var channel = "test_chan";
     var subscription = pubnub.subscribe(channels: {channel});
 
-    // StreamController<Map> streamController = StreamController<Map>();
-    // Stream stream = streamController.stream;
-
-    // stream.listen((value) {
-    //   messages_queue.push(value);
-    //   // print('Item Pushed To First: ${value}');
-    //   print(messages_queue.queueSize());
-    //   messages_queue.sendItem();
-    // });
-
-    sendMessagesControl.add(true);
-
     // Print every message
     subscription.messages.listen((message) async {
       Map<String, dynamic> payload = {
@@ -78,7 +72,16 @@ class PubNubProvider extends ChangeNotifier {
         // messages_queue.push(payload);
         // messages_queue.showQueue();
 
-        streamController.add(payload);
+        var msg = messageDetail(payload: json.encode(payload));
+        // print(payload);
+        // globals.objectBoxService.clearMessages();
+        int id = globals.objectBoxService.insertMessage(msg);
+        print('message added to local storage, id: $id');
+        var querriedMessage = globals.objectBoxService.getMessage(id);
+
+        print("Msg from local Storge: ${querriedMessage?.payload}");
+        int count = globals.objectBoxService.countMessages();
+        print("Number of messages in local storage: $count");
       }
 
       // _write(String text) async {

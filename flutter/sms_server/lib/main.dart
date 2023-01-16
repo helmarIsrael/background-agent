@@ -10,8 +10,16 @@ import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 
-void main() {
+import '../utils/globals.dart' as globals;
+import 'model_helper/helper.dart';
+// import 'model_helper/helper.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    globals.objectBoxService = await ObjectBoxService.init();
+  });
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
     (_) => runApp(MultiProvider(
