@@ -19,7 +19,10 @@ class ObjectBoxService {
 
   int insertMessage(messageDetail message) => _messageBox.put(message);
   messageDetail? getMessage(int id) => _messageBox.get(id);
+  List getAllMessages() => _messageBox.getAll();
+
   bool deleteMessage(int id) => _messageBox.remove(id);
   clearMessages() => _messageBox.removeAll();
+
   int countMessages() => _messageBox.count();
 }

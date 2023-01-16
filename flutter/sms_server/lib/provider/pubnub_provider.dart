@@ -17,16 +17,6 @@ import '../utils/globals.dart' as globals;
 class PubNubProvider extends ChangeNotifier {
   StreamController<Map> streamController = StreamController<Map>();
   StreamController<bool> sendMessagesControl = StreamController<bool>();
-  // bool isTrue = false;
-  // bool get getisTrue => isTrue;
-  // set setIsTrue(bool value) {
-  //     isTrue=value;
-  //     notifyListeners();
-  // }
-
-  // void ambotlang() {
-  //     setIsTrue = !getisTrue;
-  // }
 
   var message = {};
   get getMessage => message;
@@ -34,8 +24,6 @@ class PubNubProvider extends ChangeNotifier {
     message = value;
     notifyListeners();
   }
-
-  final messages_queue = msg_queue<Map>();
 
   Future<dynamic> getDataFromPubNub(String channel) async {
     // Create PubNub instance with default keyset.
@@ -100,66 +88,14 @@ class PubNubProvider extends ChangeNotifier {
     // await subscription.dispose();
   }
 
-  Future<void> message_handler() async {
-    Stream stream = streamController.stream;
+  // Future<void> message_handler() async {
+  //   Stream stream = streamController.stream;
 
-    stream.listen((value) async {
-      messages_queue.push(value);
-      // print('Item Pushed To First: ${value}');
-      print(messages_queue.queueSize());
-      // messages_queue.sendItem();
-    });
-  }
-
-  Future<void> send_messages() async {
-    Stream stream = sendMessagesControl.stream;
-
-    stream.listen((value) {
-      print('sending...');
-      // in background unta
-      while (!messages_queue.queueStatus()) {
-        messages_queue.sendItem();
-      }
-    });
-  }
-}
-
-class msg_queue<T> {
-  final queue = Queue<T>();
-
-  void push(T t) {
-    queue.add(t);
-  }
-
-  T pop() {
-    final first = queue.first;
-    queue.removeFirst();
-    return first;
-  }
-
-  void showQueue() {
-    print(queue);
-  }
-
-  int queueSize() {
-    final size = queue.length;
-    return size;
-  }
-
-  bool queueStatus() {
-    final status = queue.isEmpty;
-    return status;
-  }
-
-  void sendItem() async {
-    // print(queueStatus());
-
-    // print('Item Send: ${pop()}');
-    // print(queueSize());
-
-    Timer(const Duration(seconds: 9), () {
-      print('Item Send: ${pop()}');
-      print(queueSize());
-    });
-  }
+  //   stream.listen((value) async {
+  //     messages_queue.push(value);
+  //     // print('Item Pushed To First: ${value}');
+  //     print(messages_queue.queueSize());
+  //     // messages_queue.sendItem();
+  //   });
+  // }
 }

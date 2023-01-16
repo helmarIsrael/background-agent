@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
+import 'package:sms_server/utils/message_handler.dart';
+import '../utils/globals.dart' as globals;
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -314,8 +316,25 @@ class _homeState extends State<home> {
                                 width: 160,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/home');
+                                    // Navigator.pushReplacementNamed(
+                                    //     context, '/home');
+                                    // var msgs = globals.objectBoxService
+                                    //     .getAllMessages();
+                                    // final handle = msgHandler();
+                                    // for (var element in msgs) {
+                                    //   var msg = element?.payload;
+                                    //   handle.addtoQueue(msg);
+                                    // }
+
+                                    // handle.sendMsg();
+
+                                    // print(msgs[0]?.payload);
+
+                                    // globals.objectBoxService.clearMessages();
+                                    // int count = globals.objectBoxService
+                                    //     .countMessages();
+                                    // print(
+                                    //     "Number of messages in local storage: $count");
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
