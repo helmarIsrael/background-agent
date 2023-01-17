@@ -5,11 +5,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:pubnub/pubnub.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:sms_server/model/message_model.dart';
-import 'dart:io';
 
 import 'package:sms_server/objectbox.g.dart';
+import 'package:sms_server/utils/message_sender.dart';
 
 import '../model_helper/helper.dart';
 import '../utils/globals.dart' as globals;
@@ -54,48 +54,23 @@ class PubNubProvider extends ChangeNotifier {
         payload['name'] = message.content['name'];
         payload['ts'] = message.content['timestamp'];
         payload['type'] = message.content['type'];
-        // print(payload);
+
         setMessage = payload;
 
-        // messages_queue.push(payload);
-        // messages_queue.showQueue();
-
         var msg = messageDetail(payload: json.encode(payload));
-        // print(payload);
-        // globals.objectBoxService.clearMessages();
+
         int id = globals.objectBoxService.insertMessage(msg);
-        print('message added to local storage, id: $id');
-        var querriedMessage = globals.objectBoxService.getMessage(id);
 
-        print("Msg from local Storge: ${querriedMessage?.payload}");
-        int count = globals.objectBoxService.countMessages();
-        print("Number of messages in local storage: $count");
+        // print('message added to local storage, id: $id');
+        // var querriedMessage = globals.objectBoxService.getMessage(id);
+
+        // print("Msg from local Storge: ${querriedMessage?.payload}");
+        // int count = globals.objectBoxService.countMessages();
+        // print("Number of messages in local storage: $count");
       }
-
-      // _write(String text) async {
-      //   final Directory directory = await getApplicationDocumentsDirectory();
-      //   final File file = File('${directory.path}/my_file.txt');
-      //   await Future.delayed(Duration(seconds: 20), () {
-      //     file.writeAsString(text, mode: FileMode.append);
-      //     messages.removeFirst();
-      //     print(messages);
-      //     print('message length: ${messages.length}');
-      //   });
-      // }
     });
 
     // // Unsubscribe and quit
     // await subscription.dispose();
   }
-
-  // Future<void> message_handler() async {
-  //   Stream stream = streamController.stream;
-
-  //   stream.listen((value) async {
-  //     messages_queue.push(value);
-  //     // print('Item Pushed To First: ${value}');
-  //     print(messages_queue.queueSize());
-  //     // messages_queue.sendItem();
-  //   });
-  // }
 }

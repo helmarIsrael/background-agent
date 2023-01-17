@@ -1,20 +1,22 @@
 import 'package:sms_server/utils/message_handler.dart';
+import '../objectbox.g.dart';
 import '../utils/globals.dart' as globals;
+import '../model/message_model.dart';
 
 class msg_sender {
   final handle = msgHandler();
-  Future<void> send_messages(int finalNum) async {
-    while (true) {
-      var msgs = globals.objectBoxService.getAllMessages();
-      if (msgs.length < 0) {
-        final handle = msgHandler();
-        for (var element in msgs) {
-          var msg = element?.payload;
-          handle.addtoQueue(msg);
-        }
+  void send_messages(Box<messageDetail> store) {
+    var msgs = store.getAll();
+    print(msgs.length);
+    if (msgs.length > 0) {
+      for (var element in msgs) {
+        var msg = element.payload;
+        handle.addtoQueue(msg);
+        handle.showQueueSize();
       }
-      handle.sendMsg();
     }
+    handle.sendMsg(store);
+
     // int _count = 0;
     // print("isolate (send_messages) runnning....");
     // for (var i = 0; i < finalNum; i++) {

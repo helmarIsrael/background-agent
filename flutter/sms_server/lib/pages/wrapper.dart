@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
@@ -15,7 +16,8 @@ import 'package:sms_server/pages/viewMsg.dart';
 import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
-// import 'package:sms_server/utils/message_sender.dart';
+import 'package:sms_server/utils/message_handler.dart';
+import 'package:sms_server/utils/message_sender.dart';
 
 import '../model/message_model.dart';
 import '../provider/login_provider.dart';
@@ -56,7 +58,6 @@ class _WrapperState extends State<Wrapper> {
           // Timer.periodic(new Duration(seconds: 1), (timer) {
           //   pubNubProv.send_messages();
           // });
-          // msg_sender().send_messages();
           return home();
         case LoginStatus.Unauthorized:
           return splash();
@@ -82,41 +83,44 @@ class _WrapperState extends State<Wrapper> {
 }
 
 Future<void> send_messages(RequiredArgs args) async {
+  print("isolate (send_messages) runnning....");
   final SendPort sendPort = args.sendPort;
   final store = Store.fromReference(getObjectBoxModel(), args.id as ByteData);
   var messageBox = Box<messageDetail>(store);
 
-  print(messageBox.getAll());
+  // var send = msg_sender();
 
-  // print(id);
+  int id = 0;
 
-  // sendPort.send("yes");
+  // send.send_messages(messageBox);
+  Timer.periodic(new Duration(seconds: 10), (timer) {
+    // print(id);
+    msgHandler().sendMsg(messageBox);
+    // print("running periodically");
+    // var msgs = messageBox.getAll();
+    // if (msgs.length > 0) {
+    //   // send.send_messages(messageBox);
+    //   //send 10 everysecond
+    //   msgHandler().sendMsg(messageBox);
+    //   print('monitor local storage length: ${msgs.length}');
+    // }
+  });
 
-  // final commandPort = ReceivePort();
-  // p.send(commandPort.sendPort);
-
-  // print(commandPort.first);
-
-  // SendPort responsePort = args[0];
-  // var queue = args[0];
-
-  // print(queue);
-
-  // messageBox.getAll();
-
-  // while (true) {
-  //   var msgs = globals.objectBoxService.getAllMessages();
-  //   if (msgs.length < 0) {
-  //     final handle = msgHandler();
-  //     for (var element in msgs) {
-  //       var msg = element?.payload;
-  //       handle.addtoQueue(msg);
-  //     }
+  // final handle = msgHandler();
+  // var msgs = messageBox.getAll();
+  // print(msgs);
+  // if (msgs.length == 0) {
+  //   print("sleeping");
+  //   sleep(Duration(seconds: 5));
+  // } else if (msgs.length > 0) {
+  //   print("woke up");
+  //   for (var element in msgs) {
+  //     var msg = element?.payload;
+  //     handle.addtoQueue(msg);
   //   }
-  //   handle.sendMsg();
   // }
+  // handle.sendMsg();
   // int _count = 0;
-  // print("isolate (send_messages) runnning....");
   // for (var i = 0; i < 10; i++) {
   //   await Future.delayed(Duration(seconds: 3), () {});
   //   _count++;

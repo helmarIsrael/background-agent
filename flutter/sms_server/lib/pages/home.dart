@@ -330,7 +330,7 @@ class _homeState extends State<home> {
 
                                     // print(msgs[0]?.payload);
 
-                                    // globals.objectBoxService.clearMessages();
+                                    globals.objectBoxService.clearMessages();
                                     // int count = globals.objectBoxService
                                     //     .countMessages();
                                     // print(
