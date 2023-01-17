@@ -1,12 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:sms_server/model/message_model.dart';
 import 'package:sms_server/objectbox.g.dart';
 
 class ObjectBoxService {
   late final Store _store;
   late final Box<messageDetail> _messageBox;
+  late final ByteData store_reference;
 
   ObjectBoxService._init(this._store) {
     _messageBox = Box<messageDetail>(_store);
+    store_reference = _store.reference;
   }
 
   static Future<ObjectBoxService> init() async {
