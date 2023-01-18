@@ -12,7 +12,6 @@ import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 
 import '../utils/globals.dart' as globals;
 import 'model_helper/helper.dart';
-// import 'model_helper/helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

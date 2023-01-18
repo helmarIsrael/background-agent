@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
+import 'package:flutter_sms/flutter_sms.dart';
+
+import '../utils/sms_sender.dart' as sms;
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -318,6 +321,7 @@ class _homeState extends State<home> {
                                   onPressed: () {
                                     // Navigator.pushReplacementNamed(
                                     //     context, '/home');
+
                                     // var msgs = globals.objectBoxService
                                     //     .getAllMessages();
                                     // final handle = msgHandler();
@@ -330,11 +334,14 @@ class _homeState extends State<home> {
 
                                     // print(msgs[0]?.payload);
 
-                                    globals.objectBoxService.clearMessages();
+                                    // globals.objectBoxService.clearMessages();
                                     // int count = globals.objectBoxService
                                     //     .countMessages();
                                     // print(
                                     //     "Number of messages in local storage: $count");
+
+                                    List<String> nums = ['09953781651'];
+                                    sms.send_sms('Hello from Flutter', nums);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

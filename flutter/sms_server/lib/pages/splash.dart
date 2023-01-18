@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sms_server/pages/wrapper.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class splash extends StatefulWidget {
   const splash({Key? key}) : super(key: key);
@@ -13,23 +14,26 @@ class splash extends StatefulWidget {
 }
 
 class _splashState extends State<splash> {
+  void request_permission() async {
+    await [Permission.sms].request();
+  }
   // void bootup() async {
   //   await Future.delayed(Duration(seconds: 3), () {
   //     Navigator.pushReplacementNamed(context, '/home');
   //   });
   // }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   bootup();
-  // }
+  @override
+  void initState() {
+    request_permission();
+  }
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var authProv = Provider.of<LoginProvider>(context, listen: false);
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: Center(
           // Center is a layout widget. It takes a single child and positions it
@@ -114,7 +118,7 @@ class _splashState extends State<splash> {
                                   width: 300,
                                   child: TextFormField(
                                     controller: usernameController,
-                                    autofocus: true,
+                                    // autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       hintText: 'Username',
@@ -179,7 +183,7 @@ class _splashState extends State<splash> {
                                   width: 300,
                                   child: TextFormField(
                                     controller: passwordController,
-                                    autofocus: true,
+                                    // autofocus: true,
                                     obscureText: true,
                                     decoration: InputDecoration(
                                       hintText: 'Password',
