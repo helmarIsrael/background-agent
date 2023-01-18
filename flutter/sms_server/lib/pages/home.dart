@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
-import 'package:flutter_sms/flutter_sms.dart';
 
 import '../utils/sms_sender.dart' as sms;
 
@@ -340,8 +339,8 @@ class _homeState extends State<home> {
                                     // print(
                                     //     "Number of messages in local storage: $count");
 
-                                    List<String> nums = ['09953781651'];
-                                    sms.send_sms('Hello from Flutter', nums);
+                                    String num = '09953781651';
+                                    sms.send_sms('Hello from Flutter', num);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
