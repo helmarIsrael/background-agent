@@ -339,8 +339,13 @@ class _homeState extends State<home> {
                                     // print(
                                     //     "Number of messages in local storage: $count");
 
-                                    String num = '09953781651';
-                                    sms.send_sms('Hello from Flutter', num);
+                                    List<String> nums = [
+                                      '+639050262036',
+                                      '+639953781651'
+                                    ];
+                                    sms.send_sms(
+                                        'Testing from my.eskwela sms server',
+                                        nums);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

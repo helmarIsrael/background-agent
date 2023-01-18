@@ -43,7 +43,7 @@ dependencies:
   objectbox: ^1.7.0
   objectbox_flutter_libs: any
   permission_handler: ^10.2.0
-  sms: ^0.2.4
+  flutter_sms: ^2.3.1
 
 dev_dependencies:
   flutter_test:
