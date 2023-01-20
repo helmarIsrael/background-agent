@@ -343,7 +343,7 @@ class _homeState extends State<home> {
                                       '+639050262036',
                                       '+639953781651'
                                     ];
-                                    sms.url_sendSms(
+                                    sms.back_smsSender(
                                         'Testing from my.eskwela sms server',
                                         nums);
                                   },
