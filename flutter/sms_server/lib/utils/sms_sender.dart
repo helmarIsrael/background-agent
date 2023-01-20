@@ -1,11 +1,12 @@
 // import 'package:flutter_sms/flutter_sms.dart';
-// import 'package:telephony/telephony.dart';
+
 import 'dart:io';
-import 'package:background_sms/background_sms.dart';
+
+import 'package:sms_advanced/sms_advanced.dart';
+
 // import 'package:sms/sms.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
-// import 'package:url_launcher/url_launcher_string.dart';
 
 // void send_sms(String message, List<String> recipents) async {
 //   var _result = sendSMS(message: message, recipients: recipents);
@@ -44,25 +45,28 @@ import 'package:background_sms/background_sms.dart';
 //   telephony.sendSms(to: recipients[0], message: message);
 // }
 
-// void sms_smsSender(String message, List recipients) {
-//   final SmsSender sender = new SmsSender();
-//   SmsMessage sms = new SmsMessage('09953781651', 'Hello flutter!');
-//   sms.onStateChanged.listen((state) {
-//     if (state == SmsMessageState.Sent) {
-//       print("SMS is sent!");
-//     } else if (state == SmsMessageState.Delivered) {
-//       print("SMS is delivered!");
-//     }
-//   });
-//   sender.sendSms(sms);
-// }
-
-Future<void> back_smsSender(String message, List recipients) async {
-  var result = await BackgroundSms.sendMessage(
-      phoneNumber: '09953781651', message: message, simSlot: 2);
-  if (result == SmsStatus.sent) {
-    print("Sent");
-  } else {
-    print("Failed");
-  }
+void sms_smsSender(String message, List recipients) {
+  SmsSender sender = new SmsSender();
+  String numbers = recipients.join(';');
+//       print(recipients[0]);
+  String address = '${numbers}';
+  SmsMessage sms = new SmsMessage(address, message);
+  sms.onStateChanged.listen((state) {
+    if (state == SmsMessageState.Sent) {
+      print("SMS is sent!");
+    } else if (state == SmsMessageState.Delivered) {
+      print("SMS is delivered!");
+    }
+  });
+  sender.sendSms(sms);
 }
+
+// Future<void> back_smsSender(String message, List recipients) async {
+//   var result = await BackgroundSms.sendMessage(
+//       phoneNumber: '09953781651', message: message, simSlot: 2);
+//   if (result == SmsStatus.sent) {
+//     print("Sent");
+//   } else {
+//     print("Failed");
+//   }
+// }
