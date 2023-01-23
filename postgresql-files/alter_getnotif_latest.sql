@@ -26,6 +26,7 @@ AS $BODY$
 	 loc_notif_type text;
 	 notif_id text;
 	 notif_actionid text;
+	 action_initiator_type text;
    begin
 	 notif_count = 0;
      if par_usertype = 'faculty' then
@@ -42,6 +43,7 @@ AS $BODY$
 			notif_ts = notif.notif_ts;
 			notif_readablets = to_char(notif.notif_ts::date, 'Day, Month DD, yyyy');
 			notif_actionid = notif.action_initiator;
+			action_initiator_type = notif.user_type;
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
@@ -64,7 +66,8 @@ AS $BODY$
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
 					'notif_id', notif_id,
-					'action_init', notif_actionid
+					'action_init', notif_actionid,
+					'action_init_type', action_initiator_type
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -86,6 +89,7 @@ AS $BODY$
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
 			notif_actionid = notif.action_initiator;
+			action_initiator_type = notif.user_type;
 			
 			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
 				notif_read = false ;
@@ -105,7 +109,8 @@ AS $BODY$
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
 					'notif_id', notif_id,
-					'action_init', notif_actionid
+					'action_init', notif_actionid,
+					'action_init_type', action_initiator_type
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -127,6 +132,7 @@ AS $BODY$
 			
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
+			action_initiator_type = notif.user_type;
 			
 			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
 				notif_read = false ;
@@ -146,7 +152,8 @@ AS $BODY$
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
 					'notif_id', notif_id,
-					'action_init', notif_actionid
+					'action_init', notif_actionid,
+					'action_init_type', action_initiator_type
 				);
 			notif_count = notif_count + 1;
 		end loop;
@@ -167,6 +174,8 @@ AS $BODY$
 			loc_notif_type = notif.notif_type;
 			notif_id = notif.notif_id;
 			
+			action_initiator_type = notif.user_type;
+			
 			if notif.notif_id != checkreadnotif(notif.notif_id, par_initiatorid) then
 				notif_read = false ;
 			else
@@ -185,7 +194,8 @@ AS $BODY$
 					'notif_readablets', notif_readablets,
 					'notif_type', loc_notif_type,
 					'notif_id', notif_id,
-					'action_init', notif_actionid
+					'action_init', notif_actionid,
+					'action_init_type', action_initiator_type
 				);
 			notif_count = notif_count + 1;
 		end loop;

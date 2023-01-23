@@ -2833,13 +2833,14 @@
                     dataType: "json",
                     success: function(resp){
                         data = resp.notifs
+                        
                         usertype = $("#name-rightbadge").data("usertype")
                         $("#notifholder").empty()
                         if (data != null) {
                             for (var i = 0; i < data.length; i++){
                                 if (usertype == "students") {
                                     if (data[i].notif_type != "assignment") {
-
+                                        
                                         if (data[i].initiatorid.charAt(0) != 'A') {
                                             $("#notifholder").append(`
                                             <li>
@@ -2914,7 +2915,7 @@
     
                                 } else if (usertype == "admin") {
                                     
-                                    if (data[i].action_init.charAt(0) != 'F' || (data[i].notif_type == 'comment' || data[i].notif_type == 'reaction' || data[i].notif_type == 'BCast')) {
+                                    if (data[i].action_init_type != 'faculty' || (data[i].notif_type == 'comment' || data[i].notif_type == 'reaction' || data[i].notif_type == 'BCast')) {
                                         if (data[i].notif_type != 'assignment') {
                                             if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction' || data[i].notif_type == 'BCast') {
                                                 if (data[i].initiatorid == $("#name-rightbadge").data("personnumid") && data[i].receiverid.charAt(0) != 'S' || data[i].notif_type == 'BCast') {
@@ -2949,7 +2950,7 @@
                                         if (data[i].receiverid == '') {
                                             data[i].receiverid = $("#name-rightbadge").data("personnumid")
                                         }
-                                        if (data[i].action_init.charAt(0) != 'F') {
+                                        if (data[i].action_init_type != 'faculty') {
                                             if (data[i].notif_type == 'comment' ||  data[i].notif_type == 'reaction') {
                                                 if (data[i].initiatorid.charAt(0) == 'A') {
                                                     if (data[i].receiverid == $("#name-rightbadge").data("personnumid")) {
