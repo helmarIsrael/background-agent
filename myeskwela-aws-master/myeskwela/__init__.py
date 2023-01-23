@@ -3611,12 +3611,18 @@ def bcastvirtualclassroom():
                   True, 3, semid, schoolid
                   ), group, True)
 
-    msg_type = 'Bulletin Board'  
-    messageTextOnly = 'Posted a video Conference'
+
+    channels = []
+
+    channels.append(virtualroomid)
+    channels.append(schoolid)
+
+    msg_type = 'BCast'  
+    # messageTextOnly = 'Posted a video Conference'
     person_id = spcall("getpersonidbyusername", (username,),)[0][0]
     person = spcall("getpersonname", (person_id,),)[0][0]
     person = person.split("*")
-    poster = f'{person[1]} {person[0]} has posted!'
+    poster = f'{person[1]} {person[0]} has posted a Video Conference!'
     name = f'{person[1]} {person[0]}'
     messageTextOnly = f'{poster} has posted a Video Conference'
     receivers = []
@@ -3628,10 +3634,12 @@ def bcastvirtualclassroom():
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
 
+    print(receivers)
+
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, type=msg_type, 
-            user_type=group, channels=virtualroomid, 
+            user_type=group, channels=channels, 
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=None, start_date=None, section=None,
             name=name, action_initiator=usernum)
@@ -3690,7 +3698,8 @@ def bulletinpost():
    
     else:
         receivers.append(res[0][0]['responses'][0]['receiverid'])
-        
+
+
     # print(f'\n\n{channels}\n\n')
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
     notif = pub.notifications(username=username,
