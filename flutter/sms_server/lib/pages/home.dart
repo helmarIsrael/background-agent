@@ -5,7 +5,6 @@ import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
 
 import '../utils/sms_sender.dart' as sms;
-import 'package:sms_advanced/sms_advanced.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -340,33 +339,37 @@ class _homeState extends State<home> {
                                     // print(
                                     //     "Number of messages in local storage: $count");
 
-                                    // List<String> nums = [
-                                    //   '+639050262036',
-                                    //   '+639953781651'
-                                    // ];
-                                    // sms.sms_smsSender(
-                                    //     'Testing from my.eskwela sms server',
-                                    //     nums);
+                                    List<String> nums = ['09763189903'];
+                                    sms.tele_sendSMS(
+                                        'Testing from my.eskwela sms server',
+                                        nums);
 
-                                    SmsSender sender = SmsSender();
+                                    // SimCardsProvider provider =
+                                    //     new SimCardsProvider();
+                                    // List<SimCard> card =
+                                    //     await provider.getSimCards();
+                                    // print(card);
 
-                                    SmsMessage message = SmsMessage(
-                                        '+639953781651',
-                                        'Hello flutter world!');
-                                    // await Future.delayed(
-                                    //     Duration(seconds: 3), () {});
-                                    message.onStateChanged.listen((state) {
-                                      print(state);
-                                      if (state == SmsMessageState.Sent) {
-                                        print("SMS is sent!");
-                                      } else if (state ==
-                                          SmsMessageState.Delivered) {
-                                        print("SMS is delivered!");
-                                      }
-                                    });
-                                    sender.sendSms(message);
-                                    // sender.onSmsDelivered.listen((event) {
-                                    //   print(event);
+                                    // SmsSender sender = SmsSender();
+
+                                    // SmsMessage message = SmsMessage(
+                                    //     '+639953781651',
+                                    //     'Hello flutter world!');
+                                    // // await Future.delayed(
+                                    // //     Duration(seconds: 3), () {});
+                                    // message.onStateChanged.listen((state) {
+                                    //   print(state);
+                                    //   if (state == SmsMessageState.Sent) {
+                                    //     print("SMS is sent!");
+                                    //   } else if (state ==
+                                    //       SmsMessageState.Delivered) {
+                                    //     print("SMS is delivered!");
+                                    //   }
+                                    // });
+                                    // sender.sendSms(message);
+                                    // sender.onSmsDelivered
+                                    //     .listen((SmsMessage message) {
+                                    //   print(message.address);
                                     // });
                                   },
                                   style: ElevatedButton.styleFrom(

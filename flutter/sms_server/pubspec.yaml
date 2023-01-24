@@ -44,8 +44,11 @@ dependencies:
   objectbox_flutter_libs: ^1.7.1
   permission_handler: ^10.2.0
   url_launcher: ^6.0.0-nullsafety.6
-  flutter_sms: ^2.3.1
-  sms_advanced: ^1.0.1
+  flutter_sms: ^2.3.3
+  telephony:
+    git:
+      url: https://github.com/suhardik/s_telephony.git
+      ref: develop
 
 dev_dependencies:
   flutter_test:
