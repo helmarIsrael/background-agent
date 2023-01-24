@@ -340,37 +340,7 @@ class _homeState extends State<home> {
                                     //     "Number of messages in local storage: $count");
 
                                     List<String> nums = ['09763189903'];
-                                    sms.tele_sendSMS(
-                                        'Testing from my.eskwela sms server',
-                                        nums);
-
-                                    // SimCardsProvider provider =
-                                    //     new SimCardsProvider();
-                                    // List<SimCard> card =
-                                    //     await provider.getSimCards();
-                                    // print(card);
-
-                                    // SmsSender sender = SmsSender();
-
-                                    // SmsMessage message = SmsMessage(
-                                    //     '+639953781651',
-                                    //     'Hello flutter world!');
-                                    // // await Future.delayed(
-                                    // //     Duration(seconds: 3), () {});
-                                    // message.onStateChanged.listen((state) {
-                                    //   print(state);
-                                    //   if (state == SmsMessageState.Sent) {
-                                    //     print("SMS is sent!");
-                                    //   } else if (state ==
-                                    //       SmsMessageState.Delivered) {
-                                    //     print("SMS is delivered!");
-                                    //   }
-                                    // });
-                                    // sender.sendSms(message);
-                                    // sender.onSmsDelivered
-                                    //     .listen((SmsMessage message) {
-                                    //   print(message.address);
-                                    // });
+                                    sms.send_sms('my.eskwela', nums);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

@@ -1,21 +1,37 @@
+// import 'package:background_sms/background_sms.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:telephony/telephony.dart';
+import 'dart:convert' show utf8;
+// import 'package:sms_advanced/sms_advanced.dart';
 
 import 'dart:io';
 
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:sms_maintained/sms.dart';
+
+// import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:sms/sms.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
 
-// void send_sms(String message, List<String> recipents) async {
-//   var _result = sendSMS(message: message, recipients: recipents);
-//   bool canSend = await canSendSMS();
+void send_sms(String message, List<String> recipents) async {
+  // var _result = sendSMS(message: message, recipients: recipents);
+  bool canSend = await canSendSMS();
 
-//   print('Device Status: $canSend');
-//   print(_result);
-// }
+  print('Device Status: $canSend');
+  // print(_result);
+
+  //Uint8List to String
+  var bytes = utf8.encode(message);
+
+//String to Uint8List
+  String s = utf8.decode(bytes.toList());
+  print(s);
+  var result = await sendSMS(message: bytes, recipients: recipents)
+      .catchError((onError) {
+    print(onError);
+  });
+  print(result);
+}
 
 // void url_sendSms(String message, List recipients) async {
 //   // String get; separator => isCupertino() ? '&' : '?';
@@ -47,10 +63,10 @@ import 'package:url_launcher/url_launcher.dart';
 //   }
 // }
 
-void tele_sendSMS(String message, List recipients) {
-  final Telephony telephony = Telephony.instance;
-  Telephony.backgroundInstance.sendSms(to: recipients[0], message: message);
-}
+// void tele_sendSMS(String message, List recipients) {
+//   final Telephony telephony = Telephony.instance;
+//   telephony.sendSms(to: recipients[0], message: message);
+// }
 
 // void sms_smsSender(String message, List recipients) {
 //   SmsSender sender = new SmsSender();
@@ -76,4 +92,41 @@ void tele_sendSMS(String message, List recipients) {
 //   } else {
 //     print("Failed");
 //   }
+// }
+
+// void back_sendSms(String message, List recipients) async {
+//   var result = await BackgroundSms.sendMessage(
+//       phoneNumber: recipients[0], message: message);
+//   if (result == SmsStatus.sent) {
+//     print("Sent");
+//   } else {
+//     print("Failed");
+//   }
+// }
+
+// void ad_sendSms(String sms, List receipients) async {
+//   // SimCardsProvider provider =
+//   // new SimCardsProvider();
+//   // List<SimCard> card =
+//   // await provider.getSimCards();
+//   // print(card);
+
+//   SmsSender sender = SmsSender();
+
+//   SmsMessage message = SmsMessage(receipients[0], sms);
+//   // await Future.delayed(
+//   //     Duration(seconds: 3), () {});
+//   message.onStateChanged.listen((state) {
+//     print(state);
+//     if (state == SmsMessageState.Sent) {
+//       print("SMS is sent!");
+//     } else if (state == SmsMessageState.Delivered) {
+//       print("SMS is delivered!");
+//     }
+//   });
+//   sender.sendSms(message);
+  // sender.onSmsDelivered
+  // .listen((SmsMessage message) {
+  // print(message.address);
+  // });
 // }
