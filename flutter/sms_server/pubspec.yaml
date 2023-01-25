@@ -43,11 +43,8 @@ dependencies:
   objectbox: ^1.7.1
   objectbox_flutter_libs: ^1.7.1
   permission_handler: ^10.2.0
-  url_launcher: ^6.0.0-nullsafety.6
   flutter_sms: ^2.3.3
   background_sms: ^0.0.4
-  sms_advanced: ^1.0.1
-  sms_maintained: ^0.2.5
     
 
 dev_dependencies:

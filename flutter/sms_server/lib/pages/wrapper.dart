@@ -17,7 +17,7 @@ import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
 import 'package:sms_server/utils/message_handler.dart';
-import 'package:sms_server/utils/message_sender.dart';
+// import 'package:sms_server/utils/message_sender.dart';
 
 import '../model/message_model.dart';
 import '../provider/login_provider.dart';
@@ -42,8 +42,8 @@ class _WrapperState extends State<Wrapper> {
   void initState() {
     final receive_port = ReceivePort();
     var store = globals.objectBoxService.store_reference;
-    // RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-    // Isolate.spawn(send_messages, requiredArgs);
+    RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
+    Isolate.spawn(send_messages, requiredArgs);
     // sendport_completer();
   }
 

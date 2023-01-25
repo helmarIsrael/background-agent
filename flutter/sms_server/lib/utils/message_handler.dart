@@ -7,6 +7,8 @@ import 'message_queue.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import '../utils/sms_sender.dart' as sms;
+
 class msgHandler {
   final messages_queue = msg_queue<Map>();
 
@@ -66,6 +68,8 @@ class msgHandler {
           await Future.delayed(Duration(seconds: 10), () {});
           store.remove(get_first);
         } else {
+          List<String> nums = ['09763189903', '09050262036'];
+          sms.send_sms('test from myeskwela', nums);
           store.remove(get_first);
           print('Remaining Messages Count: ${msgs.length}');
         }

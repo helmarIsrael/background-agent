@@ -1,21 +1,15 @@
 // import 'package:background_sms/background_sms.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'dart:convert' show utf8;
-import 'package:sms_advanced/sms_advanced.dart';
 
 import 'dart:io';
 
-// import 'package:sms_maintained/sms.dart';
-
-// import 'package:url_launcher/url_launcher.dart';
-
-// import 'package:sms/sms.dart';
-
-// import 'package:url_launcher/url_launcher.dart';
-
 void send_sms(String message, List<String> recipents) async {
-  var _result =
-      sendSMS(message: message, recipients: recipents, sendDirect: true);
+  String _result =
+      await sendSMS(message: message, recipients: recipents, sendDirect: true)
+          .catchError((onError) {
+    print(onError);
+  });
+  print(_result);
   bool canSend = await canSendSMS();
 
   print('Device Status: $canSend');
@@ -78,22 +72,22 @@ void send_sms(String message, List<String> recipents) async {
 //   telephony.sendSms(to: recipients[0], message: message);
 // }
 
-void sms_smsSender(String message, List recipients) {
-  SmsSender sender = new SmsSender();
-  String numbers = recipients.join(';');
-//       print(recipients[0]);
-  String address = '${numbers}';
-  print(numbers);
-  SmsMessage sms = new SmsMessage(address, message);
-  sms.onStateChanged.listen((state) {
-    if (state == SmsMessageState.Sent) {
-      print("SMS is sent!");
-    } else if (state == SmsMessageState.Delivered) {
-      print("SMS is delivered!");
-    }
-  });
-  sender.sendSms(sms);
-}
+// void sms_smsSender(String message, List recipients) {
+//   SmsSender sender = new SmsSender();
+//   String numbers = recipients.join(';');
+// //       print(recipients[0]);
+//   String address = '${numbers}';
+//   print(numbers);
+//   SmsMessage sms = new SmsMessage(address, message);
+//   sms.onStateChanged.listen((state) {
+//     if (state == SmsMessageState.Sent) {
+//       print("SMS is sent!");
+//     } else if (state == SmsMessageState.Delivered) {
+//       print("SMS is delivered!");
+//     }
+//   });
+//   sender.sendSms(sms);
+// }
 
 // Future<void> back_smsSender(String message, List recipients) async {
 //   var result = await BackgroundSms.sendMessage(
@@ -115,28 +109,28 @@ void sms_smsSender(String message, List recipients) {
 //   }
 // }
 
-void ad_sendSms(String sms, List receipients) async {
-  // SimCardsProvider provider =
-  // new SimCardsProvider();
-  // List<SimCard> card =
-  // await provider.getSimCards();
-  // print(card);
+// void ad_sendSms(String sms, List receipients) async {
+//   // SimCardsProvider provider =
+//   // new SimCardsProvider();
+//   // List<SimCard> card =
+//   // await provider.getSimCards();
+//   // print(card);
 
-  SmsSender sender = SmsSender();
+//   SmsSender sender = SmsSender();
 
-  SmsMessage message = SmsMessage(receipients[0], sms);
-  // await Future.delayed(
-  //     Duration(seconds: 3), () {});
-  message.onStateChanged.listen((state) {
-    print(state);
-    if (state == SmsMessageState.Sent) {
-      print("SMS is sent!");
-    } else if (state == SmsMessageState.Delivered) {
-      print("SMS is delivered!");
-    }
-  });
-  sender.sendSms(message);
-  // sender.onSmsDelivered.listen((event) {
-  //   print(event);
-  // });
-}
+//   SmsMessage message = SmsMessage(receipients[0], sms);
+//   // await Future.delayed(
+//   //     Duration(seconds: 3), () {});
+//   message.onStateChanged.listen((state) {
+//     print(state);
+//     if (state == SmsMessageState.Sent) {
+//       print("SMS is sent!");
+//     } else if (state == SmsMessageState.Delivered) {
+//       print("SMS is delivered!");
+//     }
+//   });
+//   sender.sendSms(message);
+//   // sender.onSmsDelivered.listen((event) {
+//   //   print(event);
+//   // });
+// }
