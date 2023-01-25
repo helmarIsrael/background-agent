@@ -42,8 +42,8 @@ class _WrapperState extends State<Wrapper> {
   void initState() {
     final receive_port = ReceivePort();
     var store = globals.objectBoxService.store_reference;
-    RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-    Isolate.spawn(send_messages, requiredArgs);
+    // RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
+    // Isolate.spawn(send_messages, requiredArgs);
     // sendport_completer();
   }
 
