@@ -18,6 +18,7 @@ import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/sms_sender.dart' as sms;
+import 'package:flutter_sms/flutter_sms.dart';
 
 // import 'package:sms_server/utils/message_sender.dart';
 
@@ -42,11 +43,15 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
     final receive_port = ReceivePort();
     var store = globals.objectBoxService.store_reference;
     RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-    Isolate.spawn(send_messages, requiredArgs);
+    final store2 = Store.fromReference(getObjectBoxModel(), store as ByteData);
+    var messageBox = Box<messageDetail>(store2);
+    Timer.periodic(new Duration(seconds: 10), (timer) {
+      msgHandler().sendMsg(messageBox);
+    });
+    // Isolate.spawn(send_messages, requiredArgs);
   }
 
   @override
@@ -84,18 +89,25 @@ class _WrapperState extends State<Wrapper> {
   }
 }
 
-Future<void> send_messages(RequiredArgs args) async {
+void send_messages(RequiredArgs args) {
   print("isolate (send_messages) runnning....");
+  List<String> nums = ['09763189903', '09050262036'];
+
+  // print(nums);
+  // sendSMS(message: 'myeskwela', recipients: nums, sendDirect: true);
+
+  // var isSent = sms.send_sms('myeskwela', nums);
+
   final SendPort sendPort = args.sendPort;
   final store = Store.fromReference(getObjectBoxModel(), args.id as ByteData);
   var messageBox = Box<messageDetail>(store);
-  // var send = msg_sender();
-  var canSend = await sms.check_canSend();
+  // // var send = msg_sender();
+  // // var canSend = await sms.check_canSend();
 
-  int id = 0;
+  // int id = 0;
 
-  // if (canSend) {
-  // print(canSend);
+  // // if (canSend) {
+  // // print(canSend);
   Timer.periodic(new Duration(seconds: 10), (timer) {
     // print(id);
 
@@ -112,17 +124,3 @@ Future<void> send_messages(RequiredArgs args) async {
   // }
   // send.send_messages(messageBox);
 }
-
-// void run_isolate() async {
-//   Future<bool> canSend = sms.check_canSend();
-//   if (await canSend) {
-//     print(canSend);
-//     final receive_port = ReceivePort();
-//     var store = globals.objectBoxService.store_reference;
-//     RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-//     Isolate.spawn(send_messages, requiredArgs);
-//   } else {
-//     //pop error unta here to inform user na dli maka send
-//   }
-//   // sendport_completer();
-// }

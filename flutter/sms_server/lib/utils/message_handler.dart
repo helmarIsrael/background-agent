@@ -37,30 +37,25 @@ class msgHandler {
       int get_first = msgs[0].id;
       print('Message id: ${get_first}');
       print('Message: ${store.get(get_first)?.payload.runtimeType}');
-      String msg = store.get(get_first)!.payload;
+      Map msg = json.decode(store.get(get_first)!.payload);
+      String message = msg['poster'];
       try {
-        if (get_first % 2 == 0) {
-          //error ni kunuhay
-          // Simulation of an error on Sending
-          // itry balik ug send
-          await Future.delayed(Duration(seconds: 10), () {});
-          store.remove(get_first);
-        } else {
-          store.remove(get_first);
-        }
+        // store.remove(get_first);
+        // print('Remaining Messages Count: ${msgs.length}');
 
-        // String clean_msg = msg.replaceAll(new RegExp(r'[^\w\s]+'), '');
-        // List<String> nums = ['09763189903', '09050262036'];
-        // var isSent = sms.send_sms(clean_msg, nums);
-        // if (isSent == 'SMS Sent!') {
-        //   store.remove(get_first);
-        // } else {
+        String clean_msg = message.replaceAll(new RegExp(r'[^\w\s]+'), '');
+        // print(clean_msg);
+        List<String> nums = ['09763189903', '09050262036'];
+        var isSent = sms.send_sms(clean_msg, nums);
+        print(isSent);
+        store.remove(get_first);
+        print('Remaining Messages Count: ${msgs.length}');
+        //else {
         //   await Future.delayed(Duration(seconds: 10), () {});
         //   var isSent = sms.send_sms(clean_msg, nums);
         //   store.remove(get_first);
         // }
 
-        print('Remaining Messages Count: ${msgs.length}');
         // }
       } catch (e) {
         print("Error $e");

@@ -6,18 +6,15 @@ import 'package:flutter_sms/flutter_sms.dart';
 import 'dart:io';
 
 Future<String> send_sms(String message, List<String> recipents) async {
-  String _result =
-      await sendSMS(message: message, recipients: recipents, sendDirect: true)
-          .catchError((onError) {
-    print(onError);
-  });
+  String result =
+      await sendSMS(message: message, recipients: recipents, sendDirect: true);
 
   // bool canSend = await canSendSMS();
 
-  return _result;
-
-  //Uint8List to String
-  // var bytes = utf8.encode(message);
+  return result;
+}
+//Uint8List to String
+// var bytes = utf8.encode(message);
 
 // //String to Uint8List
 //   String s = utf8.decode(bytes.toList());
@@ -27,7 +24,6 @@ Future<String> send_sms(String message, List<String> recipents) async {
 //     print(onError);
 //   });
 //   print(result);
-}
 
 bool check_canSend() {
   bool canSend = canSendSMS() as bool;

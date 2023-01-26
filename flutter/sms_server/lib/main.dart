@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sms_server/pages/home.dart';
@@ -13,8 +15,9 @@ import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 import '../utils/globals.dart' as globals;
 import 'model_helper/helper.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // DartPluginRegistrant.ensureInitialized();
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     globals.objectBoxService = await ObjectBoxService.init();
   });
