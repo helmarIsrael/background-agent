@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
+import '../utils/sms_sender.dart' as sms;
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -336,6 +337,11 @@ class _homeState extends State<home> {
                                     //     .countMessages();
                                     // print(
                                     //     "Number of messages in local storage: $count");
+                                    // List<String> nums = [
+                                    //   '09763189903',
+                                    //   '09050262036'
+                                    // ];
+                                    // sms.send_sms('test from myeskwela', nums);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

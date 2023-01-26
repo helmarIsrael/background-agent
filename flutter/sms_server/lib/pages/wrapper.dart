@@ -17,6 +17,8 @@ import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
 import 'package:sms_server/utils/message_handler.dart';
+import '../utils/sms_sender.dart' as sms;
+
 // import 'package:sms_server/utils/message_sender.dart';
 
 import '../model/message_model.dart';
@@ -40,11 +42,11 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     final receive_port = ReceivePort();
     var store = globals.objectBoxService.store_reference;
     RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
     Isolate.spawn(send_messages, requiredArgs);
-    // sendport_completer();
   }
 
   @override
@@ -87,14 +89,16 @@ Future<void> send_messages(RequiredArgs args) async {
   final SendPort sendPort = args.sendPort;
   final store = Store.fromReference(getObjectBoxModel(), args.id as ByteData);
   var messageBox = Box<messageDetail>(store);
-
   // var send = msg_sender();
+  var canSend = await sms.check_canSend();
 
   int id = 0;
 
-  // send.send_messages(messageBox);
+  // if (canSend) {
+  // print(canSend);
   Timer.periodic(new Duration(seconds: 10), (timer) {
     // print(id);
+
     msgHandler().sendMsg(messageBox);
     // print("running periodically");
     // var msgs = messageBox.getAll();
@@ -105,25 +109,20 @@ Future<void> send_messages(RequiredArgs args) async {
     //   print('monitor local storage length: ${msgs.length}');
     // }
   });
-
-  // final handle = msgHandler();
-  // var msgs = messageBox.getAll();
-  // print(msgs);
-  // if (msgs.length == 0) {
-  //   print("sleeping");
-  //   sleep(Duration(seconds: 5));
-  // } else if (msgs.length > 0) {
-  //   print("woke up");
-  //   for (var element in msgs) {
-  //     var msg = element?.payload;
-  //     handle.addtoQueue(msg);
-  //   }
   // }
-  // handle.sendMsg();
-  // int _count = 0;
-  // for (var i = 0; i < 10; i++) {
-  //   await Future.delayed(Duration(seconds: 3), () {});
-  //   _count++;
-  //   print("in isolate: ${_count.toString()}");
-  // }
+  // send.send_messages(messageBox);
 }
+
+// void run_isolate() async {
+//   Future<bool> canSend = sms.check_canSend();
+//   if (await canSend) {
+//     print(canSend);
+//     final receive_port = ReceivePort();
+//     var store = globals.objectBoxService.store_reference;
+//     RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
+//     Isolate.spawn(send_messages, requiredArgs);
+//   } else {
+//     //pop error unta here to inform user na dli maka send
+//   }
+//   // sendport_completer();
+// }

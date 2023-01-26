@@ -29,21 +29,7 @@ class msgHandler {
   Future<void> sendMsg(Box<messageDetail> store) async {
     bool qstatus = messages_queue.queueStatus();
     int id = 0;
-    // while (!qstatus) {
-    //   id++;
-    //   qstatus = messages_queue.queueStatus();
-    //   if (qstatus) {
-    //     print("Queue Empty: All Messages Sent");
-    //     break;
-    //   }
-    //   // await Future.delayed(Duration(seconds: 10), () {});
-    //   print('Item Send: ${messages_queue.pop()}');
-    //   // messages_queue.pop();
-    //   store.remove(id);
-    //   print(messages_queue.queueSize());
 
-    //   // globals.objectBoxService.deleteMessage(id);
-    // }
     var msgs = store.getAll();
     print('  ');
     print('Current Message Count: ${msgs.length}');
@@ -52,14 +38,6 @@ class msgHandler {
       print('Message id: ${get_first}');
       print('Message: ${store.get(get_first)?.payload.runtimeType}');
       String msg = store.get(get_first)!.payload;
-
-      // write(String text) async {
-      //   final Directory directory = await getApplicationDocumentsDirectory();
-      //   final File file = File('${directory.path}/my_file.txt');
-      //   file.writeAsString(text, mode: FileMode.append);
-      // }
-
-      // write(msg);
       try {
         if (get_first % 2 == 0) {
           //error ni kunuhay
@@ -68,11 +46,22 @@ class msgHandler {
           await Future.delayed(Duration(seconds: 10), () {});
           store.remove(get_first);
         } else {
-          List<String> nums = ['09763189903', '09050262036'];
-          sms.send_sms('test from myeskwela', nums);
           store.remove(get_first);
-          print('Remaining Messages Count: ${msgs.length}');
         }
+
+        // String clean_msg = msg.replaceAll(new RegExp(r'[^\w\s]+'), '');
+        // List<String> nums = ['09763189903', '09050262036'];
+        // var isSent = sms.send_sms(clean_msg, nums);
+        // if (isSent == 'SMS Sent!') {
+        //   store.remove(get_first);
+        // } else {
+        //   await Future.delayed(Duration(seconds: 10), () {});
+        //   var isSent = sms.send_sms(clean_msg, nums);
+        //   store.remove(get_first);
+        // }
+
+        print('Remaining Messages Count: ${msgs.length}');
+        // }
       } catch (e) {
         print("Error $e");
       }
