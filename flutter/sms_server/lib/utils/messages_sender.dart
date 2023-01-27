@@ -15,7 +15,7 @@ class msg_sender {
         handle.showQueueSize();
       }
     }
-    handle.sendMsg(store);
+    handle.sendMsg();
 
     // int _count = 0;
     // print("isolate (send_messages) runnning....");

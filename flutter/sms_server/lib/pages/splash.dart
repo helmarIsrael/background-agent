@@ -6,6 +6,8 @@ import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../utils/sms_sender.dart' as sms;
+
 class splash extends StatefulWidget {
   const splash({Key? key}) : super(key: key);
 
@@ -93,8 +95,10 @@ class _splashState extends State<splash> {
                         Consumer<SplashProvider>(
                             builder: (context, splashProv, _) {
                           splashProv.toLoadSplash();
-                          if (splashProv.getSplashStatus ==
-                              SplashStatus.splashUninitialized) {
+                          if (splashProv.getSplashStatus !=
+                                  SplashStatus.splashIsLoaded ||
+                              splashProv.canSendStatus !=
+                                  SplashStatus.deviceCanSend) {
                             return Align(
                                 alignment: AlignmentDirectional(0, 0),
                                 child: SpinKitRing(
@@ -108,6 +112,16 @@ class _splashState extends State<splash> {
                                 //       fontSize: 20,
                                 //     )),
                                 );
+                          } else if (splashProv.getCanSendStatus ==
+                              SplashStatus.deviceCantSend) {
+                            return Text(
+                                'Device Not Capable for message Sending',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Color.fromARGB(255, 230, 0, 0),
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ));
                           }
                           return Column(
                             children: [

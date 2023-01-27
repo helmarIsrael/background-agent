@@ -18,9 +18,6 @@ import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/sms_sender.dart' as sms;
-import 'package:flutter_sms/flutter_sms.dart';
-
-// import 'package:sms_server/utils/message_sender.dart';
 
 import '../model/message_model.dart';
 import '../provider/login_provider.dart';
@@ -44,12 +41,12 @@ class _WrapperState extends State<Wrapper> {
   @override
   void initState() {
     final receive_port = ReceivePort();
-    var store = globals.objectBoxService.store_reference;
-    RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-    final store2 = Store.fromReference(getObjectBoxModel(), store as ByteData);
-    var messageBox = Box<messageDetail>(store2);
+    // var store = globals.objectBoxService.store_reference;
+    // RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
+    // final store2 = Store.fromReference(getObjectBoxModel(), store as ByteData);
+    // var messageBox = Box<messageDetail>(store2);
     Timer.periodic(new Duration(seconds: 10), (timer) {
-      msgHandler().sendMsg(messageBox);
+      msgHandler().sendMsg();
     });
     // Isolate.spawn(send_messages, requiredArgs);
   }
@@ -62,9 +59,6 @@ class _WrapperState extends State<Wrapper> {
         case LoginStatus.Authorized:
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
-          // Timer.periodic(new Duration(seconds: 1), (timer) {
-          //   pubNubProv.send_messages();
-          // });
           return home();
         case LoginStatus.Unauthorized:
           return splash();
@@ -89,38 +83,38 @@ class _WrapperState extends State<Wrapper> {
   }
 }
 
-void send_messages(RequiredArgs args) {
-  print("isolate (send_messages) runnning....");
-  List<String> nums = ['09763189903', '09050262036'];
+// void send_messages(RequiredArgs args) {
+//   print("isolate (send_messages) runnning....");
+//   List<String> nums = ['09763189903', '09050262036'];
 
-  // print(nums);
-  // sendSMS(message: 'myeskwela', recipients: nums, sendDirect: true);
+//   // print(nums);
+//   // sendSMS(message: 'myeskwela', recipients: nums, sendDirect: true);
 
-  // var isSent = sms.send_sms('myeskwela', nums);
+//   // var isSent = sms.send_sms('myeskwela', nums);
 
-  final SendPort sendPort = args.sendPort;
-  final store = Store.fromReference(getObjectBoxModel(), args.id as ByteData);
-  var messageBox = Box<messageDetail>(store);
-  // // var send = msg_sender();
-  // // var canSend = await sms.check_canSend();
+//   // final SendPort sendPort = args.sendPort;
+//   // final store = Store.fromReference(getObjectBoxModel(), args.id as ByteData);
+//   // var messageBox = Box<messageDetail>(store);
+//   // // var send = msg_sender();
+//   // // var canSend = await sms.check_canSend();
 
-  // int id = 0;
+//   // int id = 0;
 
-  // // if (canSend) {
-  // // print(canSend);
-  Timer.periodic(new Duration(seconds: 10), (timer) {
-    // print(id);
+//   // // if (canSend) {
+//   // // print(canSend);
+//   Timer.periodic(new Duration(seconds: 10), (timer) {
+//     // print(id);
 
-    msgHandler().sendMsg(messageBox);
-    // print("running periodically");
-    // var msgs = messageBox.getAll();
-    // if (msgs.length > 0) {
-    //   // send.send_messages(messageBox);
-    //   //send 10 everysecond
-    //   msgHandler().sendMsg(messageBox);
-    //   print('monitor local storage length: ${msgs.length}');
-    // }
-  });
-  // }
-  // send.send_messages(messageBox);
-}
+//     msgHandler().sendMsg();
+//     // print("running periodically");
+//     // var msgs = messageBox.getAll();
+//     // if (msgs.length > 0) {
+//     //   // send.send_messages(messageBox);
+//     //   //send 10 everysecond
+//     //   msgHandler().sendMsg(messageBox);
+//     //   print('monitor local storage length: ${msgs.length}');
+//     // }
+//   });
+//   // }
+//   // send.send_messages(messageBox);
+// }

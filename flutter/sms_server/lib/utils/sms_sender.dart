@@ -25,7 +25,8 @@ Future<String> send_sms(String message, List<String> recipents) async {
 //   });
 //   print(result);
 
-bool check_canSend() {
-  bool canSend = canSendSMS() as bool;
+Future<bool> check_canSend() async {
+  bool canSend = await canSendSMS();
+
   return canSend;
 }

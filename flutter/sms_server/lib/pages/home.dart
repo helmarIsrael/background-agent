@@ -337,11 +337,6 @@ class _homeState extends State<home> {
                                     //     .countMessages();
                                     // print(
                                     //     "Number of messages in local storage: $count");
-                                    // List<String> nums = [
-                                    //   '09763189903',
-                                    //   '09050262036'
-                                    // ];
-                                    // sms.send_sms('test from myeskwela', nums);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

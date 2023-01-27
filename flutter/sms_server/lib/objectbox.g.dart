@@ -15,24 +15,49 @@ import 'package:objectbox/objectbox.dart';
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'model/message_model.dart';
+import 'model/sentSMS_model.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 1897207431410446062),
+      id: const IdUid(1, 2606038121411148346),
       name: 'messageDetail',
-      lastPropertyId: const IdUid(2, 6937749705109281604),
+      lastPropertyId: const IdUid(2, 7997469751091397793),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 8199647421650698253),
+            id: const IdUid(1, 7737044700431995335),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 6937749705109281604),
+            id: const IdUid(2, 7997469751091397793),
             name: 'payload',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(2, 312639425092174687),
+      name: 'sentSMSDetail',
+      lastPropertyId: const IdUid(3, 6994461807497914328),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 836968420433488938),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 2200304238169563034),
+            name: 'payload',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 6994461807497914328),
+            name: 'timestamp',
             type: 9,
             flags: 0)
       ],
@@ -60,7 +85,7 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(1, 1897207431410446062),
+      lastEntityId: const IdUid(2, 312639425092174687),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
@@ -99,6 +124,37 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 6, ''));
 
           return object;
+        }),
+    sentSMSDetail: EntityDefinition<sentSMSDetail>(
+        model: _entities[1],
+        toOneRelations: (sentSMSDetail object) => [],
+        toManyRelations: (sentSMSDetail object) => {},
+        getId: (sentSMSDetail object) => object.id,
+        setId: (sentSMSDetail object, int id) {
+          object.id = id;
+        },
+        objectToFB: (sentSMSDetail object, fb.Builder fbb) {
+          final payloadOffset = fbb.writeString(object.payload);
+          final timestampOffset = fbb.writeString(object.timestamp);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, payloadOffset);
+          fbb.addOffset(2, timestampOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = sentSMSDetail(
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              payload: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, ''),
+              timestamp: const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, ''));
+
+          return object;
         })
   };
 
@@ -114,4 +170,19 @@ class messageDetail_ {
   /// see [messageDetail.payload]
   static final payload =
       QueryStringProperty<messageDetail>(_entities[0].properties[1]);
+}
+
+/// [sentSMSDetail] entity fields to define ObjectBox queries.
+class sentSMSDetail_ {
+  /// see [sentSMSDetail.id]
+  static final id =
+      QueryIntegerProperty<sentSMSDetail>(_entities[1].properties[0]);
+
+  /// see [sentSMSDetail.payload]
+  static final payload =
+      QueryStringProperty<sentSMSDetail>(_entities[1].properties[1]);
+
+  /// see [sentSMSDetail.timestamp]
+  static final timestamp =
+      QueryStringProperty<sentSMSDetail>(_entities[1].properties[2]);
 }

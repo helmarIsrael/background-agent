@@ -26,18 +26,20 @@ class msgHandler {
     return messages_queue.queueSize();
   }
 
-  Future<void> sendMsg(Box<messageDetail> store) async {
+  Future<void> sendMsg() async {
     bool qstatus = messages_queue.queueStatus();
     int id = 0;
 
-    var msgs = store.getAll();
+    var store = globals.objectBoxService;
+
+    var msgs = store.getAllMessages();
     print('  ');
     print('Current Message Count: ${msgs.length}');
     if (msgs.length > 0) {
       int get_first = msgs[0].id;
       print('Message id: ${get_first}');
-      print('Message: ${store.get(get_first)?.payload.runtimeType}');
-      Map msg = json.decode(store.get(get_first)!.payload);
+      print('Message: ${store.getMessage(get_first)?.payload.runtimeType}');
+      Map msg = json.decode(store.getMessage(get_first)!.payload);
       String message = msg['poster'];
       try {
         // store.remove(get_first);
@@ -48,7 +50,7 @@ class msgHandler {
         List<String> nums = ['09763189903', '09050262036'];
         var isSent = sms.send_sms(clean_msg, nums);
         print(isSent);
-        store.remove(get_first);
+        store.deleteMessage(get_first);
         print('Remaining Messages Count: ${msgs.length}');
         //else {
         //   await Future.delayed(Duration(seconds: 10), () {});

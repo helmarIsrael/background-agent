@@ -9,7 +9,6 @@ import 'package:pubnub/pubnub.dart';
 import 'package:sms_server/model/message_model.dart';
 
 import 'package:sms_server/objectbox.g.dart';
-import 'package:sms_server/utils/message_sender.dart';
 
 import '../model_helper/helper.dart';
 import '../utils/globals.dart' as globals;

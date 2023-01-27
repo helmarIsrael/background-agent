@@ -16,7 +16,7 @@ class _messagesState extends State<messages> {
           backgroundColor: Color(0xFFFFBF00),
           automaticallyImplyLeading: false,
           title: Text(
-            'Messages',
+            'Messages Sent',
             style: TextStyle(
               fontFamily: 'Montserrat',
               color: Colors.white,
