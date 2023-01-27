@@ -4,18 +4,18 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:2606038121411148346",
-      "lastPropertyId": "2:7997469751091397793",
+      "id": "1:2471085338329830444",
+      "lastPropertyId": "2:1151950008444024619",
       "name": "messageDetail",
       "properties": [
         {
-          "id": "1:7737044700431995335",
+          "id": "1:6478156705173173731",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:7997469751091397793",
+          "id": "2:1151950008444024619",
           "name": "payload",
           "type": 9
         }
@@ -23,23 +23,23 @@
       "relations": []
     },
     {
-      "id": "2:312639425092174687",
-      "lastPropertyId": "3:6994461807497914328",
+      "id": "2:4673159319815168240",
+      "lastPropertyId": "3:6606067900661135762",
       "name": "sentSMSDetail",
       "properties": [
         {
-          "id": "1:836968420433488938",
+          "id": "1:252538864656546856",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:2200304238169563034",
+          "id": "2:8891429357083628082",
           "name": "payload",
           "type": 9
         },
         {
-          "id": "3:6994461807497914328",
+          "id": "3:6606067900661135762",
           "name": "timestamp",
           "type": 9
         }
@@ -47,7 +47,7 @@
       "relations": []
     }
   ],
-  "lastEntityId": "2:312639425092174687",
+  "lastEntityId": "2:4673159319815168240",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

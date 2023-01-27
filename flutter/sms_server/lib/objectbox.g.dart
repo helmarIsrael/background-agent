@@ -21,18 +21,18 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <ModelEntity>[
   ModelEntity(
-      id: const IdUid(1, 2606038121411148346),
+      id: const IdUid(1, 2471085338329830444),
       name: 'messageDetail',
-      lastPropertyId: const IdUid(2, 7997469751091397793),
+      lastPropertyId: const IdUid(2, 1151950008444024619),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 7737044700431995335),
+            id: const IdUid(1, 6478156705173173731),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 7997469751091397793),
+            id: const IdUid(2, 1151950008444024619),
             name: 'payload',
             type: 9,
             flags: 0)
@@ -40,23 +40,23 @@ final _entities = <ModelEntity>[
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
-      id: const IdUid(2, 312639425092174687),
+      id: const IdUid(2, 4673159319815168240),
       name: 'sentSMSDetail',
-      lastPropertyId: const IdUid(3, 6994461807497914328),
+      lastPropertyId: const IdUid(3, 6606067900661135762),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
-            id: const IdUid(1, 836968420433488938),
+            id: const IdUid(1, 252538864656546856),
             name: 'id',
             type: 6,
             flags: 1),
         ModelProperty(
-            id: const IdUid(2, 2200304238169563034),
+            id: const IdUid(2, 8891429357083628082),
             name: 'payload',
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(3, 6994461807497914328),
+            id: const IdUid(3, 6606067900661135762),
             name: 'timestamp',
             type: 9,
             flags: 0)
@@ -85,7 +85,7 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(2, 312639425092174687),
+      lastEntityId: const IdUid(2, 4673159319815168240),
       lastIndexId: const IdUid(0, 0),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),

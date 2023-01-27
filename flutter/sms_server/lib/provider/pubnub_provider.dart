@@ -14,9 +14,6 @@ import '../model_helper/helper.dart';
 import '../utils/globals.dart' as globals;
 
 class PubNubProvider extends ChangeNotifier {
-  StreamController<Map> streamController = StreamController<Map>();
-  StreamController<bool> sendMessagesControl = StreamController<bool>();
-
   var message = {};
   get getMessage => message;
   set setMessage(value) {

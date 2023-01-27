@@ -16,19 +16,19 @@ class splash extends StatefulWidget {
 }
 
 class _splashState extends State<splash> {
-  // void request_permission() async {
-  //   await [Permission.sms].request();
-  // }
+  void request_permission() async {
+    await [Permission.sms].request();
+  }
   // void bootup() async {
   //   await Future.delayed(Duration(seconds: 3), () {
   //     Navigator.pushReplacementNamed(context, '/home');
   //   });
   // }
 
-  // @override
-  // void initState() {
-  //   request_permission();
-  // }
+  @override
+  void initState() {
+    request_permission();
+  }
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();

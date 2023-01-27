@@ -22,7 +22,7 @@ import '../utils/sms_sender.dart' as sms;
 import '../model/message_model.dart';
 import '../provider/login_provider.dart';
 
-import '../utils/globals.dart' as globals;
+// import '../utils/globals.dart' as globals;
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});

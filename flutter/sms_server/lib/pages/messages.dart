@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:sms_server/pages/viewMsg.dart';
+import 'package:sms_server/provider/sent_msgs_provider.dart';
 
 class messages extends StatefulWidget {
   const messages({super.key});
@@ -48,149 +54,99 @@ class _messagesState extends State<messages> {
                     // LIST VIEW HERE
                     // #############3
                     //
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.vertical,
-                      children: [
-                        for (int i = 0; i < 10; i++)
-                          //
-                          // ###############################
-                          // LIST VIEW CHLD 1
-                          // ###############################
-                          //
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 0,
-                                    color: Color(0xFFE0E3E7),
-                                    offset: Offset(0, 4),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(0),
-                                shape: BoxShape.rectangle,
-                              ),
+                    child: Consumer<SentMessagesProvider>(
+                        builder: (context, sent_msgs, _) {
+                      sent_msgs.get_sentMessages();
+                      List msgs = sent_msgs.getsentMessages.reversed.toList();
+                      return ListView(
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          for (int i = 0; i < msgs.length; i++)
+                            //
+                            // ###############################
+                            // LIST VIEW CHLD 1
+                            // ###############################
+                            //
+                            GestureDetector(
+                              onTap: () => {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            viewMsg(msg_id: msgs[i].id))),
+                              },
                               child: Padding(
                                 padding:
-                                    EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Container(
-                                      width: 4,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFFFBF00),
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            12, 0, 0, 0),
-                                        child: Text(
-                                          'Check-in evaluated',
-                                          style: TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            color: Color(0xFF101213),
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.normal,
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 0,
+                                        color: Color(0xFFE0E3E7),
+                                        offset: Offset(0, 4),
+                                      )
+                                    ],
+                                    borderRadius: BorderRadius.circular(0),
+                                    shape: BoxShape.rectangle,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        8, 8, 8, 8),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Container(
+                                          width: 4,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFFFFBF00),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 0, 0, 0),
-                                      child: Text(
-                                        'Mar 8, 2022',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF57636C),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal,
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    12, 0, 0, 0),
+                                            child: Text(
+                                              "${json.decode(msgs[i].payload)['poster']}",
+                                              style: TextStyle(
+                                                fontFamily: 'Montserrat',
+                                                color: Color(0xFF101213),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 0),
+                                          child: Text(
+                                            '${DateFormat("MMM, dd, yyyy").format(DateTime.parse(msgs[i].timestamp))}\n${DateFormat("jm").format(DateTime.parse(msgs[i].timestamp))}',
+                                            style: TextStyle(
+                                              fontFamily: 'Montserrat',
+                                              color: Color(0xFF57636C),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        //
-                        // ###############################
-                        // LIST VIEW CHLD 2
-                        // ###############################
-                        //
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 0,
-                                  color: Color(0xFFE0E3E7),
-                                  offset: Offset(0, 4),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(0),
-                              shape: BoxShape.rectangle,
-                            ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: 4,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFFFBF00),
-                                      borderRadius: BorderRadius.circular(2),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 0, 0, 0),
-                                      child: Text(
-                                        'Check-in evaluated',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF101213),
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
-                                    child: Text(
-                                      'Mar 8, 2022',
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                        ],
+                      );
+                    }),
                   ),
                 ),
 
@@ -228,7 +184,7 @@ class _messagesState extends State<messages> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
-                                        context, '/viewMsg');
+                                        context, '/messages');
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

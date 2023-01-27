@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
+import 'package:sms_server/provider/sent_msgs_provider.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
 import '../utils/sms_sender.dart' as sms;
@@ -97,15 +98,21 @@ class _homeState extends State<home> {
                                             child: Align(
                                               alignment: AlignmentDirectional(
                                                   -0.05, -0.05),
-                                              child: Text(
-                                                '999 999 999',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 33,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                              child: Consumer<
+                                                      SentMessagesProvider>(
+                                                  builder:
+                                                      (context, sent_msg, _) {
+                                                sent_msg.get_sentMessageCount();
+                                                return Text(
+                                                  '${sent_msg.getSentMessageCount}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    fontSize: 33,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                );
+                                              }),
                                             ),
                                           ),
                                         ],
@@ -317,26 +324,8 @@ class _homeState extends State<home> {
                                 width: 160,
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    // Navigator.pushReplacementNamed(
-                                    //     context, '/home');
-
-                                    // var msgs = globals.objectBoxService
-                                    //     .getAllMessages();
-                                    // final handle = msgHandler();
-                                    // for (var element in msgs) {
-                                    //   var msg = element?.payload;
-                                    //   handle.addtoQueue(msg);
-                                    // }
-
-                                    // handle.sendMsg();
-
-                                    // print(msgs[0]?.payload);
-
-                                    // globals.objectBoxService.clearMessages();
-                                    // int count = globals.objectBoxService
-                                    //     .countMessages();
-                                    // print(
-                                    //     "Number of messages in local storage: $count");
+                                    Navigator.pushReplacementNamed(
+                                        context, '/home');
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

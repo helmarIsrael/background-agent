@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sms_server/pages/wrapper.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
+import 'package:sms_server/provider/sent_msgs_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 
 import '../utils/globals.dart' as globals;
@@ -29,12 +30,15 @@ void main() {
         ChangeNotifierProvider(create: (_) => PubNubProvider()),
         ChangeNotifierProvider(create: (_) => SplashProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => SentMessagesProvider()),
       ],
       child: MaterialApp(
         initialRoute: '/',
         routes: {
           '/': (context) => const splash(),
-          '/viewMsg': (context) => const viewMsg(),
+          '/viewMsg': (context) => viewMsg(
+                msg_id: 0,
+              ),
           '/wrapper': (context) => const Wrapper(),
           '/home': (context) => const home(),
           '/messages': (context) => const messages()
