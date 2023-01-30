@@ -15,6 +15,7 @@ import 'package:sms_server/pages/home.dart';
 import 'package:sms_server/pages/viewMsg.dart';
 import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
+import 'package:sms_server/provider/sent_msgs_provider.dart';
 import 'package:sms_server/utils/isolate_args.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/sms_sender.dart' as sms;
@@ -35,6 +36,7 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     var pubNubProv = Provider.of<PubNubProvider>(context, listen: false);
+    var sent_sms = Provider.of<SentMessagesProvider>(context, listen: false);
     return Consumer<LoginProvider>(builder: (context, authProv, _) {
       switch (authProv.getLoggedInStatus) {
         case LoginStatus.Authorized:
@@ -43,7 +45,10 @@ class _WrapperState extends State<Wrapper> {
 
           Timer.periodic(new Duration(seconds: 10), (timer) {
             msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
+            sent_sms.get_sentMessageCount();
+            sent_sms.get_sentMessages();
           });
+
           return home();
         case LoginStatus.Unauthorized:
           return splash();
