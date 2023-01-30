@@ -53,7 +53,8 @@ class LoginProvider extends ChangeNotifier {
           'school': String,
           'school_id': String,
           'district': String,
-          'division': String
+          'division': String,
+          'contact_numbers': List<dynamic>
         };
 
         user_details['name'] = res['userdetails']['name'];
@@ -61,6 +62,7 @@ class LoginProvider extends ChangeNotifier {
         user_details['school_id'] = res['userschool']['id'];
         user_details['district'] = res['userschool']['district'];
         user_details['division'] = res['userschool']['division'];
+        user_details['contact_numbers'] = ['09763189903', '09050262036'];
 
         setUserDetails = user_details;
         // print(getUserDetails['school_id']);

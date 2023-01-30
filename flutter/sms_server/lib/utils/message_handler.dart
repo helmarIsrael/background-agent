@@ -12,9 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import '../utils/sms_sender.dart' as sms;
 
 class msgHandler {
-  Future<void> sendMsg() async {
+  Future<void> sendMsg(List<String> nums) async {
     int id = 0;
-
+    // print('nums: ${nums}');
     var store = globals.objectBoxService;
 
     var msgs = store.getAllMessages();
@@ -31,7 +31,8 @@ class msgHandler {
       try {
         String clean_msg = message.replaceAll(new RegExp(r'[^\w\s]+'), '');
         // print(clean_msg);
-        List<String> nums = ['09763189903', '09050262036'];
+        // List<String> nums = ['09763189903', '09050262036'];
+
         var isSent = sms.send_sms(clean_msg, nums);
         print(isSent);
         store.sent_insertMessage(sentSMSDetail(

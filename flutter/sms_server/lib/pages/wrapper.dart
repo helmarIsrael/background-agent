@@ -32,25 +32,6 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  // Future<void> sendport_completer() async {
-  //   var sendPortCompleter = Completer<SendPort>();
-  //   SendPort main_iso_sendPort = await sendPortCompleter.future;
-  //   main_iso_sendPort.send(10);
-  // }
-
-  @override
-  void initState() {
-    final receive_port = ReceivePort();
-    // var store = globals.objectBoxService.store_reference;
-    // RequiredArgs requiredArgs = RequiredArgs(store, receive_port.sendPort);
-    // final store2 = Store.fromReference(getObjectBoxModel(), store as ByteData);
-    // var messageBox = Box<messageDetail>(store2);
-    Timer.periodic(new Duration(seconds: 10), (timer) {
-      msgHandler().sendMsg();
-    });
-    // Isolate.spawn(send_messages, requiredArgs);
-  }
-
   @override
   Widget build(BuildContext context) {
     var pubNubProv = Provider.of<PubNubProvider>(context, listen: false);
@@ -59,6 +40,10 @@ class _WrapperState extends State<Wrapper> {
         case LoginStatus.Authorized:
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
+
+          Timer.periodic(new Duration(seconds: 10), (timer) {
+            msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
+          });
           return home();
         case LoginStatus.Unauthorized:
           return splash();

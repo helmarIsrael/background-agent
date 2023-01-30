@@ -34,6 +34,10 @@ class SentMessagesProvider extends ChangeNotifier {
   }
 
   void get_sentMessageCount() {
-    setSentMessageCount = globals.objectBoxService.sent_countMessages();
+    if (globals.objectBoxService.sent_countMessages() == 0) {
+      setSentMessageCount = 0;
+    } else {
+      setSentMessageCount = globals.objectBoxService.sent_countMessages();
+    }
   }
 }

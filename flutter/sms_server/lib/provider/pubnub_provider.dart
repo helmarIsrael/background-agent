@@ -31,7 +31,7 @@ class PubNubProvider extends ChangeNotifier {
 
     // Subscribe to a channel
     print('channel: ' + channel);
-    // var channel = "test_chan";
+
     var subscription = pubnub.subscribe(channels: {channel});
 
     // Print every message
