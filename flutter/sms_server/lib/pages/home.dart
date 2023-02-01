@@ -38,237 +38,352 @@ class _homeState extends State<home> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Align(
-                  alignment: AlignmentDirectional(-0.05, 0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                          width: 100,
-                          // height: MediaQuery.of(context).size.height * 0.75,
-                          decoration: BoxDecoration(
-                            color: Color(0x00FFFFFF),
-                          ),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(15, 15, 15, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // FIRST CONTAINER
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Container(
-                                    width: 600,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 4,
-                                          color: Color(0x33000000),
-                                          offset: Offset(0, 2),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          5, 5, 5, 5),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Align(
-                                            alignment:
-                                                AlignmentDirectional(-1, 0),
-                                            child: Text(
-                                              'Number of Messages Sent Today',
-                                              style: TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: AlignmentDirectional(
-                                                  -0.05, -0.05),
-                                              child: Consumer<
-                                                      SentMessagesProvider>(
-                                                  builder:
-                                                      (context, sent_msg, _) {
-                                                sent_msg.get_sentMessageCount();
-                                                return Text(
-                                                  '${sent_msg.getSentMessageCount}',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Montserrat',
-                                                    fontSize: 33,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                );
-                                              }),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                //  SECOND CONTAINER
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Container(
-                                    width: 600,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 4,
-                                          color: Color(0x33000000),
-                                          offset: Offset(0, 2),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          5, 5, 5, 5),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Align(
-                                            alignment:
-                                                AlignmentDirectional(-1, 0),
-                                            child: Text(
-                                              'School',
-                                              style: TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: AlignmentDirectional(
-                                                  -0.05, 0),
-                                              child: Consumer<LoginProvider>(
-                                                  builder:
-                                                      (context, authProv, _) {
-                                                return Text(
-                                                  '${authProv.getUserDetails['school']}',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Montserrat',
-                                                    fontSize: 25,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                );
-                                              }),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                // THIRD CONTAINER
-                                Container(
-                                  width: 600,
-                                  height: 200,
+                Expanded(
+                  child: Container(
+                    child: ListView(
+                      scrollDirection: Axis.vertical,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(-0.05, 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                  width: 100,
+                                  // height: MediaQuery.of(context).size.height * 0.75,
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 4,
-                                        color: Color(0x33000000),
-                                        offset: Offset(0, 2),
-                                      )
-                                    ],
-                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color(0x00FFFFFF),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        5, 5, 5, 5),
+                                        15, 15, 15, 0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-1, 0),
-                                          child: Text(
-                                            'District',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
+                                        // FIRST CONTAINER
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Container(
+                                            width: 600,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 4,
+                                                  color: Color(0x33000000),
+                                                  offset: Offset(0, 2),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 5, 5, 5),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -1, 0),
+                                                    child: Text(
+                                                      'Number of Messages Sent Today',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              -0.05, -0.05),
+                                                      child: Consumer<
+                                                              SentMessagesProvider>(
+                                                          builder: (context,
+                                                              sent_msg, _) {
+                                                        sent_msg
+                                                            .get_sentMessageCount();
+                                                        return Text(
+                                                          '${sent_msg.getSentMessageCount}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontSize: 33,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        );
+                                                      }),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Expanded(
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(-0.05, 0),
-                                            child: Consumer<LoginProvider>(
-                                                builder:
-                                                    (context, authProv, _) {
-                                              return Text(
-                                                '${authProv.getUserDetails['district']}',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              );
-                                            }),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-1, 0),
-                                          child: Text(
-                                            'Division',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w500,
+
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Container(
+                                            width: 600,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 4,
+                                                  color: Color(0x33000000),
+                                                  offset: Offset(0, 2),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 5, 5, 5),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -1, 0),
+                                                    child: Text(
+                                                      'Total Messages Sent',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              -0.05, -0.05),
+                                                      child: Consumer<
+                                                              SentMessagesProvider>(
+                                                          builder: (context,
+                                                              sent_msg, _) {
+                                                        sent_msg
+                                                            .get_sentMessageCount();
+                                                        return Text(
+                                                          '${sent_msg.getSentMessageCount}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontSize: 33,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        );
+                                                      }),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Expanded(
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(-0.05, 0),
-                                            child: Consumer<LoginProvider>(
-                                                builder:
-                                                    (context, authProv, _) {
-                                              return Text(
-                                                '${authProv.getUserDetails['division']}',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              );
-                                            }),
+                                        //  SECOND CONTAINER
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8.0),
+                                          child: Container(
+                                            width: 600,
+                                            height: 150,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 4,
+                                                  color: Color(0x33000000),
+                                                  offset: Offset(0, 2),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 5, 5, 5),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -1, 0),
+                                                    child: Text(
+                                                      'School',
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              -0.05, 0),
+                                                      child: Consumer<
+                                                              LoginProvider>(
+                                                          builder: (context,
+                                                              authProv, _) {
+                                                        return Text(
+                                                          '${authProv.getUserDetails['school']}',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontSize: 25,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        );
+                                                      }),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
+                                        // THIRD CONTAINER
+                                        Container(
+                                          width: 600,
+                                          height: 180,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 4,
+                                                color: Color(0x33000000),
+                                                offset: Offset(0, 2),
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    5, 5, 5, 5),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          -1, 0),
+                                                  child: Text(
+                                                    'District',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Montserrat',
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -0.05, 0),
+                                                    child:
+                                                        Consumer<LoginProvider>(
+                                                            builder: (context,
+                                                                authProv, _) {
+                                                      return Text(
+                                                        '${authProv.getUserDetails['district']}',
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 25,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          -1, 0),
+                                                  child: Text(
+                                                    'Division',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Montserrat',
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -0.05, 0),
+                                                    child:
+                                                        Consumer<LoginProvider>(
+                                                            builder: (context,
+                                                                authProv, _) {
+                                                      return Text(
+                                                        '${authProv.getUserDetails['division']}',
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              'Montserrat',
+                                                          fontSize: 25,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Align(
