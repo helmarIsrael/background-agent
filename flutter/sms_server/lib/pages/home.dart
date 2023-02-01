@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/sent_msgs_provider.dart';
@@ -117,18 +118,33 @@ class _homeState extends State<home> {
                                                               sent_msg, _) {
                                                         sent_msg
                                                             .get_sentMessageCount();
-                                                        return Text(
-                                                          '${sent_msg.getSentMessageCount}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Montserrat',
-                                                            fontSize: 33,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        );
+                                                        if (sent_msg
+                                                            .getLoadingStatus) {
+                                                          return Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0, 0),
+                                                              child:
+                                                                  SpinKitRing(
+                                                                color: Color(
+                                                                    0xFFFFBF00),
+                                                                size: 50.0,
+                                                              ));
+                                                        } else {
+                                                          return Text(
+                                                            '${sent_msg.getSentMessageCount}',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Montserrat',
+                                                              fontSize: 33,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          );
+                                                        }
                                                       }),
                                                     ),
                                                   ),
@@ -187,19 +203,34 @@ class _homeState extends State<home> {
                                                           builder: (context,
                                                               sent_msg, _) {
                                                         sent_msg
-                                                            .get_sentMessageCount();
-                                                        return Text(
-                                                          '${sent_msg.getSentMessageCount}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'Montserrat',
-                                                            fontSize: 33,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        );
+                                                            .get_oldSentMessageCount();
+                                                        if (sent_msg
+                                                            .getLoadingStatus) {
+                                                          return Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0, 0),
+                                                              child:
+                                                                  SpinKitRing(
+                                                                color: Color(
+                                                                    0xFFFFBF00),
+                                                                size: 50.0,
+                                                              ));
+                                                        } else {
+                                                          return Text(
+                                                            '${sent_msg.getSent_oldMessageCount}',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Montserrat',
+                                                              fontSize: 33,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          );
+                                                        }
                                                       }),
                                                     ),
                                                   ),
