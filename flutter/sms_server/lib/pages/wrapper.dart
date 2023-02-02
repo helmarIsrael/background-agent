@@ -46,7 +46,7 @@ class _WrapperState extends State<Wrapper> {
           Timer.periodic(new Duration(seconds: 10), (timer) {
             msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
             sent_sms.get_sentMessageCount();
-            sent_sms.get_sentMessages();
+            sent_sms.getTodayMessages();
           });
 
           return home();

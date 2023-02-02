@@ -40,4 +40,14 @@ class ObjectBoxService {
   sent_clearMessages() => _sentSMSBox.removeAll();
 
   int sent_countMessages() => _sentSMSBox.count();
+
+  // List<sentSMSDetail> getNewMessages() {
+  //   Query<sentSMSDetail> query = _sentSMSBox
+  //       .query(sentSMSDetail_.timestamp.equals(DateTime.now().toString()))
+  //       .build();
+
+  //   List<sentSMSDetail> new_msgs = query.find();
+  //   print('new messages:$new_msgs');
+  //   return new_msgs;
+  // }
 }

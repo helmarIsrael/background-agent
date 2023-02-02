@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import '../utils/globals.dart' as globals;
 
 class SentMessagesProvider extends ChangeNotifier {
@@ -9,6 +10,13 @@ class SentMessagesProvider extends ChangeNotifier {
   get getsentMessages => sent_messages;
   set setSentMessages(value) {
     sent_messages = value;
+    notifyListeners();
+  }
+
+  late List sentToday_messages;
+  get getsentTodayMessages => sentToday_messages;
+  set setSentTodayMessages(value) {
+    sentToday_messages = value;
     notifyListeners();
   }
 
@@ -56,9 +64,23 @@ class SentMessagesProvider extends ChangeNotifier {
 
   void get_sentMessages() {
     // Timer(const Duration(seconds: 10), () {});
+    // setMsgsLoadingStatus = false;
+    // setSentMessages =
+    //     globals.objectBoxService.sent_getAllMessages().reversed.toList();
+
+    var msgs = globals.objectBoxService.sent_getAllMessages();
+    List old_msgs = [];
+    for (int i = 0; i < msgs.length; i++) {
+      if (DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(msgs[i].timestamp.toString())) !=
+          DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(DateTime.now().toString()))) {
+        old_msgs.add(msgs[i]);
+      }
+    }
+
     setMsgsLoadingStatus = false;
-    setSentMessages =
-        globals.objectBoxService.sent_getAllMessages().reversed.toList();
+    setSentMessages = old_msgs.reversed.toList();
   }
 
   void get_sentMessage(id) {
@@ -77,11 +99,15 @@ class SentMessagesProvider extends ChangeNotifier {
   }
 
   void get_sentMessageCount() {
+    //today
     int count = 0;
     var msgs = globals.objectBoxService.sent_getAllMessages();
 
     for (int i = 0; i < msgs.length; i++) {
-      if (msgs[i].timestamp.toString() == DateTime.now().toString()) {
+      if (DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(msgs[i].timestamp.toString())) ==
+          DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(DateTime.now().toString()))) {
         count++;
       }
     }
@@ -89,5 +115,21 @@ class SentMessagesProvider extends ChangeNotifier {
     setLoadStatus = false;
     setSentMessageCount = count;
     ;
+  }
+
+  void getTodayMessages() {
+    var msgs = globals.objectBoxService.sent_getAllMessages();
+    List new_msgs = [];
+    for (int i = 0; i < msgs.length; i++) {
+      if (DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(msgs[i].timestamp.toString())) ==
+          DateFormat("MMM, dd, yyyy")
+              .format(DateTime.parse(DateTime.now().toString()))) {
+        new_msgs.add(msgs[i]);
+      }
+    }
+
+    setLoadStatus = false;
+    setSentTodayMessages = new_msgs.reversed.toList();
   }
 }
