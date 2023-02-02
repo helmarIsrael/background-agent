@@ -13,17 +13,6 @@ Future<String> send_sms(String message, List<String> recipents) async {
 
   return result;
 }
-//Uint8List to String
-// var bytes = utf8.encode(message);
-
-// //String to Uint8List
-//   String s = utf8.decode(bytes.toList());
-//   print(s);
-//   var result = await sendSMS(message: bytes, recipients: recipents)
-//       .catchError((onError) {
-//     print(onError);
-//   });
-//   print(result);
 
 Future<bool> check_canSend() async {
   bool canSend = await canSendSMS();

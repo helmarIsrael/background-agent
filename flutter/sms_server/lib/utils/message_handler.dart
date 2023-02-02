@@ -33,7 +33,7 @@ class msgHandler {
         // print(clean_msg);
         // List<String> nums = ['09763189903', '09050262036'];
 
-        var isSent = sms.send_sms(clean_msg, nums);
+        var isSent = await sms.send_sms(clean_msg, nums);
         print(isSent);
         store.sent_insertMessage(sentSMSDetail(
             payload: raw_msg, timestamp: DateTime.now().toString()));
