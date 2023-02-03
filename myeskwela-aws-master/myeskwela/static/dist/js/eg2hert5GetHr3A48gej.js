@@ -3037,7 +3037,7 @@
                 })
             }
 
-            model.notif_setdeadline = function(initiatorid, date, dltype, ts){
+            model.notif_setdeadline = function(initiatorid, date, dltype, quarter, ts){
 
                 $.ajax({
                     url: apputils.rest + '/notifsetdeadline',
@@ -3049,7 +3049,8 @@
                         ts: ts,
                         date: date,
                         name: $("#name-rightbadge").data("personname"),
-                        dltype: dltype
+                        dltype: dltype,
+                        quarter: quarter
 
                     }),
                     contentType: "application/json; charset=utf-8",
@@ -3575,7 +3576,7 @@
                 })
             }
 
-            model.notif_reminders = function (reminder_type, receiverid, ts) {
+            model.notif_reminders = function (reminder_type, receiverid, subject, section, ts) {
                 $.ajax({
                     url: apputils.rest + '/notifreminders',
                     type:"POST",
@@ -3586,7 +3587,9 @@
                         receiver: receiverid,
                         ts: ts,
                         reminder_type: reminder_type,
-                        name: $("#name-rightbadge").data("personname")
+                        name: $("#name-rightbadge").data("personname"),
+                        subject: subject,
+                        section: section
                     }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -7269,7 +7272,7 @@
                        apputils.echo(resp);
                        if (resp.status.toUpperCase() == 'OK')
                        {
-                          model.notif_setdeadline($("#name-rightbadge").data("personnumid"), $("#txtdlndate").val(), $("#cbodlntype").val(), resp.ts)
+                          model.notif_setdeadline($("#name-rightbadge").data("personnumid"), $("#txtdlndate").val(), $("#cbodlntype").val(), $("#cbodlnquarter").val(), resp.ts)
                           apputils.popsuccess("Deadline Successfully Set.\n" +
                           "To check issued deadlines, please check Calendar.");
                        }
@@ -7319,7 +7322,7 @@
                        apputils.echo(resp);
                        if (resp.status.toUpperCase() == 'OK')
                        {
-                          model.notif_reminders(par_type, par_facultyid, resp.ts)
+                          model.notif_reminders(par_type, par_facultyid, par_subject, par_section, resp.ts)
                           apputils.popsuccess("A Gentle Reminder Successfully Sent.");
                        }
                        else
@@ -7400,7 +7403,7 @@
                     },
                     success: function (resp) {
                         apputils.echo(resp);
-                        model.notif_reminders('ALL',  $("#name-rightbadge").data("monitorsendallfacultyid"), resp.ts)
+                        model.notif_reminders('ALL',  $("#name-rightbadge").data("monitorsendallfacultyid"), 'ALL SUB', 'SECTION', resp.ts)
                         if (resp.status !== 'OK')
                         {
                             apputils.poperror(resp.message);

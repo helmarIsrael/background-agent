@@ -87,7 +87,7 @@ class _viewMsgState extends State<viewMsg> {
                                     Align(
                                       alignment: AlignmentDirectional(-1, 0),
                                       child: Text(
-                                        'Notification Coming From',
+                                        'Message Coming From',
                                         style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           fontSize: 20,
@@ -119,7 +119,7 @@ class _viewMsgState extends State<viewMsg> {
                             ),
                             Container(
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.4,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
@@ -150,7 +150,8 @@ class _viewMsgState extends State<viewMsg> {
                                       ),
                                     ),
                                     Text(
-                                      '\"${msg['text']}\"',
+                                      '${msg['text']}',
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 15,

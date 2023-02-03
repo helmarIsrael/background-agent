@@ -6841,20 +6841,19 @@ def notif_setdeadline():
     name = params["name"]
     date = params["date"]
     dltype = params["dltype"]
+    quarter = params["quarter"]
     channels = chan.split()
 
 
     date_object = datetime.strptime(date, "%m-%d-%Y")
     clean_date = date_object.strftime("%b %d %Y")
 
-
-    # print(dltype)
     messageTextOnly = f'''{name} posted a deadline!\n
     Type of deadline is {dltype.upper()}
+    For Quarter {quarter}
     Deadline is on {clean_date.upper()}
     '''
 
-    print(messageTextOnly)
 
     msg_type = 'deadline'
 
@@ -7051,24 +7050,27 @@ def notif_reminders():
     receiver = params["receiver"]
 
     reminder_type = params["reminder_type"]
+    subject = params["subject"]
+    section = params["section"]
     
     timestamps = params["ts"]
     name = params["name"]
-    messageTextOnly = f'{name} posted a Gentle Reminder'
+    
 
     msg_type = 'reminder'
 
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-
     if reminder_type == 'ALL':
-        poster = f'{name} posted a Gentle Reminder for You'
+        poster = f'{name} posted a Gentle Reminder'
+        messageTextOnly = f'''{name} posted a Gentle Reminder for You \nReminding you Regarding the GRADE and ITEM ANALYSIS\nFor ALL SUBJECTS'''
     else: 
-        poster = f'{name} posted a Gentle {reminder_type.upper()} Reminder for You'
+        poster = f'{name} posted a Gentle {reminder_type.upper()} Reminder'
+        messageTextOnly = f'{name} posted a Gentle {reminder_type.upper()} Reminder for You\n For the subject {subject.upper()} section {section.upper()}'
 
 
     receivers = [receiver]
     
-
+    print(messageTextOnly)
 
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, 
