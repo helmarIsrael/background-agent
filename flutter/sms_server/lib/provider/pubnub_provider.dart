@@ -40,7 +40,8 @@ class PubNubProvider extends ChangeNotifier {
         'poster': String,
         'name': String,
         'ts': String,
-        'type': String
+        'type': String,
+        'text': String,
       };
 
       if (message.content['type'] == 'deadline' ||
@@ -50,6 +51,7 @@ class PubNubProvider extends ChangeNotifier {
         payload['name'] = message.content['name'];
         payload['ts'] = message.content['timestamp'];
         payload['type'] = message.content['type'];
+        payload['text'] = message.content['text'];
 
         setMessage = payload;
 

@@ -27,7 +27,8 @@ class msgHandler {
       // print('Message: ${store.getMessage(get_first)?.payload.runtimeType}');
       var raw_msg = store.getMessage(get_first)!.payload;
       Map msg = json.decode(raw_msg);
-      String message = msg['poster'];
+      print(msg);
+      String message = msg['text'];
       try {
         String clean_msg = message.replaceAll(new RegExp(r'[^\w\s]+'), '');
         // print(clean_msg);

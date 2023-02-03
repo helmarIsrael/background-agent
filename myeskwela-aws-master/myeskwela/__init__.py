@@ -6840,8 +6840,21 @@ def notif_setdeadline():
     timestamps = params["ts"]
     name = params["name"]
     date = params["date"]
+    dltype = params["dltype"]
     channels = chan.split()
-    messageTextOnly = f'{name} posted a deadline'
+
+
+    date_object = datetime.strptime(date, "%m-%d-%Y")
+    clean_date = date_object.strftime("%b %d %Y")
+
+
+    # print(dltype)
+    messageTextOnly = f'''{name} posted a deadline!\n
+    Type of deadline is {dltype.upper()}
+    Deadline is on {clean_date.upper()}
+    '''
+
+    print(messageTextOnly)
 
     msg_type = 'deadline'
 

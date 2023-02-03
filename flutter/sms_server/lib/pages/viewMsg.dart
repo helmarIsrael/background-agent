@@ -150,7 +150,7 @@ class _viewMsgState extends State<viewMsg> {
                                       ),
                                     ),
                                     Text(
-                                      '\"${msg['poster']}\"',
+                                      '\"${msg['text']}\"',
                                       style: TextStyle(
                                         fontFamily: 'Montserrat',
                                         fontSize: 15,
