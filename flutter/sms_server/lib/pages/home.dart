@@ -6,6 +6,7 @@ import 'package:sms_server/provider/sent_msgs_provider.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
 import '../utils/sms_sender.dart' as sms;
+import '../utils/sms_sender.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -449,8 +450,10 @@ class _homeState extends State<home> {
                                 width: 160,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/messages');
+                                    // Navigator.pushReplacementNamed(
+                                    //     context, '/messages');
+
+                                    checkLoad();
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
