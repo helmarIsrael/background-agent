@@ -6,9 +6,9 @@ import 'package:flutter_sms/flutter_sms.dart';
 
 import 'dart:io';
 
-import 'package:sms_maintained/sms.dart';
+// import 'package:sms_maintained/sms.dart';
 
-// import 'package:sms_advanced/sms_maintained.dart';
+import 'package:sms_advanced/sms_advanced.dart';
 // import 'package:sms_autofill/sms_autofill.dart';
 
 Future<String> send_sms(String message, List<String> recipents) async {
@@ -32,19 +32,24 @@ Future<String> send_sms(String message, List<String> recipents) async {
 // }
 
 checkLoad() async {
+  bool status = false;
+  // print('asd');
   SmsSender sender = new SmsSender();
   String address = "09763189903";
   SmsMessage message = new SmsMessage(address, 'Hello flutter world!');
   message.onStateChanged.listen((state) async {
     if (state == SmsMessageState.Sending) {
-      print('sending ra mente ayy');
+      print('Sending');
     } else if (state == SmsMessageState.Sent) {
       print("SMS is sent!");
     } else if (state == SmsMessageState.Delivered) {
       print("SMS is delivered!");
+      // status = true;
     }
   });
   await sender.sendSms(message);
+
+  return status;
 }
 
 Future<bool> check_canSend() async {

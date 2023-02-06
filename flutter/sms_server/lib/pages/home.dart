@@ -450,10 +450,8 @@ class _homeState extends State<home> {
                                 width: 160,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    // Navigator.pushReplacementNamed(
-                                    //     context, '/messages');
-
-                                    checkLoad();
+                                    Navigator.pushReplacementNamed(
+                                        context, '/messages');
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:sms_server/utils/sms_sender.dart' as sms;
+
+import '../../utils/sms_sender.dart';
 
 enum SplashStatus {
   splashIsLoaded,
   splashUninitialized,
   deviceCantSend,
-  deviceCanSend
+  deviceCanSend,
 }
 
 class SplashProvider extends ChangeNotifier {
@@ -24,6 +25,13 @@ class SplashProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool deviceHasLoad = false;
+  get getDeviceLoadStatus => deviceHasLoad;
+  set setDeviceLoadStatus(value) {
+    deviceHasLoad = value;
+    notifyListeners();
+  }
+
   void toLoadSplash() async {
     var canSend_status = await canSendSMS();
     if (canSend_status == true) {
@@ -32,5 +40,11 @@ class SplashProvider extends ChangeNotifier {
     await Future.delayed(Duration(seconds: 1), () {
       setSplashStatus = SplashStatus.splashIsLoaded;
     });
+  }
+
+  void checkDeviceLoad() {
+    // print('asdasdas');
+    var loadStatus = checkLoad();
+    setDeviceLoadStatus = true;
   }
 }

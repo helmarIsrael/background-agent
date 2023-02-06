@@ -100,6 +100,7 @@ class SentMessagesProvider extends ChangeNotifier {
 
   void get_sentMessageCount() {
     //today
+    print('today');
     int count = 0;
     var msgs = globals.objectBoxService.sent_getAllMessages();
 

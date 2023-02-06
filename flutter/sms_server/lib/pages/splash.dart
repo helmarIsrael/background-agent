@@ -7,6 +7,7 @@ import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../utils/sms_sender.dart' as sms;
+import '../utils/sms_sender.dart';
 
 class splash extends StatefulWidget {
   const splash({Key? key}) : super(key: key);
@@ -19,15 +20,18 @@ class _splashState extends State<splash> {
   void request_permission() async {
     await [Permission.sms].request();
   }
+
   // void bootup() async {
-  //   await Future.delayed(Duration(seconds: 3), () {
-  //     Navigator.pushReplacementNamed(context, '/home');
-  //   });
+  //   checkLoad();
   // }
 
   @override
   void initState() {
     request_permission();
+    // var sp = Provider.of<SplashProvider>(context, listen: false);
+    // sp.toLoadSplash();
+    // sp.checkDeviceLoad();
+    super.initState();
   }
 
   TextEditingController usernameController = TextEditingController();
@@ -36,6 +40,9 @@ class _splashState extends State<splash> {
   @override
   Widget build(BuildContext context) {
     var authProv = Provider.of<LoginProvider>(context, listen: false);
+    var sp = Provider.of<SplashProvider>(context, listen: false);
+    sp.checkDeviceLoad();
+    sp.toLoadSplash();
     return Scaffold(
       body: Center(
           // Center is a layout widget. It takes a single child and positions it
@@ -94,11 +101,10 @@ class _splashState extends State<splash> {
                         ),
                         Consumer<SplashProvider>(
                             builder: (context, splashProv, _) {
-                          splashProv.toLoadSplash();
+                          // splashProv.toLoadSplash();
+                          // splashProv.checkDeviceLoad();
                           if (splashProv.getSplashStatus !=
-                                  SplashStatus.splashIsLoaded ||
-                              splashProv.canSendStatus !=
-                                  SplashStatus.deviceCanSend) {
+                              SplashStatus.splashIsLoaded) {
                             return Align(
                                 alignment: AlignmentDirectional(0, 0),
                                 child: SpinKitRing(
@@ -112,16 +118,28 @@ class _splashState extends State<splash> {
                                 //       fontSize: 20,
                                 //     )),
                                 );
-                          } else if (splashProv.getCanSendStatus ==
-                              SplashStatus.deviceCantSend) {
-                            return Text(
-                                'Device Not Capable for message Sending',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color.fromARGB(255, 230, 0, 0),
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                ));
+                          } else {
+                            if (splashProv.getCanSendStatus ==
+                                SplashStatus.deviceCantSend) {
+                              return Text(
+                                  'Device Not Capable for message Sending',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromARGB(255, 230, 0, 0),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ));
+                            } else if (splashProv.getDeviceLoadStatus ==
+                                false) {
+                              return Text(
+                                  'Device is either has no Load for sending Text Messages or has No reception',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromARGB(255, 230, 0, 0),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ));
+                            }
                           }
                           return Column(
                             children: [
@@ -281,152 +299,6 @@ class _splashState extends State<splash> {
                             ],
                           );
                         }),
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(9, 5, 9, 5),
-                        //   child: Container(
-                        //     width: 300,
-                        //     child: TextFormField(
-                        //       autofocus: true,
-                        //       obscureText: false,
-                        //       decoration: InputDecoration(
-                        //         hintText: 'Username',
-                        //         hintStyle: TextStyle(
-                        //           fontFamily: 'Poppins',
-                        //           fontSize: 20,
-                        //         ),
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         focusedBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         errorBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         focusedErrorBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         filled: true,
-                        //         fillColor: Colors.white,
-                        //       ),
-                        //       style: TextStyle(
-                        //         fontFamily: 'Poppins',
-                        //         fontSize: 20,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(9, 5, 9, 5),
-                        //   child: Container(
-                        //     width: 300,
-                        //     child: TextFormField(
-                        //       autofocus: true,
-                        //       obscureText: true,
-                        //       decoration: InputDecoration(
-                        //         hintText: 'Password',
-                        //         hintStyle: TextStyle(
-                        //           fontFamily: 'Poppins',
-                        //           fontSize: 20,
-                        //         ),
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         focusedBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         errorBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         focusedErrorBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             color: Color(0x00000000),
-                        //             width: 1,
-                        //           ),
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(4.0),
-                        //             topRight: Radius.circular(4.0),
-                        //           ),
-                        //         ),
-                        //         filled: true,
-                        //         fillColor: Colors.white,
-                        //       ),
-                        //       style: TextStyle(
-                        //         fontFamily: 'Poppins',
-                        //         fontSize: 20,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 15,
-                        // ),
-                        // SizedBox(
-                        //   height: 50,
-                        //   width: 200,
-                        //   child: ElevatedButton(
-                        //     onPressed: () {
-                        //       print('Button pressed ...');
-                        //     },
-                        //     style: ElevatedButton.styleFrom(
-                        //         primary: Color(0xFFF8D159),
-                        //         onPrimary: Colors.white),
-                        //     child: Text('Login',
-                        //         style: TextStyle(
-                        //           fontFamily: 'Montseratt',
-                        //           fontSize: 20,
-                        //         )),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),
