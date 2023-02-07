@@ -27,15 +27,14 @@ class msgHandler {
       // print('Message: ${store.getMessage(get_first)?.payload.runtimeType}');
       var raw_msg = store.getMessage(get_first)!.payload;
       Map msg = json.decode(raw_msg);
-      print(msg);
       String message = msg['text'];
       try {
         String clean_msg = message.replaceAll(new RegExp(r'[^\w\s]+'), '');
         // print(clean_msg);
         // List<String> nums = ['09763189903', '09050262036'];
 
-        var isSent = await sms.send_sms(clean_msg, nums);
-        print(isSent);
+        await sms.send_sms(clean_msg, nums);
+
         store.sent_insertMessage(sentSMSDetail(
             payload: raw_msg, timestamp: DateTime.now().toString()));
         store.deleteMessage(get_first);

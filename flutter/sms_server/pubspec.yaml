@@ -46,9 +46,7 @@ dependencies:
   flutter_sms: ^2.3.3
   background_sms: ^0.0.4
   intl: ^0.18.0
-  sms_advanced: ^1.0.1
-  sms_maintained: ^0.2.5
-    
+  sms_advanced: 0.0.1
 
 dev_dependencies:
   flutter_test:

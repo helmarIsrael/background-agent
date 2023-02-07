@@ -42,9 +42,9 @@ class SplashProvider extends ChangeNotifier {
     });
   }
 
-  void checkDeviceLoad() {
-    // print('asdasdas');
-    var loadStatus = checkLoad();
-    setDeviceLoadStatus = true;
-  }
+  // void checkDeviceLoad() {
+  //   // print('asdasdas');
+  //   var loadStatus = checkLoad();
+  //   setDeviceLoadStatus = true;
+  // }
 }

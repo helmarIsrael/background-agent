@@ -44,11 +44,12 @@ class _WrapperState extends State<Wrapper> {
           // print(authProv.getUserDetails);
           pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
 
-          // Timer.periodic(new Duration(seconds: 10), (timer) {
-          //   msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
-          //   sent_sms.get_sentMessageCount();
-          //   sent_sms.getTodayMessages();
-          // });
+          Timer.periodic(new Duration(seconds: 10), (timer) {
+            msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
+            sent_sms.get_sentMessageCount();
+            sent_sms.getTodayMessages();
+            sent_sms.get_oldSentMessageCount();
+          });
 
           return home();
         case LoginStatus.Unauthorized:

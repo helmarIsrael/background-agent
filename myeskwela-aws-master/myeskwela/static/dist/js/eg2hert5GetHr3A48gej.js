@@ -222,7 +222,14 @@
                 ico: "fa fa-bell-o",
                 label:"Notifications",
                 id:"mnunotif"
-            }
+            };
+
+
+            apputils.mnuphone = {
+                ico: "fa fa-phone",
+                label:"Add Contact Number",
+                id:"mnuPhone"
+            };
 
             apputils.mnuenroll = {
                 ico:"fa fa-registered",
@@ -12908,6 +12915,28 @@
                 
             }
 
+
+            view.addPhone = function ()
+            {
+                $("#main").html(
+                    column(2,"")+
+                    column(8,view.simplebox({
+                    boxtype:'primary',
+                    title:"Add Phone Number",
+                    body:view.exformgroup(
+                        view.exinputtext("Phone Number", "", "","") + '<br/>'
+                        
+                    ),
+                    footer:view.paragraph({id:"lblErrorPass", class:'', content:""}) +
+                          view.buttonact("success pull-right",
+                                "Add", "",
+                                 "")
+                
+                }))
+                )   
+
+            }
+
             view.initchangepass = function ()
             {
                 $("#main").html(
@@ -13398,6 +13427,12 @@
                             {
                                 view.qrcode();
                                 model.createqrcode();
+                            }
+                        );
+
+                        addmenuitem(apputils.mnuphone,
+                            function () {
+                                view.addPhone();
                             }
                         );
 

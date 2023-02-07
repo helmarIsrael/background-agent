@@ -17,6 +17,14 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   @override
+  void initState() {
+    var sent_msg = Provider.of<SentMessagesProvider>(context, listen: false);
+    sent_msg.get_sentMessageCount();
+    sent_msg.get_oldSentMessageCount();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -117,8 +125,6 @@ class _homeState extends State<home> {
                                                               SentMessagesProvider>(
                                                           builder: (context,
                                                               sent_msg, _) {
-                                                        sent_msg
-                                                            .get_sentMessageCount();
                                                         if (sent_msg
                                                             .getLoadingStatus) {
                                                           return Align(
@@ -203,8 +209,6 @@ class _homeState extends State<home> {
                                                               SentMessagesProvider>(
                                                           builder: (context,
                                                               sent_msg, _) {
-                                                        sent_msg
-                                                            .get_oldSentMessageCount();
                                                         if (sent_msg
                                                             .getLoadingStatus) {
                                                           return Align(

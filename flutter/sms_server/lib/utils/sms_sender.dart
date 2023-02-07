@@ -31,26 +31,27 @@ Future<String> send_sms(String message, List<String> recipents) async {
 //   }
 // }
 
-checkLoad() async {
-  bool status = false;
-  // print('asd');
-  SmsSender sender = new SmsSender();
-  String address = "09763189903";
-  SmsMessage message = new SmsMessage(address, 'Hello flutter world!');
-  message.onStateChanged.listen((state) async {
-    if (state == SmsMessageState.Sending) {
-      print('Sending');
-    } else if (state == SmsMessageState.Sent) {
-      print("SMS is sent!");
-    } else if (state == SmsMessageState.Delivered) {
-      print("SMS is delivered!");
-      // status = true;
-    }
-  });
-  await sender.sendSms(message);
+// send_sms(String msg, List<String> recipents) {
+//   // bool status = false;
+//   // print('asd');
+//   SmsSender sender = new SmsSender();
+//   String address = recipents.join(';');
+//   print(address);
+//   SmsMessage message = new SmsMessage(address, msg);
+//   message.onStateChanged.listen((state) async {
+//     if (state == SmsMessageState.Sending) {
+//       print('Sending');
+//     } else if (state == SmsMessageState.Sent) {
+//       print("SMS is sent!");
+//     } else if (state == SmsMessageState.Delivered) {
+//       print("SMS is delivered!");
+//       // status = true;
+//     }
+//   });
+//   sender.sendSms(message);
 
-  return status;
-}
+//   // return status;
+// }
 
 Future<bool> check_canSend() async {
   bool canSend = await canSendSMS();

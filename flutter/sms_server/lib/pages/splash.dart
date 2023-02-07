@@ -28,9 +28,8 @@ class _splashState extends State<splash> {
   @override
   void initState() {
     request_permission();
-    // var sp = Provider.of<SplashProvider>(context, listen: false);
-    // sp.toLoadSplash();
-    // sp.checkDeviceLoad();
+    var sp = Provider.of<SplashProvider>(context, listen: false);
+    sp.toLoadSplash();
     super.initState();
   }
 
@@ -40,9 +39,6 @@ class _splashState extends State<splash> {
   @override
   Widget build(BuildContext context) {
     var authProv = Provider.of<LoginProvider>(context, listen: false);
-    var sp = Provider.of<SplashProvider>(context, listen: false);
-    sp.checkDeviceLoad();
-    sp.toLoadSplash();
     return Scaffold(
       body: Center(
           // Center is a layout widget. It takes a single child and positions it
@@ -122,24 +118,27 @@ class _splashState extends State<splash> {
                             if (splashProv.getCanSendStatus ==
                                 SplashStatus.deviceCantSend) {
                               return Text(
-                                  'Device Not Capable for message Sending',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Color.fromARGB(255, 230, 0, 0),
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ));
-                            } else if (splashProv.getDeviceLoadStatus ==
-                                false) {
-                              return Text(
-                                  'Device is either has no Load for sending Text Messages or has No reception',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Color.fromARGB(255, 230, 0, 0),
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ));
+                                'Device Not Capable for message Sending',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Color.fromARGB(255, 230, 0, 0),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              );
                             }
+                            // } else if (splashProv.getDeviceLoadStatus ==
+                            //     false) {
+                            //   return Text(
+                            //       'Device is either has no Load for sending Text Messages or has No reception',
+                            //       style: TextStyle(
+                            //         fontFamily: 'Montserrat',
+                            //         color: Color.fromARGB(255, 230, 0, 0),
+                            //         fontSize: 25,
+                            //         fontWeight: FontWeight.bold,
+                            //       ));
+                            // }
                           }
                           return Column(
                             children: [
@@ -295,7 +294,20 @@ class _splashState extends State<splash> {
                                         fontSize: 20,
                                       )),
                                 ),
-                              )
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Make Sure that the Device has load or has reception.',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Color.fromRGBO(0, 152, 46, 1),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           );
                         }),
