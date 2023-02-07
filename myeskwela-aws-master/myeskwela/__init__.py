@@ -7086,6 +7086,28 @@ def notif_reminders():
     return jsonify({"status": "OK"})
 
 
+
+@app.route("/addPhoneNum", methods=["POST"])
+@auth.login_required
+def addPhoneNum():
+    params = request.get_json()
+    username = auth.username()
+    phoneNum = params["phoneNum"]
+    personid = params["personid"]
+    schoolid = params["schoolid"]
+    group = params["group"]
+
+    print(f'''
+    Phone Number: {phoneNum}
+    Person ID: {personid}
+    School ID: {schoolid}
+    User Type: {group}
+    ''')
+
+
+    return {"status": "OK"}
+
+
 #last
 
 # @app.route("/exam/<string:username>", methods=["POST"])
