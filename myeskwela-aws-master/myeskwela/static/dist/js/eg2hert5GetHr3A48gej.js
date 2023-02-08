@@ -3930,16 +3930,19 @@
                         contentType: 'application/json; charset=utf-8',
                         success: function(resp) {
                             apputils.echo(resp);
-                            view.stopspin(btnId, "OK");
+                            view.stopspin(btnId, "Add");
     
                                 if (resp.status == "OK")
                                 {
                                     $("#lblErrorPhone").html(view
                                         .colortext("info", "Phone Number Added successfully."));
+                                    $("#phoneNumInput").val('')
                                     return;
+                                } else if (resp.status == "duplicate") {
+
+                                    $("#lblErrorPhone").html(view
+                                        .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number tab.`));
                                 }
-                            $("#lblErrorPhone").html(view
-                                .colortext("danger", resp.message));
     
                             //apputils.echo(resp);
                         },

@@ -62,7 +62,10 @@ class LoginProvider extends ChangeNotifier {
         user_details['school_id'] = res['userschool']['id'];
         user_details['district'] = res['userschool']['district'];
         user_details['division'] = res['userschool']['division'];
-        user_details['contact_numbers'] = ['09763189903', '09050262036'];
+        user_details['contact_numbers'] = [
+          '09171148868',
+          '09050262036',
+        ];
 
         setUserDetails = user_details;
         // print(getUserDetails['school_id']);

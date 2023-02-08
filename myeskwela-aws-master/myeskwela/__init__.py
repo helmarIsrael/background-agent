@@ -7097,16 +7097,24 @@ def addPhoneNum():
     schoolid = params["schoolid"]
     group = params["group"]
 
-    print(f'''
-    Phone Number: {phoneNum}
-    Person ID: {personid}
-    School ID: {schoolid}
-    User Type: {group}
-    ''')
+    check_num = spcall("getPhoneNumberbyPersonid", (personid,),)[0][0]
+
+    if check_num != 'NONE':
+        return {'status': 'duplicate', 'phone': check_num}
+    else:
+        # print(f'''
+        # Phone Number: {phoneNum}
+        # Person ID: {personid}
+        # School ID: {schoolid}
+        # User Type: {group}
+        # ''')
+
+        res = spcall("insertphonenumber",
+                     (phoneNum, personid, schoolid, group), group, True)
 
 
-    return {"status": "OK"}
-
+        return res[0][0]
+        # return {'status': 'OK'}
 
 #last
 
