@@ -3897,6 +3897,46 @@
                
             }
 
+            model.getPhoneNumber = function () {
+                $("#updtPhoneNumInput").prop('disabled', true)
+                $("#updtPhoneNumBtn").prop('disabled', true)
+                $.ajax({
+                    url: apputils.rest + '/getPhoneNum',
+                    type:"GET",
+                    data:{
+                        personid: $("#name-rightbadge").data("personnumid"),
+                    },
+                    dataType: "json",
+                    success: function(resp){
+                        apputils.echo(resp);
+
+                            if (resp.status == "OK")
+                            {   
+                                $("#updtPhoneNumInput").val(`${resp.phone}`)
+                                $("#updtPhoneNumInput").prop('disabled', false)
+                                $("#updtPhoneNumBtn").prop('disabled', false)
+
+                                // $("#lblErrorUpdtPhone").html(view
+                                //     .colortext("danger", ""));
+                            
+                            } else if (resp.status == "no number") {
+                                $("#lblErrorUpdtPhone").html(view
+                                    .colortext("danger", "No Phone Number yet! Add Phone Number first"));
+                            }
+                        // apputils.echo(resp);
+                    },
+                    error: function (e) {
+                        $("#lblErrorUpdtPhone").html(view
+                            .colortext("danger", "Something Went Wrong"));
+                    },
+                    beforeSend: function (xhrObj){
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                });
+
+            }
+
             model.addPhoneNumber = function (btnId) {
                 // console.log(btnId);
 
@@ -3937,6 +3977,7 @@
                                     $("#lblErrorPhone").html(view
                                         .colortext("info", "Phone Number Added successfully."));
                                     $("#phoneNumInput").val('')
+                                    model.getPhoneNumber()
                                     return;
                                 } else if (resp.status == "duplicate") {
 
@@ -3949,6 +3990,72 @@
                         error: function (e) {
                             view.stopspin(btnId, "Add");
                             $("#lblErrorPhone").html(view
+                                .colortext("danger", "Something Went Wrong"));
+                        },
+                        beforeSend: function (xhrObj){
+                            view.setspin(btnId);
+                            xhrObj.setRequestHeader("Authorization",
+                                "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                        }
+                    }); 
+
+                }
+
+            }
+
+            model.updtPhoneNumber = function (btnId) {
+                // console.log(btnId);
+
+                // phoneNum = $("#phoneNumInput").val()
+                // view.setspin(btnId);
+                // // view.stopspin(btnId, "Add");
+
+                preferred_num = RegExp("(\+?\d{2}?\s?\d{3}\s?\d{3}\s?\d{4})"|"([0]\d{3}\s?\d{3}\s?\d{4})");
+
+                if ($("#updtPhoneNumInput").val() == '') {
+                    $("#lblErrorUpdtPhone").html(view
+                        .colortext("danger",
+                            "Field Cannot be Empty" ));
+
+                } else if (!preferred_num.test($("#updtPhoneNumInput").val())) {
+                    $("#lblErrorUpdtPhone").html(view
+                        .colortext("danger",
+                            "Enter A Valid Phone Number" ));
+                } else { 
+                    $.ajax({
+                        url: apputils.rest + '/updtPhoneNum',
+                        type:"POST",
+                        dataType: "json",
+                        data: JSON.stringify(
+                            {
+                                phoneNum:$("#updtPhoneNumInput").val(),
+                                personid: $("#name-rightbadge").data("personnumid"),
+                                group:$("#name-rightbadge").data("usertype")
+                            }),
+                        contentType: 'application/json; charset=utf-8',
+                        success: function(resp) {
+                            apputils.echo(resp);
+                            view.stopspin(btnId, "Update");
+    
+                                if (resp.status == "OK")
+                                {
+                                    $("#lblErrorUpdtPhone2").html(view
+                                        .colortext("info", "Phone Number Updated successfully."));
+                                    $("#updtPhoneNumInput").val('')
+                                    model.getPhoneNumber()
+                                    return;
+                                }
+                                // } else if (resp.status == "duplicate") {
+
+                                //     $("#lblErrorUpdtPhone").html(view
+                                //         .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number below.`));
+                                // }
+    
+                            //apputils.echo(resp);
+                        },
+                        error: function (e) {
+                            view.stopspin(btnId, "Update");
+                            $("#lblErrorUpdtPhone").html(view
                                 .colortext("danger", "Something Went Wrong"));
                         },
                         beforeSend: function (xhrObj){
@@ -12970,7 +13077,6 @@
                                 </ul>
                             </div>
                         
-
                     `,
                     footer:''
                 })));
@@ -12997,9 +13103,27 @@
                                 "Add", "model.addPhoneNumber('addPhoneNumBtn')",
                                  "addPhoneNumBtn")
                         })) +
-                    column(2,"")
+                    column(12,"") ) +
+
+                $("#main").append(
+                    column(2,"")+
+                    column(8,view.simplebox({
+                    boxtype:'primary',
+                    title:"Update Phone Number",
+                    body:view.exformgroup(
+                        view.inputtextonly("updtPhoneNumInput","") + '<br/>'
+                        
+                    ),
+                    footer:view.paragraph({id:"lblErrorUpdtPhone", class:'', content:""}) +
+                            view.paragraph({id:"lblErrorUpdtPhone2", class:'', content:""}) +
+                          view.buttonact("success pull-right",
+                                "Update", "model.updtPhoneNumber('updtPhoneNumBtn')",
+                                 "updtPhoneNumBtn")
+                        }))    
             
-                )   
+                )
+                
+                model.getPhoneNumber()
 
             }
 
@@ -14360,6 +14484,7 @@
                           'class="form-control"'+
                     '  id="' + id + '" '+ extension + '>';
             }
+            
 
             view.exinputtext = function (label, inputtype, id, extension)
             {

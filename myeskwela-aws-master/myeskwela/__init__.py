@@ -7116,6 +7116,59 @@ def addPhoneNum():
         return res[0][0]
         # return {'status': 'OK'}
 
+
+@app.route("/getPhoneNum", methods=["GET"])
+@auth.login_required
+def getPhoneNum():
+    params = request.args
+    personid = params["personid"]
+
+    check_num = spcall("getPhoneNumberbyPersonid", (personid,),)[0][0]
+    if check_num != 'NONE':
+        return {'status': 'OK', 'phone': check_num}
+    else:
+        return {'status': 'no number'}
+
+
+
+@app.route("/updtPhoneNum", methods=["POST"])
+@auth.login_required
+def updtPhoneNum():
+    params = request.get_json()
+    username = auth.username()
+    phoneNum = params["phoneNum"]
+    personid = params["personid"]
+    group = params["group"]
+
+    print(f'''
+        Phone Number: {phoneNum}
+        Person ID: {personid}
+        ''')
+
+    
+
+    res = spcall("updatephone",
+                     (personid, phoneNum), group, True)
+
+    print(res[0][0])
+
+    # check_num = spcall("getPhoneNumberbyPersonid", (personid,),)[0][0]
+
+    # if check_num != 'NONE':
+    #     return {'status': 'duplicate', 'phone': check_num}
+    # else:
+        # print(f'''
+        # Phone Number: {phoneNum}
+        # Person ID: {personid}
+        # ''')
+
+        # res = spcall("insertphonenumber",
+        #              (phoneNum, personid, schoolid, group), group, True)
+
+
+        # return res[0][0]
+    return {'status': 'OK'}
+
 #last
 
 # @app.route("/exam/<string:username>", methods=["POST"])
