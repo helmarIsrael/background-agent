@@ -1795,26 +1795,7 @@ def syslogcred():
        
         
         personnumid = credentials[u"personnumid"]
-        clean_cred =  {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
-                "userdetails": {"name": userdetails[0], "position": userdetails[1]},
-                "userschool": {"id": schoolassin[0],
-                               "name": schoolassin[1],
-                               "region": schoolassin[2],
-                               "division": schoolassin[3],
-                               "district": schoolassin[4]
-                               },
-                "designated": designated,
-                "religions": credentials[u"religions"].split(","),
-                "imgsrc": pic.getImgSrcUrl(credentials[u"imgsrc"]),
-                "date": todayis,
-                "semid": credentials[u"semid"],
-                "freeid": credentials[u"freeid"],
-                "load": load,
-                "nstatus": credentials[u"nstatus"].split(",")[:-1],
-                "quarter": credentials[u"quarter"],
-                "lrn": credentials[u"lrn"],
-                "mystu": mystu
-                }
+        phone_num = spcall("getPhoneNumberbyPersonid", (personnumid,),)[0][0]
         if credentials[u"usertype"] == 'admin' or credentials[u"usertype"] == 'faculty':
             channels.append(schoolassin[0])
             if credentials[u"usertype"] == 'faculty':
@@ -1843,7 +1824,8 @@ def syslogcred():
                 "lrn": credentials[u"lrn"],
                 "mystu": mystu,
                 "virtualroomid": channels,
-                "personnumid": personnumid
+                "personnumid": personnumid,
+                "phonenumber": phone_num
                 }
     except:
         return {
@@ -2665,11 +2647,13 @@ def publishclassrecord(par_offeringid):
 
             # print(receivers)
 
+            
+
             notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
             channels=channels, initiator_id=initiatorid, section=None,
             receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
-            name=name, action_initiator=usernum)
+            name=name, action_initiator=usernum, phone_number='')
 
             notif.notify()
 
@@ -3642,7 +3626,7 @@ def bcastvirtualclassroom():
             user_type=group, channels=channels, 
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=None, start_date=None, section=None,
-            name=name, action_initiator=usernum)
+            name=name, action_initiator=usernum, phone_number='')
     
 
     
@@ -3706,7 +3690,7 @@ def bulletinpost():
                 poster=poster, msg_payload=messageTextOnly, type=msg_type, user_type=group, 
                 channels=channels, initiator_id=initiatorid, section=None,
                 receiver_id=receivers, tstamp=timestamps, due_date=None, start_date=None,
-                name=name, action_initiator=usernum)
+                name=name, action_initiator=usernum, phone_number='')
     
 
    
@@ -4091,7 +4075,7 @@ def assignmentpost():
         section=assignment_section,
         channels=channels, initiator_id=initiatorid, receiver_id=receivers, 
         tstamp=timestamps, due_date=duedate, start_date=None,
-        name=name, action_initiator=usernum
+        name=name, action_initiator=usernum, phone_number=''
         )
 
     
@@ -4166,7 +4150,7 @@ def eventpost():
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=enddate, 
             start_date=begindate, section=None,
-            name=name, action_initiator=usernum
+            name=name, action_initiator=usernum, phone_number=''
         )
     
 
@@ -6168,7 +6152,7 @@ def forwardtline():
                 initiator_id=initiatorid, receiver_id=receivers,
                 tstamp=timestamps, 
                 due_date=None, start_date=None, name=name, 
-                action_initiator=usernum)
+                action_initiator=usernum, phone_number='')
     
 
     if 'Error' in res[0][0]:
@@ -6227,7 +6211,7 @@ def postcomment():
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts,due_date=None, start_date=None, section=None,
-                name=name, action_initiator=usernum)
+                name=name, action_initiator=usernum, phone_number='')
     
     
     # print result
@@ -6330,7 +6314,7 @@ def postreaction():
                 type=msg_type, user_type=group, channels=channels,
                 initiator_id=initiatorid, receiver_id=receiver_id,
                 tstamp=ts, due_date=None, start_date=None, section=None,
-                name=name, action_initiator=usernum)
+                name=name, action_initiator=usernum, phone_number='')
     
 
     if 'Error' in res:
@@ -6878,7 +6862,7 @@ def notif_setdeadline():
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=date, 
             start_date=None, section=None,
-            name=name, action_initiator=usernum
+            name=name, action_initiator=usernum, phone_number=''
         )
         
     notif.notify()
@@ -7070,7 +7054,9 @@ def notif_reminders():
 
     receivers = [receiver]
     
-    print(messageTextOnly)
+    phone_num = spcall("getPhoneNumberbyPersonid", (receiver,),)[0][0]
+
+    print(phone_num)
 
     notif = pub.notifications(username=username,
             poster=poster, msg_payload=messageTextOnly, 
@@ -7078,7 +7064,7 @@ def notif_reminders():
             initiator_id=initiatorid, receiver_id=receivers, tstamp=timestamps,
             due_date=None, 
             start_date=None, section=None,
-            name=name, action_initiator=usernum
+            name=name, action_initiator=usernum, phone_number=phone_num
         )
         
     notif.notify()

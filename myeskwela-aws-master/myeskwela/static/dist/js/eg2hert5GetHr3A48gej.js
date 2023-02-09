@@ -2154,6 +2154,7 @@
                             $("#name-rightbadge").data("virtualroomid", resp.virtualroomid);
                             $("#name-rightbadge").data("personname", resp.userdetails["name"])
                             $("#name-rightbadge").data("personnumid", resp.personnumid)
+                            $("#name-rightbadge").data("phonenumber", resp.phonenumber)
                             
                             model.pubnub_sub($("#name-rightbadge").data("virtualroomid"))
                             
@@ -3896,6 +3897,26 @@
                 }
                
             }
+
+            // model.sendSMS = function () {
+            //     $.ajax({
+            //         url: 'https://api.semaphore.co/api/v4/messages',
+            //         type: "POST",
+            //         data: {
+            //             apikey: '452e9c80485a16c4dfa07b86095e5b11',
+            //             number: '09953781651',
+            //             message: 'Hello from myeskwela',
+            //             sendername:''
+            //         },
+            //         success: function(resp){
+            //             apputils.echo(resp);
+            //         },
+            //         error: function(e){
+            //             apputils.echo(e)
+            //         }
+
+            //     })
+            // }
 
             model.getPhoneNumber = function () {
                 $("#updtPhoneNumInput").prop('disabled', true)
@@ -13086,9 +13107,8 @@
                 
             }
 
-
             view.addPhone = function ()
-            {
+            {   
                 $("#main").html(
                     column(2,"")+
                     column(8,view.simplebox({
@@ -13104,6 +13124,8 @@
                                  "addPhoneNumBtn")
                         })) +
                     column(12,"") ) +
+
+
 
                 $("#main").append(
                     column(2,"")+

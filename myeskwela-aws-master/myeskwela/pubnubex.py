@@ -6,32 +6,6 @@ from pprint import pprint
 from datetime import datetime, timedelta
 from __init__ import spcall
 
-# class MySubscribeCallback(SubscribeCallback):
-#     def status(self, pubnub, status):
-#         pass
-
-#     def presence(self, pubnub, presence):
-#         pprint(presence.__dict__)
-
-#     def message(self, pubnub, message):
-#         pprint(message.__dict__)
-
-# def my_publish_callback(envelope, status):
-#     print(envelope, status)
-
-# pnconfig = PNConfiguration()
-# pnconfig.subscribe_key = "sub-c-4813d7cf-d269-45f3-9937-3f5811a879d0"
-# pnconfig.publish_key = "pub-c-120bfc98-ed9d-48c0-8bcb-48ba129e6056"
-# pnconfig.uuid = 'pythonista'
-
-# pubnub = PubNub(pnconfig)
-
-# pubnub.add_listener(MySubscribeCallback())
-
-# pubnub.subscribe()\
-#     .channels("myeskwela-testchan")\
-#     .with_presence()\
-#     .execute()\
 
 
 
@@ -48,7 +22,7 @@ class notifications(object):
                 username=None, poster=None, type=None,
                 due_date=None, section=None, start_date=None,
                 receiver_id=None, channels=None, initiator_id = None,
-                tstamp = None, name=None, action_initiator = None):
+                tstamp = None, name=None, action_initiator = None, phone_number = None):
         self.username = username
         self.user_type = user_type
         self.msg_payload = msg_payload
@@ -61,6 +35,7 @@ class notifications(object):
         self.initiator_id = initiator_id
         self.name = name
         self.action_initiator = action_initiator
+        self.phone_number = phone_number
 
         self.channels = channels
         self.tstamp = tstamp
@@ -90,7 +65,7 @@ class notifications(object):
         section = self.section
         name = self.name
         action_initiator = self.action_initiator
-        
+        phone_number = self.phone_number
         if isinstance(channels, str) == False and len(channels) > 1:
             for item in channels:
                 self.pubnub.publish()\
@@ -100,7 +75,7 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate,
                                 'startdate': startdate, 'section':section,
-                                'name': name, 'action_initiator': action_initiator})\
+                                'name': name, 'action_initiator': action_initiator, 'phone_number': phone_number})\
                     .pn_async(my_publish_callback)
                 notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':item,
@@ -118,7 +93,7 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name, 'action_initiator': action_initiator})\
+                                'name': name, 'action_initiator': action_initiator, 'phone_number': phone_number})\
                     .pn_async(my_publish_callback)
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
                                 'user_type': user_type, 'channel':channels,
@@ -136,7 +111,7 @@ class notifications(object):
                                 'initiatorid': initiatorid, 'receiverid': receiverid,
                                 'timestamp': tstamp, 'duedate': duedate, 
                                 'startdate': startdate, 'section':section,
-                                'name': name, 'action_initiator': action_initiator})\
+                                'name': name, 'action_initiator': action_initiator, 'phone_number': phone_number})\
                     .pn_async(my_publish_callback)
 
             notif_dict = {'poster':poster,'text': text, 'type': type, 'username': username,
