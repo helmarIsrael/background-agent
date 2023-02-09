@@ -69,7 +69,7 @@ class _messagesState extends State<messages> {
                             ));
                       } else {
                         if (sent_msgs.getsentTodayMessages.length == 0 &&
-                            sent_msgs.getsentMessages) {
+                            sent_msgs.getsentMessages.length == 0) {
                           return Center(
                             child: Text('No Messages Sent Yet',
                                 textAlign: TextAlign.center,

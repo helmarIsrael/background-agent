@@ -21,7 +21,7 @@ class PubNubProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> getDataFromPubNub(String channel) async {
+  Future<dynamic> getDataFromPubNub(Set<String> channel) async {
     // Create PubNub instance with default keyset.
     var pubnub = PubNub(
         defaultKeyset: Keyset(
@@ -30,9 +30,10 @@ class PubNubProvider extends ChangeNotifier {
             userId: UserId('myUniqueUserId')));
 
     // Subscribe to a channel
-    print('channel: ' + channel);
 
-    var subscription = pubnub.subscribe(channels: {channel});
+    print('channel: $channel');
+
+    var subscription = pubnub.subscribe(channels: channel);
 
     // Print every message
     subscription.messages.listen((message) async {
@@ -42,8 +43,8 @@ class PubNubProvider extends ChangeNotifier {
         'ts': String,
         'type': String,
         'text': String,
+        'phone_number': String
       };
-
       if (message.content['type'] == 'deadline' ||
           message.content['type'] == 'reminder' &&
               message.content['action_initiator'][0] == 'A') {
@@ -52,13 +53,23 @@ class PubNubProvider extends ChangeNotifier {
         payload['ts'] = message.content['timestamp'];
         payload['type'] = message.content['type'];
         payload['text'] = message.content['text'];
+        payload['phone_number'] = message.content['phone_number'];
 
         setMessage = payload;
 
         var msg = messageDetail(payload: json.encode(payload));
 
-        int id = globals.objectBoxService.insertMessage(msg);
-
+        if (message.content['type'] == 'reminder') {
+          // print(
+          //     "reminder phone number: ${message.content['phone_number'].runtimeType}");
+          if (message.content['phone_number'] == 'NONE' ||
+              message.content['phone_number'] == '') {
+          } else {
+            int id = globals.objectBoxService.insertMessage(msg);
+          }
+        } else if (message.content['type'] != 'reminder') {
+          int id = globals.objectBoxService.insertMessage(msg);
+        }
         // print('message added to local storage, id: $id');
         // var querriedMessage = globals.objectBoxService.getMessage(id);
 

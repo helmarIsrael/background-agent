@@ -50,20 +50,21 @@ class LoginProvider extends ChangeNotifier {
         // print(res['userschool']['id']);
         Map<String, dynamic> user_details = {
           'name': String,
+          // 'personnumid': String,
           'school': String,
           'school_id': String,
           'district': String,
           'division': String,
           'contact_numbers': List<dynamic>
         };
-
         user_details['name'] = res['userdetails']['name'];
+        // userDetails['personnumid'] = res['personnumid'];
         user_details['school'] = res['userschool']['name'];
         user_details['school_id'] = res['userschool']['id'];
         user_details['district'] = res['userschool']['district'];
         user_details['division'] = res['userschool']['division'];
         user_details['contact_numbers'] = [
-          '09171148868',
+          '09094619538',
           '09050262036',
         ];
 

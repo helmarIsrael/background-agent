@@ -3583,7 +3583,7 @@
                     }
                 })
             }
-
+            
             model.notif_reminders = function (reminder_type, receiverid, subject, section, ts) {
                 $.ajax({
                     url: apputils.rest + '/notifreminders',

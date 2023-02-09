@@ -7054,6 +7054,8 @@ def notif_reminders():
 
     receivers = [receiver]
     
+    channels = [receiver, initiatorid]
+    
     phone_num = spcall("getPhoneNumberbyPersonid", (receiver,),)[0][0]
 
     print(phone_num)

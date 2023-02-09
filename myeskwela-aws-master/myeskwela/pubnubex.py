@@ -66,6 +66,9 @@ class notifications(object):
         name = self.name
         action_initiator = self.action_initiator
         phone_number = self.phone_number
+
+        print(channels)
+        
         if isinstance(channels, str) == False and len(channels) > 1:
             for item in channels:
                 self.pubnub.publish()\
