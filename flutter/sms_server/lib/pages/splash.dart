@@ -30,7 +30,6 @@ class _splashState extends State<splash> {
     request_permission();
     var sp = Provider.of<SplashProvider>(context, listen: false);
     sp.toLoadSplash();
-    super.initState();
   }
 
   TextEditingController usernameController = TextEditingController();
@@ -40,286 +39,310 @@ class _splashState extends State<splash> {
   Widget build(BuildContext context) {
     var authProv = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
-      body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            width: 100,
-            height: MediaQuery.of(context).size.height * 1,
-            decoration: BoxDecoration(
-              color: Color(0xFFFFBF00),
-            ),
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Center(
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
             child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  width: 100,
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  decoration: BoxDecoration(
-                    color: Color(0x00FFFFFF),
-                  ),
-                  child: Container(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              width: 100,
+              height: MediaQuery.of(context).size.height * 1,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFBF00),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
                     width: 100,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     decoration: BoxDecoration(
-                      color: Color(0x00FFFFFF),
+                      color: Color.fromARGB(0, 255, 255, 255),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('my.eskwela',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.normal,
-                            )),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text('SMS App',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.normal,
-                            )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Consumer<SplashProvider>(
-                            builder: (context, splashProv, _) {
-                          // splashProv.toLoadSplash();
-                          // splashProv.checkDeviceLoad();
-                          if (splashProv.getSplashStatus !=
-                              SplashStatus.splashIsLoaded) {
-                            return Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: SpinKitRing(
-                                  color: Colors.white,
-                                  size: 50.0,
-                                )
-                                // child: Text('Loading...',
-                                //     textAlign: TextAlign.center,
-                                //     style: TextStyle(
-                                //       fontFamily: 'Poppins',
-                                //       fontSize: 20,
-                                //     )),
+                    child: Container(
+                      width: 100,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(0, 231, 15, 15),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('my.eskwela',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.normal,
+                              )),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text('SMS App',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                color: Colors.white,
+                                fontSize: 25,
+                                fontWeight: FontWeight.normal,
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Consumer<SplashProvider>(
+                              builder: (context, splashProv, _) {
+                            // splashProv.toLoadSplash();
+                            // splashProv.checkDeviceLoad();
+                            if (splashProv.getSplashStatus !=
+                                SplashStatus.splashIsLoaded) {
+                              return Align(
+                                  alignment: AlignmentDirectional(0, 0),
+                                  child: SpinKitRing(
+                                    color: Colors.white,
+                                    size: 50.0,
+                                  )
+                                  // child: Text('Loading...',
+                                  //     textAlign: TextAlign.center,
+                                  //     style: TextStyle(
+                                  //       fontFamily: 'Poppins',
+                                  //       fontSize: 20,
+                                  //     )),
+                                  );
+                            } else {
+                              if (splashProv.getCanSendStatus ==
+                                  SplashStatus.deviceCantSend) {
+                                return Text(
+                                  'Device Not Capable for message Sending',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromARGB(255, 230, 0, 0),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 );
-                          } else {
-                            if (splashProv.getCanSendStatus ==
-                                SplashStatus.deviceCantSend) {
-                              return Text(
-                                'Device Not Capable for message Sending',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color.fromARGB(255, 230, 0, 0),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
-                              );
+                              }
+
+                              // } else if (splashProv.getDeviceLoadStatus ==
+                              //     false) {
+                              //   return Text(
+                              //       'Device is either has no Load for sending Text Messages or has No reception',
+                              //       style: TextStyle(
+                              //         fontFamily: 'Montserrat',
+                              //         color: Color.fromARGB(255, 230, 0, 0),
+                              //         fontSize: 25,
+                              //         fontWeight: FontWeight.bold,
+                              //       ));
+                              // }
                             }
-                            // } else if (splashProv.getDeviceLoadStatus ==
-                            //     false) {
-                            //   return Text(
-                            //       'Device is either has no Load for sending Text Messages or has No reception',
-                            //       style: TextStyle(
-                            //         fontFamily: 'Montserrat',
-                            //         color: Color.fromARGB(255, 230, 0, 0),
-                            //         fontSize: 25,
-                            //         fontWeight: FontWeight.bold,
-                            //       ));
-                            // }
-                          }
-                          return Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(9, 5, 9, 5),
-                                child: Container(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: usernameController,
-                                    // autofocus: true,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      hintText: 'Username',
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      9, 5, 9, 5),
+                                  child: Container(
+                                    width: 300,
+                                    child: TextFormField(
+                                      controller: usernameController,
+                                      // autofocus: true,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        hintText: 'Username',
+                                        hintStyle: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 20,
+                                        ),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
                                       ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      errorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedErrorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(9, 5, 9, 5),
-                                child: Container(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: passwordController,
-                                    // autofocus: true,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      hintText: 'Password',
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                      ),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      errorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      focusedErrorBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1,
-                                        ),
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(4.0),
-                                          topRight: Radius.circular(4.0),
-                                        ),
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              SizedBox(
-                                height: 50,
-                                width: 200,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    authProv.verify(usernameController.text,
-                                        passwordController.text);
-                                    Navigator.pushReplacementNamed(
-                                        context, '/wrapper');
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFFF8D159),
-                                      onPrimary: Colors.white),
-                                  child: Text('Login',
                                       style: TextStyle(
-                                        fontFamily: 'Montseratt',
+                                        fontFamily: 'Poppins',
                                         fontSize: 20,
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'Make Sure that the Device has load or has reception.',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color.fromRGBO(0, 152, 46, 1),
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      9, 5, 9, 5),
+                                  child: Container(
+                                    width: 300,
+                                    child: TextFormField(
+                                      controller: passwordController,
+                                      // autofocus: true,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                        hintText: 'Password',
+                                        hintStyle: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 20,
+                                        ),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        errorBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        focusedErrorBorder:
+                                            UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 1,
+                                          ),
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(4.0),
+                                            topRight: Radius.circular(4.0),
+                                          ),
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                      ),
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          );
-                        }),
-                      ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  width: 200,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      authProv.verify(usernameController.text,
+                                          passwordController.text);
+                                      Navigator.pushReplacementNamed(
+                                          context, '/wrapper');
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFFF8D159),
+                                        onPrimary: Colors.white),
+                                    child: Text('Login',
+                                        style: TextStyle(
+                                          fontFamily: 'Montseratt',
+                                          fontSize: 20,
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                if (authProv.getLoggedInStatus ==
+                                    LoginStatus.Unauthorized)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      'Invalid Username or Password',
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        color: Color.fromARGB(255, 230, 0, 0),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                Text(
+                                  'Make Sure that the Device has load or has reception.',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Color.fromRGBO(0, 152, 46, 1),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 30,
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
-      )),
+          ],
+        )),
+      ),
     );
   }
 }
