@@ -3958,71 +3958,136 @@
 
             }
 
+            model.verifyCode = function (original_code) {
+                input_code = $("#verifyCodeInput").val()
+                if (input_code == original_code) {
+                    model.addPhoneNumber('addPhoneNumBtn')
+                } else {
+                    $("#lblErrorPhone").html(view
+                        .colortext("danger",
+                            "Invalid Code!" ));
+                }
+            }
+
+            model.addVerification = function (btnId) {
+                preferred_num = RegExp("(\+?\d{2}?\s?\d{3}\s?\d{3}\s?\d{4})"|"([0]\d{3}\s?\d{3}\s?\d{4})");
+
+                if ($("#phoneNumInput").val() == '') {
+                    $("#lblErrorPhone").html(view
+                        .colortext("danger",
+                            "Field Cannot be Empty" ));
+
+                } else if (!preferred_num.test($("#phoneNumInput").val())) {
+                    $("#lblErrorPhone").html(view
+                        .colortext("danger",
+                            "Enter A Valid Phone Number" ));
+                } else {
+
+                        randomCode = Math.random().toString(36).substr(2, 5)
+                        console.log(randomCode)
+                        view.setspin(btnId);
+                        $.ajax({
+                            url: apputils.rest + '/sendVerification',
+                            type:"POST",
+                            dataType: "json",
+                            data: JSON.stringify(
+                                {
+                                    name: $("#name-rightbadge").data("personname"),
+                                    code: randomCode,
+                                    group: $("#name-rightbadge").data("usertype"),
+                                    schoolid: $("#name-rightbadge").data("schoolid"),
+                                    personid: $("#name-rightbadge").data("personnumid"),
+                                    phoneNum:$("#phoneNumInput").val(),
+                                }),
+                            contentType: 'application/json; charset=utf-8',
+                            success: function(resp) {
+                                apputils.echo(resp);
+                                    if (resp.status == "OK")
+                                    {
+                                        view.verifyPhone();
+                                        view.stopspin(btnId, "Confirm");
+                                        document.getElementById( "addPhoneNumBtn" ).setAttribute( "onClick", "model.verifyCode(randomCode)" );
+                                       
+                                    }
+        
+                                //apputils.echo(resp);
+                            },
+                            error: function (e) {
+                                view.stopspin(btnId, "Confirm");
+                                $("#lblErrorPhone").html(view
+                                    .colortext("danger", "Something Went Wrong"));
+                            },
+                            beforeSend: function (xhrObj){
+                                view.setspin(btnId);
+                                xhrObj.setRequestHeader("Authorization",
+                                    "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                            }
+                        });
+                        // setTimeout(function() {
+                        //     view.verifyPhone();
+                        //     view.stopspin(btnId, "Confirm");
+                        //     // console.log(input_code)
+                        //     document.getElementById( "addPhoneNumBtn" ).setAttribute( "onClick", "model.verifyCode(randomCode)" );
+                        //   }, 1000);
+                        
+                }
+            }
+
             model.addPhoneNumber = function (btnId) {
                 
-                view.verifyPhone();
+                
                 // console.log(btnId);
 
                 // phoneNum = $("#phoneNumInput").val()
                 // view.setspin(btnId);
                 // // view.stopspin(btnId, "Add");
+                $.ajax({
+                    url: apputils.rest + '/addPhoneNum',
+                    type:"POST",
+                    dataType: "json",
+                    data: JSON.stringify(
+                        {
+                            phoneNum:$("#phoneNumInput").val(),
+                            personid: $("#name-rightbadge").data("personnumid"),
+                            schoolid: $("#name-rightbadge").data("schoolid"),
+                            group:$("#name-rightbadge").data("usertype")
+                        }),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function(resp) {
+                        apputils.echo(resp);
+                        view.stopspin(btnId, "Add");
 
-                // preferred_num = RegExp("(\+?\d{2}?\s?\d{3}\s?\d{3}\s?\d{4})"|"([0]\d{3}\s?\d{3}\s?\d{4})");
+                            if (resp.status == "OK")
+                            {
+                                $("#verifyDiv").html("")
+                                $("#lblErrorPhone").html(view
+                                    .colortext("info", "Phone Number Added successfully."));
+                                $("#phoneNumInput").val('');
+                                document.getElementById( "addPhoneNumBtn" ).setAttribute( "onClick", "model.addPhoneNumber('addPhoneNumBtn')" );
+                                model.getPhoneNumber()
+                                
+                                return;
+                            } else if (resp.status == "duplicate") {
 
-                // if ($("#phoneNumInput").val() == '') {
-                //     $("#lblErrorPhone").html(view
-                //         .colortext("danger",
-                //             "Field Cannot be Empty" ));
+                                $("#lblErrorPhone").html(view
+                                    .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number tab.`));
+                            }
 
-                // } else if (!preferred_num.test($("#phoneNumInput").val())) {
-                //     $("#lblErrorPhone").html(view
-                //         .colortext("danger",
-                //             "Enter A Valid Phone Number" ));
-                // } else { 
-                //     $.ajax({
-                //         url: apputils.rest + '/addPhoneNum',
-                //         type:"POST",
-                //         dataType: "json",
-                //         data: JSON.stringify(
-                //             {
-                //                 phoneNum:$("#phoneNumInput").val(),
-                //                 personid: $("#name-rightbadge").data("personnumid"),
-                //                 schoolid: $("#name-rightbadge").data("schoolid"),
-                //                 group:$("#name-rightbadge").data("usertype")
-                //             }),
-                //         contentType: 'application/json; charset=utf-8',
-                //         success: function(resp) {
-                //             apputils.echo(resp);
-                //             view.stopspin(btnId, "Add");
-    
-                //                 if (resp.status == "OK")
-                //                 {
-                //                     $("#lblErrorPhone").html(view
-                //                         .colortext("info", "Phone Number Added successfully."));
-                //                     $("#phoneNumInput").val('')
-                //                     model.getPhoneNumber()
-                //                     return;
-                //                 } else if (resp.status == "duplicate") {
+                        //apputils.echo(resp);
+                    },
+                    error: function (e) {
+                        view.stopspin(btnId, "Add");
+                        $("#lblErrorPhone").html(view
+                            .colortext("danger", "Something Went Wrong"));
+                    },
+                    beforeSend: function (xhrObj){
+                        view.setspin(btnId);
+                        xhrObj.setRequestHeader("Authorization",
+                            "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                    }
+                }); 
 
-                //                     $("#lblErrorPhone").html(view
-                //                         .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number tab.`));
-                //                 }
-    
-                //             //apputils.echo(resp);
-                //         },
-                //         error: function (e) {
-                //             view.stopspin(btnId, "Add");
-                //             $("#lblErrorPhone").html(view
-                //                 .colortext("danger", "Something Went Wrong"));
-                //         },
-                //         beforeSend: function (xhrObj){
-                //             view.setspin(btnId);
-                //             xhrObj.setRequestHeader("Authorization",
-                //                 "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
-                //         }
-                //     }); 
-
-                // }
+                
 
             }
 
@@ -13113,7 +13178,7 @@
             view.verifyPhone = function () {
                 $("#verifyDiv").html(
                     '<h4 id="verifyCodeId">Please Enter Code Sent to your Phone</h4>' +
-                        view.inputtextonly("verifyCode","") + '<br/>'
+                        view.inputtextonly("verifyCodeInput","") + '<br/>'
                 )
             }
 
@@ -13131,7 +13196,7 @@
                     ),
                     footer:view.paragraph({id:"lblErrorPhone", class:'', content:""}) +
                           view.buttonact("success pull-right",
-                                "Add", "model.addPhoneNumber('addPhoneNumBtn')",
+                                "Add", "model.addVerification('addPhoneNumBtn')",
                                  "addPhoneNumBtn")
                         })) +
                     column(12,"") ) +

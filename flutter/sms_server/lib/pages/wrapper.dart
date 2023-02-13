@@ -42,10 +42,12 @@ class _WrapperState extends State<Wrapper> {
       switch (authProv.getLoggedInStatus) {
         case LoginStatus.Authorized:
           // print(authProv.getUserDetails);
-          // pubNubProv.getDataFromPubNub(authProv.getUserDetails['school_id']);
-          // pubNubProv.getDataFromPubNub(
-          //     {authProv.getUserDetails['school_id'], authProv.getUserDetails['personnumid']});
-          pubNubProv.getDataFromPubNub({'128081', 'A2019ENERIOEBISA-1'});
+          // pubNubProv.getDataFromPubNub({authProv.getUserDetails['school_id']});
+          pubNubProv.getDataFromPubNub({
+            authProv.getUserDetails['school_id'],
+            authProv.getUserDetails['name']
+          });
+          // pubNubProv.getDataFromPubNub({'128081', 'A2019ENERIOEBISA-1'});
           Timer.periodic(new Duration(seconds: 10), (timer) {
             msgHandler().sendMsg(authProv.getUserDetails['contact_numbers']);
             sent_sms.get_sentMessageCount();

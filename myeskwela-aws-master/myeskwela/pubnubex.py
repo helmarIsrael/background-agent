@@ -67,7 +67,7 @@ class notifications(object):
         action_initiator = self.action_initiator
         phone_number = self.phone_number
 
-        print(channels)
+        
         
         if isinstance(channels, str) == False and len(channels) > 1:
             for item in channels:
@@ -89,6 +89,7 @@ class notifications(object):
                 self.savetodb(notif_dict)
 
         elif isinstance(channels, str):
+            print(channels)
             self.pubnub.publish()\
                     .channel(channels)\
                      .message({'poster':poster,'text': text, 'type': type, 'username': username,

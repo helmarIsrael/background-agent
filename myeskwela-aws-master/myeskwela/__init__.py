@@ -7157,6 +7157,39 @@ def updtPhoneNum():
         # return res[0][0]
     return {'status': 'OK'}
 
+@app.route("/sendVerification", methods=["POST"])
+@auth.login_required
+def sendVerification():
+    print('send verification')
+    params = request.get_json()
+    username = auth.username()
+    name = params['name']
+    verification_code = params['code']
+    group = params['group']
+    channels = params['schoolid']
+    initiatorid = params['personid']
+    phone_num = params['phoneNum']
+    
+    receivers = []
+
+    usernum = spcall("getpersonidbyusername", (username,),)[0][0]
+
+    msg_type = 'verification'
+    poster = f'Code Verification for {username}'
+    messageTextOnly =  f'''{name} Verify your Phone Number by Entring this code \n {verification_code}'''
+    
+    
+    notif = pub.notifications(username=username,
+            poster=poster, msg_payload=messageTextOnly, 
+            type=msg_type, user_type=group, channels = channels,
+            initiator_id=initiatorid, receiver_id=receivers, tstamp='',
+            due_date=None, 
+            start_date=None, section=None,
+            name=name, action_initiator=usernum, phone_number=phone_num
+        )
+        
+    notif.notify()
+    return {'status': 'OK'}
 #last
 
 # @app.route("/exam/<string:username>", methods=["POST"])

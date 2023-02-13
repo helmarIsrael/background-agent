@@ -45,7 +45,8 @@ class PubNubProvider extends ChangeNotifier {
         'text': String,
         'phone_number': String
       };
-      if (message.content['type'] == 'deadline' ||
+      if (message.content['type'] == 'verification' ||
+          message.content['type'] == 'deadline' ||
           message.content['type'] == 'reminder' &&
               message.content['action_initiator'][0] == 'A') {
         payload['poster'] = message.content['poster'];
