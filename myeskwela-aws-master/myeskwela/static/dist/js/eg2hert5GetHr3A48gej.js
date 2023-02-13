@@ -3959,68 +3959,70 @@
             }
 
             model.addPhoneNumber = function (btnId) {
+                
+                view.verifyPhone();
                 // console.log(btnId);
 
                 // phoneNum = $("#phoneNumInput").val()
                 // view.setspin(btnId);
                 // // view.stopspin(btnId, "Add");
 
-                preferred_num = RegExp("(\+?\d{2}?\s?\d{3}\s?\d{3}\s?\d{4})"|"([0]\d{3}\s?\d{3}\s?\d{4})");
+                // preferred_num = RegExp("(\+?\d{2}?\s?\d{3}\s?\d{3}\s?\d{4})"|"([0]\d{3}\s?\d{3}\s?\d{4})");
 
-                if ($("#phoneNumInput").val() == '') {
-                    $("#lblErrorPhone").html(view
-                        .colortext("danger",
-                            "Field Cannot be Empty" ));
+                // if ($("#phoneNumInput").val() == '') {
+                //     $("#lblErrorPhone").html(view
+                //         .colortext("danger",
+                //             "Field Cannot be Empty" ));
 
-                } else if (!preferred_num.test($("#phoneNumInput").val())) {
-                    $("#lblErrorPhone").html(view
-                        .colortext("danger",
-                            "Enter A Valid Phone Number" ));
-                } else { 
-                    $.ajax({
-                        url: apputils.rest + '/addPhoneNum',
-                        type:"POST",
-                        dataType: "json",
-                        data: JSON.stringify(
-                            {
-                                phoneNum:$("#phoneNumInput").val(),
-                                personid: $("#name-rightbadge").data("personnumid"),
-                                schoolid: $("#name-rightbadge").data("schoolid"),
-                                group:$("#name-rightbadge").data("usertype")
-                            }),
-                        contentType: 'application/json; charset=utf-8',
-                        success: function(resp) {
-                            apputils.echo(resp);
-                            view.stopspin(btnId, "Add");
+                // } else if (!preferred_num.test($("#phoneNumInput").val())) {
+                //     $("#lblErrorPhone").html(view
+                //         .colortext("danger",
+                //             "Enter A Valid Phone Number" ));
+                // } else { 
+                //     $.ajax({
+                //         url: apputils.rest + '/addPhoneNum',
+                //         type:"POST",
+                //         dataType: "json",
+                //         data: JSON.stringify(
+                //             {
+                //                 phoneNum:$("#phoneNumInput").val(),
+                //                 personid: $("#name-rightbadge").data("personnumid"),
+                //                 schoolid: $("#name-rightbadge").data("schoolid"),
+                //                 group:$("#name-rightbadge").data("usertype")
+                //             }),
+                //         contentType: 'application/json; charset=utf-8',
+                //         success: function(resp) {
+                //             apputils.echo(resp);
+                //             view.stopspin(btnId, "Add");
     
-                                if (resp.status == "OK")
-                                {
-                                    $("#lblErrorPhone").html(view
-                                        .colortext("info", "Phone Number Added successfully."));
-                                    $("#phoneNumInput").val('')
-                                    model.getPhoneNumber()
-                                    return;
-                                } else if (resp.status == "duplicate") {
+                //                 if (resp.status == "OK")
+                //                 {
+                //                     $("#lblErrorPhone").html(view
+                //                         .colortext("info", "Phone Number Added successfully."));
+                //                     $("#phoneNumInput").val('')
+                //                     model.getPhoneNumber()
+                //                     return;
+                //                 } else if (resp.status == "duplicate") {
 
-                                    $("#lblErrorPhone").html(view
-                                        .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number tab.`));
-                                }
+                //                     $("#lblErrorPhone").html(view
+                //                         .colortext("danger", `User has a phone number:${resp.phone}\nYou can update it in the Update Phone Number tab.`));
+                //                 }
     
-                            //apputils.echo(resp);
-                        },
-                        error: function (e) {
-                            view.stopspin(btnId, "Add");
-                            $("#lblErrorPhone").html(view
-                                .colortext("danger", "Something Went Wrong"));
-                        },
-                        beforeSend: function (xhrObj){
-                            view.setspin(btnId);
-                            xhrObj.setRequestHeader("Authorization",
-                                "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
-                        }
-                    }); 
+                //             //apputils.echo(resp);
+                //         },
+                //         error: function (e) {
+                //             view.stopspin(btnId, "Add");
+                //             $("#lblErrorPhone").html(view
+                //                 .colortext("danger", "Something Went Wrong"));
+                //         },
+                //         beforeSend: function (xhrObj){
+                //             view.setspin(btnId);
+                //             xhrObj.setRequestHeader("Authorization",
+                //                 "Basic " + btoa($("#name-rightbadge").data("username") + ":" + $("#name-rightbadge").data("key")));
+                //         }
+                //     }); 
 
-                }
+                // }
 
             }
 
@@ -13107,6 +13109,14 @@
                 
             }
 
+
+            view.verifyPhone = function () {
+                $("#verifyDiv").html(
+                    '<h4 id="verifyCodeId">Please Enter Code Sent to your Phone</h4>' +
+                        view.inputtextonly("verifyCode","") + '<br/>'
+                )
+            }
+
             view.addPhone = function ()
             {   
                 $("#main").html(
@@ -13115,7 +13125,8 @@
                     boxtype:'primary',
                     title:"Add Phone Number",
                     body:view.exformgroup(
-                        view.inputtextonly("phoneNumInput","") + '<br/>'
+                        view.inputtextonly("phoneNumInput","") + '<br/>' +
+                        '<div id="verifyDiv"></div>'
                         
                     ),
                     footer:view.paragraph({id:"lblErrorPhone", class:'', content:""}) +
