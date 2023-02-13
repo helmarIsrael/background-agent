@@ -67,7 +67,7 @@ class _viewMsgState extends State<viewMsg> {
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              // height: 100,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
@@ -80,8 +80,8 @@ class _viewMsgState extends State<viewMsg> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    20, 10, 20, 20),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
@@ -91,7 +91,7 @@ class _viewMsgState extends State<viewMsg> {
                                         'Message Coming From',
                                         style: TextStyle(
                                           fontFamily: 'Montserrat',
-                                          fontSize: 20,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -103,7 +103,7 @@ class _viewMsgState extends State<viewMsg> {
                                           "${msg['name']}",
                                           style: TextStyle(
                                             fontFamily: 'Montserrat',
-                                            fontSize: 30,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ))

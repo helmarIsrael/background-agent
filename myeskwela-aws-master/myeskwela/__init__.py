@@ -7054,7 +7054,7 @@ def notif_reminders():
 
     receivers = [receiver]
     
-    channels = [receiver, initiatorid]
+    channels = [receiver, name]
     
     phone_num = spcall("getPhoneNumberbyPersonid", (receiver,),)[0][0]
 
@@ -7175,8 +7175,8 @@ def sendVerification():
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
 
     msg_type = 'verification'
-    poster = f'Code Verification for {username}'
-    messageTextOnly =  f'''{name} Verify your Phone Number by Entring this code \n {verification_code}'''
+    poster = f'Code Verification for {name}'
+    messageTextOnly =  f'''{name} Verify your Phone Number by Entring this code  {verification_code}'''
     
     
     notif = pub.notifications(username=username,

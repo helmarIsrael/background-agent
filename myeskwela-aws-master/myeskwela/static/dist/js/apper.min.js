@@ -3984,7 +3984,7 @@
                 } else {
 
                         randomCode = Math.random().toString(36).substr(2, 5)
-                        console.log(randomCode)
+                        // console.log(randomCode)
                         view.setspin(btnId);
                         $.ajax({
                             url: apputils.rest + '/sendVerification',
@@ -3993,7 +3993,7 @@
                             data: JSON.stringify(
                                 {
                                     name: $("#name-rightbadge").data("personname"),
-                                    code: randomCode,
+                                    code: randomCode.toUpperCase(),
                                     group: $("#name-rightbadge").data("usertype"),
                                     schoolid: $("#name-rightbadge").data("schoolid"),
                                     personid: $("#name-rightbadge").data("personnumid"),
@@ -4006,7 +4006,7 @@
                                     {
                                         view.verifyPhone();
                                         view.stopspin(btnId, "Confirm");
-                                        document.getElementById( "addPhoneNumBtn" ).setAttribute( "onClick", "model.verifyCode(randomCode)" );
+                                        document.getElementById( "addPhoneNumBtn" ).setAttribute( "onClick", "model.verifyCode(randomCode.toUpperCase())" );
                                        
                                     }
         
