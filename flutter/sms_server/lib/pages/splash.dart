@@ -318,7 +318,7 @@ class _splashState extends State<splash> {
                                     ),
                                   ),
                                 Text(
-                                  'Make Sure that the Device has load or has reception.',
+                                  'Make Sure that the Device has load, internet and reception.',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     color: Color.fromRGBO(0, 152, 46, 1),

@@ -55,24 +55,32 @@ class LoginProvider extends ChangeNotifier {
           'school_id': String,
           'district': String,
           'division': String,
-          'contact_numbers': List<dynamic>
+          'contact_numbers': List<dynamic>,
+          'usertype': String
         };
-        user_details['name'] = res['userdetails']['name'];
-        // userDetails['personnumid'] = res['personnumid'];
-        user_details['school'] = res['userschool']['name'];
-        user_details['school_id'] = res['userschool']['id'];
-        user_details['district'] = res['userschool']['district'];
-        user_details['division'] = res['userschool']['division'];
-        user_details['contact_numbers'] = [
-          '09094619538',
-          '09050262036',
-        ];
 
-        setUserDetails = user_details;
-        // print(getUserDetails['school_id']);
-        setLoggedInStatus = LoginStatus.Authorized;
-        // User getUserData = User.fromJson(res); MOOOOODEEEEEEL
-        // setUser = getUserData;
+        if (res['usertype'] == 'admin') {
+          user_details['name'] = res['userdetails']['name'];
+          // userDetails['personnumid'] = res['personnumid'];
+          user_details['school'] = res['userschool']['name'];
+          user_details['school_id'] = res['userschool']['id'];
+          user_details['district'] = res['userschool']['district'];
+          user_details['division'] = res['userschool']['division'];
+          user_details['contact_numbers'] = [
+            '09094619538',
+            '09050262036',
+          ];
+          user_details['usertype'] = res['usertype'];
+
+          setUserDetails = user_details;
+          // print(getUserDetails['school_id']);
+          setLoggedInStatus = LoginStatus.Authorized;
+          // User getUserData = User.fromJson(res); MOOOOODEEEEEEL
+          // setUser = getUserData;
+
+        } else {
+          setLoggedInStatus = LoginStatus.Unauthorized;
+        }
       } else {
         setLoggedInStatus = LoginStatus.Unauthorized;
       }

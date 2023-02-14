@@ -1800,10 +1800,9 @@ def syslogcred():
             channels.append(schoolassin[0])
             if credentials[u"usertype"] == 'faculty':
                 channels.append(personnumid)
-
-       
-        # print(f'\n\nCredentials: {clean_cred}\n\n')
-
+        phone_nums = []
+        if credentials[u"usertype"] == 'admin':
+            phone_nums = spcall("getPhoneNumbersBySchoolid", (schoolassin[0],),)[0][0]
         return {"status": "ok", "token": credentials[u"token"], "usertype": credentials[u"usertype"],
                 "userdetails": {"name": userdetails[0], "position": userdetails[1]},
                 "userschool": {"id": schoolassin[0],
@@ -1825,7 +1824,8 @@ def syslogcred():
                 "mystu": mystu,
                 "virtualroomid": channels,
                 "personnumid": personnumid,
-                "phonenumber": phone_num
+                "phonenumber": phone_num,
+                "school_directory": {"id": schoolassin[0], "phone_numbers": phone_nums}
                 }
     except:
         return {
