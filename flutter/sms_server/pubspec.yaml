@@ -48,6 +48,7 @@ dependencies:
   intl: ^0.18.0
   sms_advanced: 0.0.1
   shared_preferences: ^2.0.17
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:

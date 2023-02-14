@@ -6,6 +6,7 @@ import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../utils/secure_userdetails.dart';
 import '../utils/sms_sender.dart' as sms;
 import '../utils/sms_sender.dart';
 
@@ -21,15 +22,35 @@ class _splashState extends State<splash> {
     await [Permission.sms].request();
   }
 
+  void toWrapper() {
+    Navigator.pushReplacementNamed(context, '/wrapper');
+  }
+
   // void bootup() async {
   //   checkLoad();
   // }
+
+  Future initialize_user() async {
+    final cred_sec_user = await CredsSecureStorage.getUsername() ?? '';
+    final cred_sec_pass = await CredsSecureStorage.getUserPass() ?? '';
+
+    checkSecureStorage(cred_sec_user, cred_sec_pass);
+  }
+
+  void checkSecureStorage(username, password) {
+    if (username != '' && password != '') {
+      var authProv = Provider.of<LoginProvider>(context, listen: false);
+      authProv.verify(username, password);
+      toWrapper();
+    }
+  }
 
   @override
   void initState() {
     request_permission();
     var sp = Provider.of<SplashProvider>(context, listen: false);
     sp.toLoadSplash();
+    initialize_user();
   }
 
   TextEditingController usernameController = TextEditingController();
@@ -41,6 +62,9 @@ class _splashState extends State<splash> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
+        // child: (secure_name != '' && secure_pass != '')
+        //     ? authProv.verify(usernameController.text,passwordController.text);
+        //     : Center(
         child: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.
@@ -284,6 +308,7 @@ class _splashState extends State<splash> {
                                   width: 200,
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      // save username to secure storage
                                       authProv.verify(usernameController.text,
                                           passwordController.text);
                                       Navigator.pushReplacementNamed(

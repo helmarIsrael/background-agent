@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:sms_server/utils/secure_userdetails.dart';
 
 enum LoginStatus { Uninitialized, Authorized, Unauthorized }
 
@@ -45,6 +46,17 @@ class LoginProvider extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
+        final cred_sec_user = await CredsSecureStorage.getUsername() ?? '';
+        final cred_sec_pass = await CredsSecureStorage.getUserPass() ?? '';
+
+        if (cred_sec_user != username && cred_sec_pass != password) {
+          CredsSecureStorage.deleteUsername();
+          CredsSecureStorage.deleteUserPass();
+          CredsSecureStorage.setUsername(username);
+          CredsSecureStorage.setUserPass(password);
+        }
+
+        // save username and pass to secure storge
         // print(response.body.runtimeType);
         var res = jsonDecode(response.body);
         // print(res['userschool']['id']);
