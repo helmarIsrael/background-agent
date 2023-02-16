@@ -7044,17 +7044,18 @@ def notif_reminders():
     msg_type = 'reminder'
 
     usernum = spcall("getpersonidbyusername", (username,),)[0][0]
-    if reminder_type == 'ALL':
-        poster = f'{name} posted a Gentle Reminder'
-        messageTextOnly = f'''{name} posted a Gentle Reminder for You \nReminding you Regarding the GRADE and ITEM ANALYSIS\nFor ALL SUBJECTS'''
-    else: 
-        poster = f'{name} posted a Gentle {reminder_type.upper()} Reminder'
-        messageTextOnly = f'{name} posted a Gentle {reminder_type.upper()} Reminder for You\n For the subject {subject.upper()} section {section.upper()}'
+    # if reminder_type == 'ALL':
+    #     poster = f'{name} posted a Gentle Reminder'
+    #     messageTextOnly = f'''{name} posted a Gentle Reminder for You \nReminding you Regarding the GRADE and ITEM ANALYSIS\nFor ALL SUBJECTS'''
+    # else: 
+    poster = f'{name} posted a Gentle {reminder_type.upper()} Reminder'
+    messageTextOnly = f'{name} posted a Gentle {reminder_type.upper()} Reminder for You\n For the subject {subject.upper()} section {section.upper()}'
 
 
     receivers = [receiver]
     
     channels = [receiver, name]
+    print(channels)
     
     phone_num = spcall("getPhoneNumberbyPersonid", (receiver,),)[0][0]
 
