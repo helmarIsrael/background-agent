@@ -19,13 +19,24 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  bool showDialog = false;
+  bool dialogStatus = false;
   void showAlert() {
     Timer(const Duration(seconds: 10), () {
       print('showAlert');
-      setState(() {
-        showDialog = true;
-      });
+      // setState(() {
+      //   dialogStatus = true;
+      // });
+      showDialog(
+          context: context,
+          barrierColor: Color(0x01000000),
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+                title: Text('No Internet Connection'),
+                content: Text(
+                    'Please Check your Mobile Data and Connect to the Internet to continue sending messages.'),
+                elevation: 24.0,
+                backgroundColor: Color(0xFFF8D159),
+              ));
     });
   }
 
@@ -452,14 +463,7 @@ class _homeState extends State<home> {
                     ),
                     bottomNav(context)
                   ]),
-              if (showDialog)
-                AlertDialog(
-                  title: Text('No Internet Connection'),
-                  content: Text(
-                      'Please Check your Mobile Data and Connect to the Internet to continue sending messages.'),
-                  elevation: 24.0,
-                  backgroundColor: Color(0xFFF8D159),
-                )
+              // if (dialogStatus)
             ],
           ),
         ),
