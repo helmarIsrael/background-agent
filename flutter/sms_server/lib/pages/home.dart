@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/sent_msgs_provider.dart';
+import 'package:sms_server/utils/alert_dialog.dart';
 import 'package:sms_server/utils/bottom_nav.dart';
 import 'package:sms_server/utils/message_handler.dart';
 import '../utils/globals.dart' as globals;
@@ -21,22 +22,8 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   bool dialogStatus = false;
   void showAlert() {
-    Timer(const Duration(seconds: 10), () {
-      print('showAlert');
-      // setState(() {
-      //   dialogStatus = true;
-      // });
-      showDialog(
-          context: context,
-          barrierColor: Color(0x01000000),
-          barrierDismissible: false,
-          builder: (_) => AlertDialog(
-                title: Text('No Internet Connection'),
-                content: Text(
-                    'Please Check your Mobile Data and Connect to the Internet to continue sending messages.'),
-                elevation: 24.0,
-                backgroundColor: Color(0xFFF8D159),
-              ));
+    Timer(const Duration(seconds: 3), () {
+      internetDialog(context);
     });
   }
 
