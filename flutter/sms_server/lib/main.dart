@@ -8,6 +8,7 @@ import 'package:sms_server/pages/viewMsg.dart';
 import 'package:sms_server/pages/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:sms_server/pages/wrapper.dart';
+import 'package:sms_server/provider/connection_provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/provider/sent_msgs_provider.dart';
@@ -31,6 +32,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => SplashProvider()),
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => SentMessagesProvider()),
+        ChangeNotifierProvider(create: (_) => ConnectionProvider()),
       ],
       child: MaterialApp(
         initialRoute: '/',

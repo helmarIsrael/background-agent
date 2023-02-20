@@ -6,6 +6,8 @@ import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/ui_providers/splash_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../provider/connection_provider.dart';
+import '../utils/alert_dialog.dart';
 import '../utils/secure_userdetails.dart';
 import '../utils/sms_sender.dart' as sms;
 import '../utils/sms_sender.dart';
@@ -50,7 +52,12 @@ class _splashState extends State<splash> {
     request_permission();
     var sp = Provider.of<SplashProvider>(context, listen: false);
     sp.toLoadSplash();
-    initialize_user();
+    var connProv = Provider.of<ConnectionProvider>(context, listen: false);
+    connProv.checkConnectivity();
+
+    if (connProv.getStatus != 'Offline') {
+      initialize_user();
+    }
   }
 
   TextEditingController usernameController = TextEditingController();
@@ -59,6 +66,8 @@ class _splashState extends State<splash> {
   @override
   Widget build(BuildContext context) {
     var authProv = Provider.of<LoginProvider>(context, listen: false);
+    var connProv = Provider.of<ConnectionProvider>(context, listen: false);
+    // connProv.checkConnectivity();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -124,6 +133,7 @@ class _splashState extends State<splash> {
                               builder: (context, splashProv, _) {
                             // splashProv.toLoadSplash();
                             // splashProv.checkDeviceLoad();
+                            connProv.checkConnectivity();
                             if (splashProv.getSplashStatus !=
                                 SplashStatus.splashIsLoaded) {
                               return Align(
@@ -166,192 +176,237 @@ class _splashState extends State<splash> {
                               //       ));
                               // }
                             }
-                            return Column(
+                            return Stack(
                               children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      9, 5, 9, 5),
-                                  child: Container(
-                                    width: 300,
-                                    child: TextFormField(
-                                      controller: usernameController,
-                                      // autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        hintText: 'Username',
-                                        hintStyle: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                        ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          9, 5, 9, 5),
+                                      child: Container(
+                                        width: 300,
+                                        child: TextFormField(
+                                          controller: usernameController,
+                                          // autofocus: true,
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            hintText: 'Username',
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20,
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            errorBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedErrorBorder:
+                                                UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
                                           ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                      ),
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      9, 5, 9, 5),
-                                  child: Container(
-                                    width: 300,
-                                    child: TextFormField(
-                                      controller: passwordController,
-                                      // autofocus: true,
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        hintText: 'Password',
-                                        hintStyle: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                        ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
                                           ),
                                         ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                      ),
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 20,
                                       ),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  width: 200,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // save username to secure storage
-                                      authProv.verify(usernameController.text,
-                                          passwordController.text);
-                                      Navigator.pushReplacementNamed(
-                                          context, '/wrapper');
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        primary: Color(0xFFF8D159),
-                                        onPrimary: Colors.white),
-                                    child: Text('Login',
-                                        style: TextStyle(
-                                          fontFamily: 'Montseratt',
-                                          fontSize: 20,
-                                        )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                if (authProv.getLoggedInStatus ==
-                                    LoginStatus.Unauthorized)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(
-                                      'Invalid Username or Password',
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          9, 5, 9, 5),
+                                      child: Container(
+                                        width: 300,
+                                        child: TextFormField(
+                                          controller: passwordController,
+                                          // autofocus: true,
+                                          obscureText: true,
+                                          decoration: InputDecoration(
+                                            hintText: 'Password',
+                                            hintStyle: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20,
+                                            ),
+                                            enabledBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            errorBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            focusedErrorBorder:
+                                                UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(4.0),
+                                                topRight: Radius.circular(4.0),
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                          ),
+                                          style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    SizedBox(
+                                      height: 50,
+                                      width: 200,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // save username to secure storage
+                                          authProv.verify(
+                                              usernameController.text,
+                                              passwordController.text);
+                                          Navigator.pushReplacementNamed(
+                                              context, '/wrapper');
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Color(0xFFF8D159),
+                                            onPrimary: Colors.white),
+                                        child: Text('Login',
+                                            style: TextStyle(
+                                              fontFamily: 'Montseratt',
+                                              fontSize: 20,
+                                            )),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    if (authProv.getLoggedInStatus ==
+                                        LoginStatus.Unauthorized)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Text(
+                                          'Invalid Username or Password',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color:
+                                                Color.fromARGB(255, 230, 0, 0),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    if (authProv.getLoggedInStatus ==
+                                        LoginStatus.Disconnected)
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Text(
+                                          'No Internet Connection',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color:
+                                                Color.fromARGB(255, 230, 0, 0),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    Text(
+                                      'Make Sure that the Device has load, internet and reception.',
                                       style: TextStyle(
                                         fontFamily: 'Montserrat',
-                                        color: Color.fromARGB(255, 230, 0, 0),
-                                        fontSize: 16,
+                                        color: Color.fromRGBO(0, 152, 46, 1),
+                                        fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
-                                  ),
-                                Text(
-                                  'Make Sure that the Device has load, internet and reception.',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Color.fromRGBO(0, 152, 46, 1),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
+                                  ],
                                 ),
+                                Consumer<ConnectionProvider>(
+                                    builder: (context, connProv, _) {
+                                  connProv.checkConnectivity();
+                                  if (connProv.getStatus == 'Offline') {
+                                    return splashDialog(context);
+                                    // return internetDialog(context);
+
+                                  }
+                                  return Visibility(
+                                    child: Text("Gone"),
+                                    visible: false,
+                                  );
+                                })
                               ],
                             );
                           }),

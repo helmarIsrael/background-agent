@@ -1,26 +1,18 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:io';
-import 'dart:isolate';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:sms_server/objectbox.g.dart';
 import 'package:sms_server/pages/home.dart';
-import 'package:sms_server/pages/viewMsg.dart';
+
 import 'package:sms_server/pages/splash.dart';
 import 'package:sms_server/provider/pubnub_provider.dart';
 import 'package:sms_server/provider/sent_msgs_provider.dart';
-import 'package:sms_server/utils/isolate_args.dart';
-import 'package:sms_server/utils/message_handler.dart';
-import '../utils/sms_sender.dart' as sms;
 
-import '../model/message_model.dart';
+import 'package:sms_server/utils/message_handler.dart';
+// import '../provider/connection_provider.dart';
+
 import '../provider/login_provider.dart';
 
 // import '../utils/globals.dart' as globals;
@@ -38,6 +30,19 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     var pubNubProv = Provider.of<PubNubProvider>(context, listen: false);
     var sent_sms = Provider.of<SentMessagesProvider>(context, listen: false);
+    // ConnectionProvider _check_conn =
+    //     Provider.of<ConnectionProvider>(context, listen: false);
+
+    // _check_conn.checkConnectivity();
+
+    // if (_check_conn.getStatus == 'offline') {
+    //   showDialog(
+    //       context: context,
+    //       barrierColor: Color(0x01000000),
+    //       barrierDismissible: false,
+    //       builder: (_) => internetDialog(context));
+    // }
+
     return Consumer<LoginProvider>(builder: (context, authProv, _) {
       switch (authProv.getLoggedInStatus) {
         case LoginStatus.Authorized:
@@ -57,6 +62,8 @@ class _WrapperState extends State<Wrapper> {
 
           return home();
         case LoginStatus.Unauthorized:
+          return splash();
+        case LoginStatus.Disconnected:
           return splash();
         case LoginStatus.Uninitialized:
           return Scaffold(

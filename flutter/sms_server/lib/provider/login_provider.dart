@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:sms_server/utils/secure_userdetails.dart';
 
-enum LoginStatus { Uninitialized, Authorized, Unauthorized }
+enum LoginStatus { Uninitialized, Authorized, Unauthorized, Disconnected }
 
 class LoginProvider extends ChangeNotifier {
   LoginStatus _loggedInStatus = LoginStatus.Uninitialized;
@@ -98,6 +98,7 @@ class LoginProvider extends ChangeNotifier {
       }
     } on SocketException {
       print('no internet');
+      setLoggedInStatus = LoginStatus.Disconnected;
     } on HttpException {
       print('Could not find the post');
 

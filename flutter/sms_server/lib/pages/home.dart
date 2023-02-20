@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:sms_server/provider/connection_provider.dart';
 import 'package:sms_server/provider/login_provider.dart';
 import 'package:sms_server/provider/sent_msgs_provider.dart';
 import 'package:sms_server/utils/alert_dialog.dart';
@@ -21,18 +22,12 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   bool dialogStatus = false;
-  void showAlert() {
-    Timer(const Duration(seconds: 3), () {
-      internetDialog(context);
-    });
-  }
 
   @override
   void initState() {
     var sent_msg = Provider.of<SentMessagesProvider>(context, listen: false);
     sent_msg.get_sentMessageCount();
     sent_msg.get_oldSentMessageCount();
-    showAlert();
     super.initState();
   }
 
@@ -450,7 +445,16 @@ class _homeState extends State<home> {
                     ),
                     bottomNav(context)
                   ]),
-              // if (dialogStatus)
+              Consumer<ConnectionProvider>(builder: (context, connProv, _) {
+                connProv.checkConnectivity();
+                if (connProv.getStatus == 'Offline') {
+                  return internetDialog(context);
+                }
+                return Visibility(
+                  child: Text("Gone"),
+                  visible: false,
+                );
+              })
             ],
           ),
         ),
